@@ -101,3 +101,14 @@
 		mix-blend-mode: normal;
 	}
 }
+
+::selection {
+	background-color: #4B3732; /* e.g., #FFFF00 for yellow */
+	color: #A0A041; /* e.g., #000000 for black */
+  }
+  
+  /* For Firefox compatibility, use the -moz-prefix as well */
+  ::-moz-selection {
+	background-color: #4B3732;
+	color: #A0A041;
+  }
