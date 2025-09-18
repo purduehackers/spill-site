@@ -3,24 +3,28 @@ import Layout from '@/layouts/Layout.astro'
 ---
 
 <Layout title="spill" description="an upcoming exhibition of student-made creative technical projects.">
-	<main class="min-h-screen flex ps-20">
+	<main class="min-h-screen flex flex-col md:flex-row ps-6 md:ps-20">
+		<!-- Left side (big heading) -->
 		<section class="text-left flex-shrink-0">
-			<h1 class="text-[30vh] sm:text-[40vh] md:text-[50vh] font-bold font-heading goo" style="filter: url(#goof);">
+			<h1 class="text-[40vh] sm:text-[40vh] md:text-[50vh] font-bold font-heading goo" style="filter: url(#goof);">
 				spill
 			</h1>
 			<p class="mt-4 text-lg font-body">
 				an upcoming exhibition of student-made creative technical projects.
 			</p>
 		</section>
-		
-		<div class="flex flex-col space-y-8 ml-16 max-w-2xl pt-110">
+	
+		<!-- Right side (paragraphs) -->
+		<div class="flex flex-col space-y-8 md:ml-16 md:max-w-2xl mt-10 md:mt-[10vh]">
 			<section class="text-left">
-				<p class="text-lg font-body leading-relaxed">
-					projects aren't sterile or perfect—they're made by people; late nights, spilled coffee, and lots of trial & error. 
-				</p>
+				<p class="text-lg font-body leading-relaxed pt-[32vh]">
+					projects aren't sterile or perfect—they're made by <span class="realistic-marker-highlight">people, late nights, </span>
+					<span class="sketch-highlight">spilled coffee</span>, 
+					and lots of <span class="realistic-marker-highlight">trial & error</span>.
+				  </p>
 				<br>
 				<p class="text-lg font-body leading-relaxed">
-					come experience interactive installations, digital experiments, and visual stories created by Purdue students.
+					come experience interactive installations, digital experiments, and visual stories created by purdue students.
 				</p>
 			</section>
 		</div>

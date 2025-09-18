@@ -24,19 +24,19 @@ import { ClientRouter } from 'astro:transitions'
 		
 		<!-- Grain texture overlay -->
 		<div class="grain-overlay"></div>
-		
+
 		<!-- SVG Filter for ink bleed effect -->
 		<svg style="visibility: hidden; position: absolute" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
 			<defs>
 				<filter id="goof">
-					<feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" /> 
-					<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -8" result="goof2" />
+					<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" /> 
+					<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7.5" result="goof2" />
 					<feComposite in="SourceGraphic" in2="goof2" operator="atop"/>
 					<feTurbulence
 						id="turbulence"
 						type="fractalNoise"
-						baseFrequency="0.1"
-						numOctaves="2"
+						baseFrequency="0.025"
+						numOctaves="4"
 						seed="1"
 						result="turbulence" />
 					<feDisplacementMap
@@ -154,10 +154,10 @@ import { ClientRouter } from 'astro:transitions'
 					const wheelEvent = event as WheelEvent;
 					wheelEvent.preventDefault();
 
-					scale += wheelEvent.deltaY * 0.003;
+					scale += wheelEvent.deltaY * 0.01;
 
 					// Restrict scale with higher minimum blur
-					scale = Math.min(Math.max(10, scale), 25);
+					scale = Math.min(Math.max(10, scale), 100);
 
 					// Apply scale transform
 					(feGauss as Element).setAttribute('stdDeviation', scale.toString());
@@ -168,5 +168,15 @@ import { ClientRouter } from 'astro:transitions'
 				document.addEventListener('wheel', zoom);
 			});
 		</script>
+
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters" style="display:none;">
+			<defs>
+			<filter id="marker-shape">
+				<feTurbulence type="fractalNoise" baseFrequency="0 0.15" numOctaves="1" result="warp" />
+				<feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warp" />
+			</filter>
+			
+			</defs>
+		</svg>
 	</body>
 </html>
