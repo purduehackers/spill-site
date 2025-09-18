@@ -21,5 +21,152 @@ import { ClientRouter } from 'astro:transitions'
 	</head>
 	<body>
 		<slot />
+		
+		<!-- Grain texture overlay -->
+		<div class="grain-overlay"></div>
+		
+		<!-- SVG Filter for ink bleed effect -->
+		<svg style="visibility: hidden; position: absolute" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<defs>
+				<filter id="goof">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="8" result="blur" /> 
+					<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -8" result="goof2" />
+					<feComposite in="SourceGraphic" in2="goof2" operator="atop"/>
+					<feTurbulence
+						id="turbulence"
+						type="fractalNoise"
+						baseFrequency="0.1"
+						numOctaves="2"
+						seed="1"
+						result="turbulence" />
+					<feDisplacementMap
+						id="displacement"
+						in2="turbulence"
+						in="goof2"
+						scale="5"
+						xChannelSelector="R"
+						yChannelSelector="B" />
+				</filter>
+			</defs>
+		</svg>
+		
+		<script>
+			// Wait for DOM to be ready
+			document.addEventListener('DOMContentLoaded', function() {
+				// Create canvas-based paper texture
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+
+				function createTexture(size: number, name: string, color: string) {
+					if (!ctx) return;
+					
+					canvas.width = size;
+					canvas.height = size;
+
+					ctx.fillStyle = color;
+
+					for (let x = 0; x < size; x++) {
+						for (let y = 0; y < size; y++) {
+							if (Math.random() > 0.5) {
+								ctx.fillRect(x, y, 1, 1);
+							}
+						}
+					}
+
+					canvas.toBlob((blob) => {
+						if (blob) {
+							const url = URL.createObjectURL(blob);
+							document.documentElement.style.setProperty(name, `url(${url})`);
+						}
+					});
+				}
+
+				createTexture(256, "--grain-texture", "hsla(39, 30%, 50%, 0.3)");
+				
+				// Simple scroll lock implementation without GSAP
+				let isAtBottom = false;
+				let isScrolling = false;
+				
+				function checkScrollPosition() {
+					const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+					const windowHeight = window.innerHeight;
+					const documentHeight = document.documentElement.scrollHeight;
+					
+					// Check if we're at the bottom (with small tolerance)
+					const atBottom = scrollTop + windowHeight >= documentHeight - 10;
+					
+					if (atBottom && !isAtBottom) {
+						isAtBottom = true;
+						// Prevent further scrolling
+						document.body.style.overflow = "hidden";
+					} else if (!atBottom && isAtBottom) {
+						isAtBottom = false;
+						// Allow scrolling
+						document.body.style.overflow = "auto";
+					}
+				}
+				
+				// Throttled scroll handler
+				function handleScroll() {
+					if (!isScrolling) {
+						requestAnimationFrame(() => {
+							checkScrollPosition();
+							isScrolling = false;
+						});
+						isScrolling = true;
+					}
+				}
+				
+				// Add scroll listener
+				window.addEventListener('scroll', handleScroll, { passive: true });
+				
+				// Initial check
+				checkScrollPosition();
+				const filterElement = document.querySelector('svg filter');
+				if (!filterElement) return;
+				
+				const filterId = filterElement.id;
+				const feGauss = document.querySelector(`#${filterId} feGaussianBlur`);
+				const feDisp = document.querySelector(`#${filterId} feDisplacementMap`);
+				const feTurb = document.querySelector(`#${filterId} feTurbulence`);
+				const el = document.querySelector(".goo");
+
+				if (!feGauss || !feDisp || !feTurb || !el) return;
+
+				let scale = 8; // Start with more blurry effect
+				let time = 0;
+
+				// Animation loop for flowing turbulence
+				function animate() {
+					time += 0.01;
+					
+					// Animate the seed for flowing ripple motion
+					(feTurb as Element).setAttribute('seed', Math.floor(time * 3).toString());
+					
+					// Tie displacement scale to blur amount for growing distortion
+					const displacementScale = Math.max(1, scale * 0.5);
+					(feDisp as Element).setAttribute('scale', displacementScale.toString());
+					
+					requestAnimationFrame(animate);
+				}
+
+				function zoom(event: Event) {
+					const wheelEvent = event as WheelEvent;
+					wheelEvent.preventDefault();
+
+					scale += wheelEvent.deltaY * 0.003;
+
+					// Restrict scale with higher minimum blur
+					scale = Math.min(Math.max(10, scale), 25);
+
+					// Apply scale transform
+					(feGauss as Element).setAttribute('stdDeviation', scale.toString());
+				}
+
+				// Start animation loop
+				animate();
+				document.addEventListener('wheel', zoom);
+			});
+		</script>
 	</body>
 </html>
