@@ -10,7 +10,12 @@ import Layout from '@/layouts/Layout.astro'
 				spill
 			</h1>
 			<p class="mt-2 sm:mt-4 text-base sm:text-lg font-body">
-				an upcoming exhibition of student-made creative technical projects run by <a href="https://www.purduehackers.com" target="_blank" rel="noopener noreferrer" class="purdue-hackers-link">purdue hackers</a>.
+				an <span class="realistic-marker-highlight">upcoming exhibition</span> of student-made 
+				creative technical projects 
+				run by <a href="https://www.purduehackers.com"
+				 target="_blank" rel="noopener noreferrer" 
+				 class="purdue-hackers-link">
+				 <span class="realistic-marker-highlight hover:text-decoration-underline">purdue hackers</span></a>.
 			</p>
 		</section>
 	
@@ -18,7 +23,7 @@ import Layout from '@/layouts/Layout.astro'
 		<div class="flex flex-col space-y-6 md:space-y-8 md:ml-16 md:max-w-2xl mt-6 sm:mt-8 md:mt-[10vh]">
 			<section class="text-left">
 				<p class="text-base sm:text-lg font-body leading-relaxed pt-8 sm:pt-12 md:pt-[32vh]">
-					projects aren't sterile or perfect—they're made by <span class="realistic-marker-highlight">people, late nights, </span>
+					projects aren't sterile or perfect—they're made by <span class="realistic-marker-highlight"> people, late nights, </span>
 					<span class="sketch-highlight">spilled coffee</span>, 
 					and lots of <span class="realistic-marker-highlight">trial & error</span>.
 				  </p>
@@ -26,13 +31,16 @@ import Layout from '@/layouts/Layout.astro'
 				<p class="text-base sm:text-lg font-body leading-relaxed">
 					come experience interactive installations, digital experiments, and visual stories created by purdue students.
 				</p>
+				<p class="text-base sm:text-lg font-body leading-relaxed pt-8">
+					<span class="realistic-marker-highlight">2025.12.06.</span> stay tuned.
+				</p>
 				
 				<!-- RSVP Button! -->
 				<div class="mt-6 sm:mt-8">
-					<button class="rsvp-button group">
+					<a href="#" target="_blank" rel="noopener noreferrer" class="rsvp-button group">
 						<img src="/img/rsvp1.png" alt="RSVP" class="rsvp-image group-hover:opacity-0 " />
 						<img src="/img/rsvp2.png" alt="RSVP" class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100" />
-					</button>
+					</a>
 				</div>
 			</section>
 		</div>

@@ -206,21 +206,21 @@
   }
 
   .purdue-hackers-link {
-	/* position: fixed;
-	top: 20px;
-	left: 20px; */
 	z-index: 1001;
-	/* display: block; */
+	color: #4B3732;
+	text-decoration: none;
   }
 
   .purdue-hackers-link:hover {
-	color: #838e31;
+	text-decoration: underline;
   }
 
-  .purdue-hackers-link svg {
-	display: block;
-	width: 44px;
-	height: 57px;
+  .purdue-hackers-link .realistic-marker-highlight:before {
+	border-bottom: 1px solid #4B3732;
+  }
+
+  .purdue-hackers-link:hover .realistic-marker-highlight:before {
+	border-bottom: 2px solid #4B3732;
   }
 
   /* graph paper */
@@ -236,9 +236,6 @@
   @media (min-width: 768px) {
 	.graph-paper-decoration {
 		display: block;
-	}
-	.purdue-hackers-link {
-		color: #838e31;
 	}
   }
 
