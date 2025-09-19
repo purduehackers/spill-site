@@ -39,7 +39,7 @@
 		background-color: var(--color-background);
 		color: var(--color-header);
 		/* Prevent horizontal scroll on mobile */
-		overflow-x: hidden;
+		overflow: hidden;
 	}
 
 	body {
@@ -76,11 +76,12 @@
 	}
 
 	.goo {
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px); /* Safari support */
+		/* backdrop-filter: blur(20px); */
+		/*-webkit-backdrop-filter: blur(20px);*/ /* Safari support */
 		-webkit-user-select: none; /* Safari */
 		-ms-user-select: none; /* IE 10 and IE 11 */
 		user-select: none; /* Standard syntax */
+		mix-blend-mode: multiply; /*gives the look thats its on da paper */
 	}
 
 	/* Grain texture overlay */
@@ -94,8 +95,8 @@
 		z-index: 1000;
 		background-image: var(--grain-texture);
 		background-repeat: repeat;
-		opacity: 0.3;
-		mix-blend-mode: darken;
+		opacity: 	1;
+		mix-blend-mode: overlay;
 	}
 
 	/* Alternative grain approach - more visible */
@@ -111,6 +112,11 @@
 		opacity: 0.4;
 		mix-blend-mode: normal;
 	}
+	.coffee-stain {
+		mix-blend-mode: hard-light;
+		z-index: 0;
+	}
+
 }
 
 ::selection {
@@ -126,12 +132,12 @@
 
 .highlight {
 	background-color: #4b3732; /* e.g., #FFFF00 for yellow */
-	color: #a0a041; /* e.g., #000000 for black */
+	color: #c2c241; /* e.g., #000000 for black */
 }
 
 .sketch-highlight {
 	display: inline-block;
-	z-index: 0;
+	z-index: 1;
 	position: relative;
 	/* Ensure text doesn't break awkwardly on mobile */
 	word-break: keep-all;
@@ -139,7 +145,7 @@
 
 .sketch-highlight:before {
 	content: '';
-	z-index: -1;
+	z-index: 0;
 	left: 0em;
 	top: 0em;
 	border-width: 2px;
@@ -156,7 +162,7 @@
 
 .sketch-highlight:after {
 	content: '';
-	z-index: -1;
+	z-index: 0;
 	left: 0em;
 	top: 0em;
 	border-width: 2px;
@@ -195,7 +201,11 @@
 }
 
 .rsvp-button {
-	position: relative;
+	position: absolute;
+	user-select: none;
+	top:70%;
+	left:70%;
+	rotate: 15deg;
 	background: none;
 	border: none;
 	padding: 0;
@@ -208,6 +218,7 @@
 	height: auto;
 	max-width: 200px;
 	width: auto;
+	filter: drop-shadow(5px 5px 5px rgb(0,0,0,0.366));
 }
 
 .purdue-hackers-link {
@@ -230,12 +241,14 @@
 
 /* graph paper */
 .graph-paper-decoration {
-	position: fixed;
-	top: -230px;
-	right: -180px;
+	position: absolute;
+	top: -40%;
+	right: -20%;
 	z-index: 1;
 	pointer-events: none;
 	display: none;
+	filter: drop-shadow(5px 5px 5px rgb(0,0,0,0.366));
+
 }
 
 @media (min-width: 768px) {
@@ -251,11 +264,29 @@
 	opacity: 1;
 	object-fit: cover;
 }
+.paper-texture {
+	position: absolute;
+	z-index: 0;
+	filter: url();
+	-webkit-user-select: none; /* Safari */
+		-ms-user-select: none; /* IE 10 and IE 11 */
+		user-select: none; /* Standard syntax */
+}
+.sticky-note {
+	user-select: none;
+	z-index:1;
+	width: 600px;
+	height: auto;
+	position: absolute;
+	top: 20%;
+	left: 59%;
+	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.366));
+}
 
 /* COOOOOOOOOOOOOOOFFFFFFFFFFEEEEEEEEEEEEEEEEEEEEE SSSSSSSTTTAAAAAAAAAIIIIIINNNS*/
 .coffee-stain {
 	position: fixed;
-	z-index: 2;
+	z-index: 1;
 	pointer-events: none;
 	opacity: 1;
 	display: none;
