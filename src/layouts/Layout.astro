@@ -13,13 +13,227 @@ import { ClientRouter } from 'astro:transitions'
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 		<title>{title}</title>
 		<meta name="description" content={description} />
 		<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 		<ClientRouter />
 	</head>
 	<body>
+
+		<!-- 
+		i'm debating if i want the purdue hackers logo in the corner xx
+		<a href="https://www.purduehackers.com" target="_blank" rel="noopener noreferrer" class="purdue-hackers-link">
+			<svg width="44" height="57" viewBox="0 0 1759 2278" fill="none" xmlns="http://www.w3.org/2000/svg">
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M440.761 269L877.5 523.648L1300.55 276.601L1301.81 769.419L1330.64 769.766L1332.14 262.986L1755.66 502.395L1758.53 1520.21L1332.53 1758.43L1332.14 1240.85L877.498 1505.43V2028.09L438.683 2277.81L0.625732 2023.42L2.22669 1533.57L447.52 1788.95L460.707 1763.51L18.5434 1506.53L441.3 1259.83L440.761 269Z" fill="#4B3732"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M890.937 1528.74L1303.95 1767.75L890.937 1528.74ZM1302.67 1287.72C1302.86 1287.61 1303.09 1287.61 1303.28 1287.72C1303.47 1287.83 1303.58 1288.03 1303.58 1288.24L1303.95 1767.75L1302.37 1289.3L890.938 1528.74L1303.28 1287.72L1303.95 1767.75L890.938 1528.74" fill="#4B3732"/>
+				<path fill-rule="evenodd" clip-rule="evenodd" d="M877.5 493.268L454.076 246.383L877.313 0.925293L1300.55 246.221L877.5 493.268Z" fill="#4B3732"/>
+			</svg>
+		</a> -->
+
+
+		<div class="graph-paper-decoration">
+			<img src="/img/graphpaper.png" alt="silly graph paper" class="graph-paper-image" />
+		</div>
+
+		<!-- coffee stains 0_0 -->
+		<div class="coffee-stain coffee-stain-1">
+			<img src="/img/coffee/10.png" alt="Coffee stain" class="coffee-stain-img" />
+		</div>
+		<div class="coffee-stain coffee-stain-2">
+			<img src="/img/coffee/20.png" alt="Coffee stain" class="coffee-stain-img" />
+		</div>
+		<div class="coffee-stain coffee-stain-3">
+			<img src="/img/coffee/35.png" alt="Coffee stain" class="coffee-stain-img" />
+		</div>
+		<div class="coffee-stain coffee-stain-4">
+			<img src="/img/coffee/85.png" alt="Coffee stain" class="coffee-stain-img" />
+		</div>
+		<div class="coffee-stain coffee-stain-5">
+			<img src="/img/coffee/89.png" alt="Coffee stain" class="coffee-stain-img" />
+		</div>
+
 		<slot />
+		
+		<!-- Grain texture overlay -->
+		<div class="grain-overlay"></div>
+
+		<!-- SVG Filter for ink bleed effect -->
+		<svg style="visibility: hidden; position: absolute" width="0" height="0" xmlns="http://www.w3.org/2000/svg" version="1.1">
+			<defs>
+				<filter id="goof">
+					<feGaussianBlur in="SourceGraphic" stdDeviation="10" result="blur" /> 
+					<feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 10 -7.5" result="goof2" />
+					<feComposite in="SourceGraphic" in2="goof2" operator="atop"/>
+					<feTurbulence
+						id="turbulence"
+						type="fractalNoise"
+						baseFrequency="0.025"
+						numOctaves="4"
+						seed="1"
+						result="turbulence" />
+					<feDisplacementMap
+						id="displacement"
+						in2="turbulence"
+						in="goof2"
+						scale="5"
+						xChannelSelector="R"
+						yChannelSelector="B" />
+				</filter>
+			</defs>
+		</svg>
+		
+		<script>
+			// Wait for DOM to be ready
+			document.addEventListener('DOMContentLoaded', function() {
+				// Create canvas-based paper texture
+				const canvas = document.createElement("canvas");
+				const ctx = canvas.getContext("2d");
+
+				function createTexture(size: number, name: string, color: string) {
+					if (!ctx) return;
+					
+					canvas.width = size;
+					canvas.height = size;
+
+					ctx.fillStyle = color;
+
+					for (let x = 0; x < size; x++) {
+						for (let y = 0; y < size; y++) {
+							if (Math.random() > 0.3) {
+								ctx.fillRect(x, y, 1, 1);
+							}
+						}
+					}
+
+					canvas.toBlob((blob) => {
+						if (blob) {
+							const url = URL.createObjectURL(blob);
+							document.documentElement.style.setProperty(name, `url(${url})`);
+						}
+					});
+				}
+
+				createTexture(256, "--grain-texture", "#a69f95");
+				
+				// Simple scroll lock implementation without GSAP
+				let isAtBottom = false;
+				let isScrolling = false;
+				
+				function checkScrollPosition() {
+					const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+					const windowHeight = window.innerHeight;
+					const documentHeight = document.documentElement.scrollHeight;
+					
+					// Check if we're at the bottom (with small tolerance)
+					const atBottom = scrollTop + windowHeight >= documentHeight - 10;
+					
+					if (atBottom && !isAtBottom) {
+						isAtBottom = true;
+						// Prevent further scrolling
+						document.body.style.overflow = "hidden";
+					} else if (!atBottom && isAtBottom) {
+						isAtBottom = false;
+						// Allow scrolling
+						document.body.style.overflow = "auto";
+					}
+				}
+				
+				// Throttled scroll handler
+				function handleScroll() {
+					if (!isScrolling) {
+						requestAnimationFrame(() => {
+							checkScrollPosition();
+							isScrolling = false;
+						});
+						isScrolling = true;
+					}
+				}
+				
+				// Add scroll listener
+				window.addEventListener('scroll', handleScroll, { passive: true });
+				
+				// Initial check
+				checkScrollPosition();
+				const filterElement = document.querySelector('svg filter');
+				if (!filterElement) return;
+				
+				const filterId = filterElement.id;
+				const feGauss = document.querySelector(`#${filterId} feGaussianBlur`);
+				const feDisp = document.querySelector(`#${filterId} feDisplacementMap`);
+				const feTurb = document.querySelector(`#${filterId} feTurbulence`);
+				const el = document.querySelector(".goo");
+
+				if (!feGauss || !feDisp || !feTurb || !el) return;
+
+				let isMobile = window.innerWidth < 768;
+				let scale = isMobile ? 4 : 8;
+				let time = 0;
+
+				// inital scale >_<
+				(feGauss as Element).setAttribute('stdDeviation', scale.toString());
+				const displacementScale = Math.max(1, scale * 0.5);
+				(feDisp as Element).setAttribute('scale', displacementScale.toString());
+
+				// Animation loop for flowing turbulence
+				function animate() {
+					time += 0.01;
+					
+					// Animate the seed for flowing ripple motion
+					(feTurb as Element).setAttribute('seed', Math.floor(time * 3).toString());
+					
+					// Tie displacement scale to blur amount for growing distortion
+					const displacementScale = Math.max(1, scale * 0.5);
+					(feDisp as Element).setAttribute('scale', displacementScale.toString());
+					
+					requestAnimationFrame(animate);
+				}
+
+				function zoom(event: Event) {
+					const wheelEvent = event as WheelEvent;
+					wheelEvent.preventDefault();
+
+					scale += wheelEvent.deltaY * 0.01;
+
+					// we care about mobile
+					if (isMobile) {
+						scale = Math.min(Math.max(4, scale), 100);
+					} else {
+						scale = Math.min(Math.max(10, scale), 100);
+					}
+
+					// Apply scale transform
+					(feGauss as Element).setAttribute('stdDeviation', scale.toString());
+				}
+
+				function handleResize() {
+					const wasMobile = isMobile;
+					isMobile = window.innerWidth < 800;
+					
+					// we care about these resizers. gah.
+					if (wasMobile !== isMobile) {
+						scale = isMobile ? 3 : 8;
+						(feGauss as Element).setAttribute('stdDeviation', scale.toString());
+						const displacementScale = Math.max(1, scale * 0.5);
+						(feDisp as Element).setAttribute('scale', displacementScale.toString());
+					}
+				}
+
+				// Start animation loop
+				animate();
+				document.addEventListener('wheel', zoom);
+				window.addEventListener('resize', handleResize);
+			});
+		</script>
+
+		<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filters" style="display:none;">
+			<defs>
+			<filter id="marker-shape">
+				<feTurbulence type="fractalNoise" baseFrequency="0 0.15" numOctaves="1" result="warp" />
+				<feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="30" in="SourceGraphic" in2="warp" />
+			</filter>
+			
+			</defs>
+		</svg>
 	</body>
 </html>

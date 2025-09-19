@@ -3,18 +3,38 @@ import Layout from '@/layouts/Layout.astro'
 ---
 
 <Layout title="spill" description="an upcoming exhibition of student-made creative technical projects.">
-	<main class="min-h-screen flex items-center justify-center">
-		<section class="text-left">
-			<h1 class="text-6xl font-bold font-heading">
+	<main class="min-h-screen flex flex-col md:flex-row px-4 sm:px-6 md:ps-20">
+		<!-- Left side (big heading) -->
+		<section class="text-left flex-shrink-0">
+			<h1 class="text-[25vh] sm:text-[30vh] md:text-[50vh] font-bold font-heading goo leading-none" style="filter: url(#goof);">
 				spill
 			</h1>
-			<p class="mt-4 text-lg font-body">
-				an upcoming exhibition of student-made creative technical projects.
-			</p>
-			<!-- <p class="mt-4 text-lg font-body">
-				projects aren't sterile or perfect, they're made by people; late nights, spilled coffee, and lots of trial & error.
-			</p> -->
+			<p class="mt-2 sm:mt-4 text-base sm:text-lg font-body">
+				an upcoming exhibition of student-made creative technical projects run by <a href="https://www.purduehackers.com" target="_blank" rel="noopener noreferrer" class="purdue-hackers-link">purdue hackers</a>.
 			</p>
 		</section>
+	
+		<!-- Right side (paragraphs) -->
+		<div class="flex flex-col space-y-6 md:space-y-8 md:ml-16 md:max-w-2xl mt-6 sm:mt-8 md:mt-[10vh]">
+			<section class="text-left">
+				<p class="text-base sm:text-lg font-body leading-relaxed pt-8 sm:pt-12 md:pt-[32vh]">
+					projects aren't sterile or perfect—they're made by <span class="realistic-marker-highlight">people, late nights, </span>
+					<span class="sketch-highlight">spilled coffee</span>, 
+					and lots of <span class="realistic-marker-highlight">trial & error</span>.
+				  </p>
+				<br>
+				<p class="text-base sm:text-lg font-body leading-relaxed">
+					come experience interactive installations, digital experiments, and visual stories created by purdue students.
+				</p>
+				
+				<!-- RSVP Button! -->
+				<div class="mt-6 sm:mt-8">
+					<button class="rsvp-button group">
+						<img src="/img/rsvp1.png" alt="RSVP" class="rsvp-image group-hover:opacity-0 " />
+						<img src="/img/rsvp2.png" alt="RSVP" class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100" />
+					</button>
+				</div>
+			</section>
+		</div>
 	</main>
 </Layout>
