@@ -38,6 +38,8 @@
 		@apply scroll-smooth;
 		background-color: var(--color-background);
 		color: var(--color-header);
+		/* Prevent horizontal scroll on mobile */
+		overflow-x: hidden;
 	}
 
 	body {
@@ -45,6 +47,8 @@
 		background-color: var(--color-background);
 		min-height: 100vh;
 		position: relative;
+		/* Prevent horizontal scroll on mobile */
+		overflow-x: hidden;
 	}
 
 	h1, h2, h3, h4, h5, h6 {
@@ -122,6 +126,8 @@
 	display: inline-block;
   	z-index: 0;
 	position:relative;
+	/* Ensure text doesn't break awkwardly on mobile */
+	word-break: keep-all;
   }
   
   .sketch-highlight:before{
@@ -165,6 +171,8 @@
 	display: inline-block;
   	z-index: 0;
 	position:relative;
+	/* Ensure text doesn't break awkwardly on mobile */
+	word-break: keep-all;
   }
   
   .realistic-marker-highlight:before{
@@ -179,4 +187,56 @@
 	top:0.3em;
 	opacity: 0.8;
 	padding:0 0.25em;
+  }
+
+  .rsvp-button {
+	position: relative;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	display: inline-block;
+  }
+
+  .rsvp-image {
+	display: block;
+	height: auto;
+	max-width: 200px;
+	width: auto;
+  }
+
+  .purdue-hackers-link {
+	position: fixed;
+	top: 20px;
+	left: 20px;
+	z-index: 1001;
+	display: block;
+	transition: opacity 0.2s ease;
+  }
+
+  .purdue-hackers-link:hover {
+	opacity: 0.7;
+  }
+
+  .purdue-hackers-link svg {
+	display: block;
+	width: 44px;
+	height: 57px;
+  }
+
+  /* graph paper */
+  .graph-paper-decoration {
+	position: fixed;
+	top: -230px;
+	right: -180px;
+	z-index: 1;
+	pointer-events: none;
+  }
+
+  .graph-paper-image {
+	width: 600px;
+	height: 600px;
+	transform: rotate(21deg);
+	opacity: 1;
+	object-fit: cover;
   }
