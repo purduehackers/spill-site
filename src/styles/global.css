@@ -75,6 +75,32 @@
 		-webkit-backdrop-filter: blur(20px); /* Safari support */
 	}
 
+	/* Drawing UI */
+	.draw-toggle {
+		position: fixed;
+		bottom: 14px;
+		left: 14px;
+		z-index: 1100;
+		padding: 8px;
+		cursor: pointer;
+		transition: transform 120ms ease, background 120ms ease;
+	}
+
+	.draw-toggle:hover { transform: translateY(-1px); }
+	.draw-toggle:active { transform: translateY(0); }
+
+	.draw-canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		z-index: 1050;
+		pointer-events: none; /* enabled when drawing mode is active */
+	}
+
+	body.drawing-active { cursor: crosshair; }
+
 	/* Grain texture overlay */
 	.grain-overlay {
 		position: fixed;
