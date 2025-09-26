@@ -307,14 +307,6 @@
 	top: 20%;
 	left: 59%;
 	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.366));
-	display: none; /* Hide by default */
-}
-
-/* Show sticky note only on mobile */
-@media (max-width: 767px) {
-	.sticky-note {
-		display: block;
-	}
 }
 
 /* COOOOOOOOOOOOOOOFFFFFFFFFFEEEEEEEEEEEEEEEEEEEEE SSSSSSSTTTAAAAAAAAAIIIIIINNNS*/

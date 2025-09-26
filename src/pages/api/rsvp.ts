@@ -1,5 +1,6 @@
 import type { APIRoute } from 'astro';
 
+// Mark this API route as server-rendered
 export const prerender = false;
 
 import pkg from 'airtable-ts';
