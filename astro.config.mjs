@@ -7,6 +7,7 @@ import tailwindcss from '@tailwindcss/vite';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://spill.example.com/',
+  output: 'server', // Enable server-side rendering for API routes
   integrations: [react()],
   vite: {
     plugins: [tailwindcss()],

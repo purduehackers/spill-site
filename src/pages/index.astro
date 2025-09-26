@@ -11,10 +11,10 @@ import Layout from '@/layouts/Layout.astro'
 			</h1>
 			<!-- RSVP Button! -->
 			<div class="rsvp-button">
-				<a href="#" target="_blank" rel="noopener noreferrer" class="rsvp-button group">
+				<button id="rsvp-button" class="rsvp-button group">
 					<img src="/img/rsvp1.png" alt="RSVP" class="rsvp-image group-hover:opacity-0 " draggable="false"/>
 					<img src="/img/rsvp2.png" alt="RSVP" class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100" draggable="false" />
-				</a>
+				</button>
 			</div>
 			<p class="pt-8 mt-2 sm:mt-4 text-base sm:text-lg font-body">
 				an <span class="realistic-marker-highlight">upcoming exhibition</span> of student-made 
@@ -48,4 +48,124 @@ import Layout from '@/layouts/Layout.astro'
 			</section>
 		</div>
 	</main>
+	
+	<!-- rsvp -->
+	<div id="rsvp-modal-root"></div>
 </Layout>
+
+<script>
+	let isFormOpen = false;
+	const modalRoot = document.getElementById('rsvp-modal-root');
+	const rsvpButton = document.getElementById('rsvp-button');
+
+	function openForm() {
+		isFormOpen = true;
+		renderForm();
+	}
+
+	function closeForm() {
+		isFormOpen = false;
+		renderForm();
+	}
+
+	function renderForm() {
+		if (modalRoot) {
+			modalRoot.innerHTML = '';
+			if (isFormOpen) {
+				modalRoot.innerHTML = `
+					<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+						<div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
+							<button id="close-form" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold" aria-label="Close form">
+								×
+							</button>
+							<h2 class="text-3xl font-bold mb-6 text-center font-heading" style="filter: url(#goof)">
+								RSVP to Spill
+							</h2>
+							<form id="rsvp-form" class="space-y-4">
+								<div>
+									<label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+										Email *
+									</label>
+									<input
+										type="email"
+										id="email"
+										name="email"
+										required
+										class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-body text-base"
+										placeholder="your.email@example.com"
+									/>
+								</div>
+								<div id="error-message" class="text-red-600 text-sm hidden"></div>
+								<button
+									type="submit"
+									id="submit-btn"
+									class="w-full bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-body text-base font-medium transition-colors"
+								>
+									RSVP
+								</button>
+							</form>
+						</div>
+					</div>
+				`;
+
+				document.getElementById('close-form')?.addEventListener('click', closeForm);
+				document.getElementById('rsvp-form')?.addEventListener('submit', handleFormSubmit);
+			}
+		}
+	}
+
+	async function handleFormSubmit(e) {
+		e.preventDefault();
+		const submitBtn = document.getElementById('submit-btn');
+		const errorDiv = document.getElementById('error-message');
+		const formData = new FormData(e.target);
+		
+		submitBtn.textContent = 'submitting...';
+		submitBtn.disabled = true;
+		errorDiv?.classList.add('hidden');
+
+		try {
+			const response = await fetch('/api/rsvp', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email: formData.get('email'),
+					name: formData.get('name')
+				}),
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Show success message
+				modalRoot.innerHTML = `
+					<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+						<div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
+							<div class="text-center">
+								<p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
+								<p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
+							</div>
+						</div>
+					</div>
+				`;
+				// Close form after 2 seconds
+				setTimeout(() => {
+					closeForm();
+				}, 2000);
+			} else {
+				errorDiv.textContent = result.error || 'Something went wrong';
+				errorDiv.classList.remove('hidden');
+			}
+		} catch (error) {
+			errorDiv.textContent = 'Network error. Please try again.';
+			errorDiv.classList.remove('hidden');
+		} finally {
+			submitBtn.textContent = 'RSVP';
+			submitBtn.disabled = false;
+		}
+	}
+
+	rsvpButton?.addEventListener('click', openForm);
+</script>
