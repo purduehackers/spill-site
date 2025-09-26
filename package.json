@@ -10,8 +10,8 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/node": "^9.4.4",
     "@astrojs/react": "^4.3.0",
+    "@astrojs/vercel": "^8.2.8",
     "@paper-design/shaders-react": "^0.0.54",
     "@tailwindcss/vite": "^4.1.5",
     "airtable-ts": "^1.6.2",
