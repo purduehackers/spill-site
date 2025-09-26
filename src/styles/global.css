@@ -3,9 +3,9 @@
 @theme {
 	--font-heading: 'MudClub FranklintheGoth', 'serif';
 	--font-body: 'Authentic Sans', 'sans-serif';
-	--color-header: #4B3732;
+	--color-header: #4b3732;
 	--color-background: #e0dbd3;
-	--color-highlight: #4B3732;
+	--color-highlight: #4b3732;
 }
 
 @font-face {
@@ -39,7 +39,7 @@
 		background-color: var(--color-background);
 		color: var(--color-header);
 		/* Prevent horizontal scroll on mobile */
-		overflow-x: hidden;
+		overflow: hidden;
 	}
 
 	body {
@@ -51,7 +51,12 @@
 		overflow-x: hidden;
 	}
 
-	h1, h2, h3, h4, h5, h6 {
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
 		font-family: var(--font-heading);
 		color: var(--color-header);
 	}
@@ -71,9 +76,39 @@
 	}
 
 	.goo {
-		backdrop-filter: blur(20px);
-		-webkit-backdrop-filter: blur(20px); /* Safari support */
+		/* backdrop-filter: blur(20px); */
+		/*-webkit-backdrop-filter: blur(20px);*/ /* Safari support */
+		-webkit-user-select: none; /* Safari */
+		-ms-user-select: none; /* IE 10 and IE 11 */
+		user-select: none; /* Standard syntax */
+		mix-blend-mode: multiply; /*gives the look thats its on da paper */
 	}
+
+	/* Drawing UI */
+	.draw-toggle {
+		position: fixed;
+		bottom: 14px;
+		left: 14px;
+		z-index: 1100;
+		padding: 8px;
+		cursor: pointer;
+		transition: transform 120ms ease, background 120ms ease;
+	}
+
+	.draw-toggle:hover { transform: translateY(-1px); }
+	.draw-toggle:active { transform: translateY(0); }
+
+	.draw-canvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		z-index: 1050;
+		pointer-events: none; /* enabled when drawing mode is active */
+	}
+
+	body.drawing-active { cursor: crosshair; }
 
 	/* Grain texture overlay */
 	.grain-overlay {
@@ -86,11 +121,10 @@
 		z-index: 1000;
 		background-image: var(--grain-texture);
 		background-repeat: repeat;
-		opacity: 0.3;
-		mix-blend-mode: darken;
+		opacity: 	1;
+		mix-blend-mode: overlay;
 	}
-	
-	
+
 	/* Alternative grain approach - more visible */
 	.grain-overlay::before {
 		content: '';
@@ -104,212 +138,240 @@
 		opacity: 0.4;
 		mix-blend-mode: normal;
 	}
+	.coffee-stain {
+		mix-blend-mode: hard-light;
+		z-index: 0;
+	}
+
 }
 
 ::selection {
-	background-color: #4B3732; /* e.g., #FFFF00 for yellow */
-	color: #A0A041; /* e.g., #000000 for black */
-  }
-  
-  /* For Firefox compatibility, use the -moz-prefix as well */
-  ::-moz-selection {
-	background-color: #4B3732;
-	color: #A0A041;
-  }
+	background-color: #4b3732; /* e.g., #FFFF00 for yellow */
+	color: #a0a041; /* e.g., #000000 for black */
+}
 
-  .highlight {
-	background-color: #4B3732; /* e.g., #FFFF00 for yellow */
-	color: #A0A041; /* e.g., #000000 for black */
-  }
-  
-  .sketch-highlight{
+/* For Firefox compatibility, use the -moz-prefix as well */
+::-moz-selection {
+	background-color: #4b3732;
+	color: #a0a041;
+}
+
+.highlight {
+	background-color: #4b3732; /* e.g., #FFFF00 for yellow */
+	color: #c2c241; /* e.g., #000000 for black */
+}
+
+.sketch-highlight {
 	display: inline-block;
-  	z-index: 0;
-	position:relative;
-	/* Ensure text doesn't break awkwardly on mobile */
-	word-break: keep-all;
-  }
-  
-  .sketch-highlight:before{
-	content:"";
-	z-index:-1;
-	left:0em;
-	top:0em;
-	border-width:2px;
-	border-style:solid;
-	border-color:#4B3732;
-	position:absolute;
-	border-right-color:transparent;
-	width:100%;
-	height:1.5em;
-	transform:rotate(2deg);
-	opacity:0.8;
-	border-radius:0.25em;
-  }
-  
-  .sketch-highlight:after{
-	content:"";
-	z-index:-1;
-	left:0em;
-	top:0em;
-	border-width:2px;
-	border-style:solid;
-	border-color:#4B3732;
-	border-left-color:transparent;
-	border-top-color:transparent;
-	position:absolute;
-	width:100%;
-	height:1.5em;
-	transform:rotate(-1deg);
-	opacity:0.7;
-	border-radius:0.25em;
-  }
-
-
-
-.realistic-marker-highlight{
-	display: inline-block;
-  	z-index: 0;
-	position:relative;
-	/* Ensure text doesn't break awkwardly on mobile */
-	word-break: keep-all;
-  }
-  
-  .realistic-marker-highlight:before{
-	content:"";
-	background-color:#A0A041;
-	width:100%;
-	height:1em;
-	position:absolute;
-	z-index:-1;
-	filter:url(#marker-shape);
-	left:-0.1em;
-	top:0.3em;
-	opacity: 0.8;
-	padding:0 0.25em;
-  }
-
-  .rsvp-button {
+	z-index: 1;
 	position: relative;
+	/* Ensure text doesn't break awkwardly on mobile */
+	word-break: keep-all;
+}
+
+.sketch-highlight:before {
+	content: '';
+	z-index: 0;
+	left: 0em;
+	top: 0em;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #4b3732;
+	position: absolute;
+	border-right-color: transparent;
+	width: 100%;
+	height: 1.5em;
+	transform: rotate(2deg);
+	opacity: 0.8;
+	border-radius: 0.25em;
+}
+
+.sketch-highlight:after {
+	content: '';
+	z-index: 0;
+	left: 0em;
+	top: 0em;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #4b3732;
+	border-left-color: transparent;
+	border-top-color: transparent;
+	position: absolute;
+	width: 100%;
+	height: 1.5em;
+	transform: rotate(-1deg);
+	opacity: 0.7;
+	border-radius: 0.25em;
+}
+
+.realistic-marker-highlight {
+	display: inline-block;
+	z-index: 0;
+	position: relative;
+	/* Ensure text doesn't break awkwardly on mobile */
+	word-break: keep-all;
+}
+
+.realistic-marker-highlight:before {
+	content: '';
+	background-color: #a0a041;
+	width: 100%;
+	height: 1em;
+	position: absolute;
+	z-index: -1;
+	filter: url(#marker-shape);
+	left: -0.1em;
+	top: 0.3em;
+	opacity: 0.8;
+	padding: 0 0.25em;
+}
+
+.rsvp-button {
+	position: absolute;
+	user-select: none;
+	top:70%;
+	left:70%;
+	rotate: 15deg;
 	background: none;
 	border: none;
 	padding: 0;
 	cursor: pointer;
 	display: inline-block;
-  }
+}
 
-  .rsvp-image {
+.rsvp-image {
 	display: block;
 	height: auto;
 	max-width: 200px;
 	width: auto;
-  }
+	filter: drop-shadow(5px 5px 5px rgb(0,0,0,0.366));
+}
 
-  .purdue-hackers-link {
+.purdue-hackers-link {
 	z-index: 1001;
-	color: #4B3732;
+	color: #4b3732;
 	text-decoration: none;
-  }
+}
 
-  .purdue-hackers-link:hover {
+.purdue-hackers-link:hover {
 	text-decoration: underline;
-  }
+}
 
-  .purdue-hackers-link .realistic-marker-highlight:before {
-	border-bottom: 1px solid #4B3732;
-  }
+.purdue-hackers-link .realistic-marker-highlight:before {
+	border-bottom: 1px solid #4b3732;
+}
 
-  .purdue-hackers-link:hover .realistic-marker-highlight:before {
-	border-bottom: 2px solid #4B3732;
-  }
+.purdue-hackers-link:hover .realistic-marker-highlight:before {
+	border-bottom: 2px solid #4b3732;
+}
 
-  /* graph paper */
-  .graph-paper-decoration {
-	position: fixed;
-	top: -230px;
-	right: -180px;
+/* graph paper */
+.graph-paper-decoration {
+	position: absolute;
+	top: -40%;
+	right: -20%;
 	z-index: 1;
 	pointer-events: none;
 	display: none;
-  }
+	filter: drop-shadow(5px 5px 5px rgb(0,0,0,0.366));
 
-  @media (min-width: 768px) {
+}
+
+@media (min-width: 768px) {
 	.graph-paper-decoration {
 		display: block;
 	}
-  }
+}
 
-  .graph-paper-image {
+.graph-paper-image {
 	width: 600px;
 	height: 600px;
 	transform: rotate(21deg);
 	opacity: 1;
 	object-fit: cover;
-  }
+}
+.paper-texture {
+	position: absolute;
+	z-index: 0;
+	filter: url();
+	-webkit-user-select: none; /* Safari */
+		-ms-user-select: none; /* IE 10 and IE 11 */
+		user-select: none; /* Standard syntax */
+}
+.sticky-note {
+	user-select: none;
+	z-index:1;
+	width: 600px;
+	height: auto;
+	position: absolute;
+	top: 20%;
+	left: 59%;
+	filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.366));
+}
 
-  /* COOOOOOOOOOOOOOOFFFFFFFFFFEEEEEEEEEEEEEEEEEEEEE SSSSSSSTTTAAAAAAAAAIIIIIINNNS*/
-  .coffee-stain {
+/* COOOOOOOOOOOOOOOFFFFFFFFFFEEEEEEEEEEEEEEEEEEEEE SSSSSSSTTTAAAAAAAAAIIIIIINNNS*/
+.coffee-stain {
 	position: fixed;
-	z-index: 2;
+	z-index: 1;
 	pointer-events: none;
 	opacity: 1;
 	display: none;
-  }
+}
 
-  @media (min-width: 768px) {
+@media (min-width: 768px) {
 	.coffee-stain {
 		display: block;
 	}
-  }
+}
 
-  .coffee-stain-img {
+.coffee-stain-img {
 	width: auto;
 	height: auto;
 	max-width: 640px;
 	max-height: 640px;
 	object-fit: contain;
 	filter: brightness(0.6);
-  }
+}
 
-  .coffee-stain-1 {
+.coffee-stain-1 {
 	top: -15%;
 	left: -12%;
 	transform: rotate(90deg);
 	display: block; /* show on mobile */
-  }
+}
 
-  .coffee-stain-2 {
+.coffee-stain-2 {
 	top: -50%;
 	right: 12%;
 	transform: rotate(8deg);
-  }
+}
 
-  .coffee-stain-3 {
+.coffee-stain-3 {
 	top: 70%;
 	left: 15%;
 	transform: rotate(15deg);
-  }
+}
 /*  this is the two rings one */
-  .coffee-stain-4 {
+.coffee-stain-4 {
 	top: 55%;
 	left: 75%;
 	transform: rotate(-8deg);
 	display: block;
-  }
+}
 
-  @media (max-width: 767px) {
+@media (max-width: 767px) {
 	.coffee-stain-1 {
 		left: -70%;
 		top: -19%;
 	}
 	.coffee-stain-4 {
 		left: 35%;
-		top:60%;
+		top: 60%;
 	}
-  }
+}
 
-  .coffee-stain-5 {
+.coffee-stain-5 {
 	top: 70%;
 	right: 60%;
 	transform: rotate(-5deg);
-  }
+}

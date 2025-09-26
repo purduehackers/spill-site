@@ -5,11 +5,18 @@ import Layout from '@/layouts/Layout.astro'
 <Layout title="spill" description="an upcoming exhibition of student-made creative technical projects.">
 	<main class="min-h-screen flex flex-col md:flex-row px-4 sm:px-6 md:ps-20">
 		<!-- Left side (big heading) -->
-		<section class="text-left flex-shrink-0">
+		<section class="z-1 text-left flex-shrink-0">
 			<h1 class="text-[25vh] sm:text-[30vh] md:text-[50vh] font-bold font-heading goo leading-none" style="filter: url(#goof);">
 				spill
 			</h1>
-			<p class="mt-2 sm:mt-4 text-base sm:text-lg font-body">
+			<!-- RSVP Button! -->
+			<div class="rsvp-button">
+				<button id="rsvp-button" class="rsvp-button group">
+					<img src="/img/rsvp1.png" alt="RSVP" class="rsvp-image group-hover:opacity-0 " draggable="false"/>
+					<img src="/img/rsvp2.png" alt="RSVP" class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100" draggable="false" />
+				</button>
+			</div>
+			<p class="pt-8 mt-2 sm:mt-4 text-base sm:text-lg font-body">
 				an <span class="realistic-marker-highlight">upcoming exhibition</span> of student-made 
 				creative technical projects 
 				run by <a href="https://www.purduehackers.com"
@@ -17,11 +24,16 @@ import Layout from '@/layouts/Layout.astro'
 				 class="purdue-hackers-link">
 				 <span class="realistic-marker-highlight hover:text-decoration-underline">purdue hackers</span></a>.
 			</p>
+			<p class="text-base sm:text-lg font-body leading-relaxed">
+				<span class="realistic-marker-highlight">2025.12.06.</span> stay tuned.
+			</p>
+			
 		</section>
 	
 		<!-- Right side (paragraphs) -->
 		<div class="flex flex-col space-y-6 md:space-y-8 md:ml-16 md:max-w-2xl mt-6 sm:mt-8 md:mt-[10vh]">
-			<section class="text-left">
+			<section class="z-1 text-left">
+
 				<p class="text-base sm:text-lg font-body leading-relaxed pt-8 sm:pt-12 md:pt-[32vh]">
 					projects aren't sterile or perfect—they're made by <span class="realistic-marker-highlight"> people, late nights, </span>
 					<span class="sketch-highlight">spilled coffee</span>, 
@@ -31,18 +43,126 @@ import Layout from '@/layouts/Layout.astro'
 				<p class="text-base sm:text-lg font-body leading-relaxed">
 					come experience interactive installations, digital experiments, and visual stories created by purdue students.
 				</p>
-				<p class="text-base sm:text-lg font-body leading-relaxed pt-8">
-					<span class="realistic-marker-highlight">2025.12.06.</span> stay tuned.
-				</p>
 				
-				<!-- RSVP Button! -->
-				<div class="mt-6 sm:mt-8">
-					<a href="#" target="_blank" rel="noopener noreferrer" class="rsvp-button group">
-						<img src="/img/rsvp1.png" alt="RSVP" class="rsvp-image group-hover:opacity-0 " />
-						<img src="/img/rsvp2.png" alt="RSVP" class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100" />
-					</a>
-				</div>
+				
 			</section>
 		</div>
 	</main>
+	
+	<!-- rsvp -->
+	<div id="rsvp-modal-root"></div>
 </Layout>
+
+<script>
+	let isFormOpen = false;
+	const modalRoot = document.getElementById('rsvp-modal-root');
+	const rsvpButton = document.getElementById('rsvp-button');
+
+	function openForm() {
+		isFormOpen = true;
+		renderForm();
+	}
+
+	function closeForm() {
+		isFormOpen = false;
+		renderForm();
+	}
+
+	function renderForm() {
+		if (modalRoot) {
+			modalRoot.innerHTML = '';
+			if (isFormOpen) {
+				modalRoot.innerHTML = `
+					<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+						<div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
+							<button id="close-form" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold" aria-label="Close form">
+								×
+							</button>
+							<form id="rsvp-form" class="space-y-4">
+								<div>
+									<label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+										Email *
+									</label>
+									<input
+										type="email"
+										id="email"
+										name="email"
+										required
+										class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-body text-base"
+										placeholder="your.email@example.com"
+									/>
+								</div>
+								<div id="error-message" class="text-red-600 text-sm hidden"></div>
+								<button
+									type="submit"
+									id="submit-btn"
+									class="w-full bg-black text-white py-3 px-6 rounded-lg hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-body text-base font-medium transition-colors"
+								>
+									RSVP
+								</button>
+							</form>
+						</div>
+					</div>
+				`;
+
+				document.getElementById('close-form')?.addEventListener('click', closeForm);
+				document.getElementById('rsvp-form')?.addEventListener('submit', handleFormSubmit);
+			}
+		}
+	}
+
+	async function handleFormSubmit(e) {
+		e.preventDefault();
+		const submitBtn = document.getElementById('submit-btn');
+		const errorDiv = document.getElementById('error-message');
+		const formData = new FormData(e.target);
+		
+		submitBtn.textContent = 'submitting...';
+		submitBtn.disabled = true;
+		errorDiv?.classList.add('hidden');
+
+		try {
+			const response = await fetch('/api/rsvp', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({
+					email: formData.get('email'),
+					name: formData.get('name')
+				}),
+			});
+
+			const result = await response.json();
+
+			if (result.success) {
+				// Show success message
+				modalRoot.innerHTML = `
+					<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+						<div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
+							<div class="text-center">
+								<p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
+								<p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
+							</div>
+						</div>
+					</div>
+				`;
+				// Close form after 2 seconds
+				setTimeout(() => {
+					closeForm();
+				}, 2000);
+			} else {
+				errorDiv.textContent = result.error || 'Something went wrong';
+				errorDiv.classList.remove('hidden');
+			}
+		} catch (error) {
+			errorDiv.textContent = 'Network error. Please try again.';
+			errorDiv.classList.remove('hidden');
+		} finally {
+			submitBtn.textContent = 'RSVP';
+			submitBtn.disabled = false;
+		}
+	}
+
+	rsvpButton?.addEventListener('click', openForm);
+</script>
