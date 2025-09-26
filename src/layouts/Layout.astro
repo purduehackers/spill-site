@@ -271,7 +271,7 @@ import { ClientRouter } from 'astro:transitions'
 
 				function getPos(e: MouseEvent | TouchEvent) {
 					let x = 0, y = 0;
-					if (e instanceof TouchEvent) {
+					if (window.TouchEvent && e instanceof TouchEvent) {
 						const t = e.touches[0] || e.changedTouches[0];
 						x = t.clientX; y = t.clientY;
 					} else {
