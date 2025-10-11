@@ -1,80 +1,105 @@
 ---
-import Layout from '@/layouts/Layout.astro'
+import Layout from '@/layouts/Layout.astro';
 ---
 
-<Layout title="spill" description="an upcoming exhibition of student-made creative technical projects.">
-	<main class="min-h-screen flex flex-col md:flex-row px-4 sm:px-6 md:ps-20">
-		<!-- Left side (big heading) -->
-		<section class="z-1 text-left flex-shrink-0">
-			<h1 class="text-[25vh] sm:text-[30vh] md:text-[50vh] font-bold font-heading goo leading-none" style="filter: url(#goof);">
-				spill
-			</h1>
-			<!-- RSVP Button! -->
-			<div class="rsvp-button">
-				<button id="rsvp-button" class="rsvp-button group">
-					<img src="/img/rsvp1.png" alt="RSVP" class="rsvp-image group-hover:opacity-0 " draggable="false"/>
-					<img src="/img/rsvp2.png" alt="RSVP" class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100" draggable="false" />
-				</button>
-			</div>
-			<div class="flex flex-col max-w-xl gap-y-4">
-  			<p class="pt-8 mt-2 sm:mt-4 text-base sm:text-xl font-body">
-  				an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made 
-  				creative technical projects,
-  				run by <a href="https://www.purduehackers.com"
-  				 target="_blank" rel="noopener noreferrer" 
-  				 class="purdue-hackers-link">
-  				 <span class="realistic-marker-highlight hover:text-decoration-underline">purdue hackers</span></a>.
-  			</p>
-  			<p class="text-lg sm:text-2xl font-body leading-relaxed">
-  				<span class="realistic-marker-highlight">december 6, 2025 • 6-10pm • venue tba</span>
-  			</p>
-			</div>
-			
-		</section>
-	
-		<!-- Right side (paragraphs) -->
-		<div class="flex flex-col space-y-6 md:space-y-8 md:ml-20 md:max-w-2xl mt-6 sm:mt-8 md:mt-[10vh]">
-			<section class="z-1 text-left">
+<Layout
+  title="spill"
+  description="an upcoming exhibition of student-made creative technical projects."
+>
+  <main class="flex min-h-screen flex-col px-4 sm:px-6 md:flex-row md:ps-20">
+    <!-- Left side (big heading) -->
+    <section class="z-1 flex-shrink-0 text-left">
+      <h1
+        class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]"
+        style="filter: url(#goof);"
+      >
+        spill
+      </h1>
+      <!-- RSVP Button! -->
+      <div class="rsvp-button">
+        <button id="rsvp-button" class="rsvp-button group">
+          <img
+            src="/img/rsvp1.png"
+            alt="RSVP"
+            class="rsvp-image group-hover:opacity-0"
+            draggable="false"
+          />
+          <img
+            src="/img/rsvp2.png"
+            alt="RSVP"
+            class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
+            draggable="false"
+          />
+        </button>
+      </div>
+      <div class="flex max-w-xl flex-col gap-y-4">
+        <p class="font-body mt-2 pt-8 text-base sm:mt-4 sm:text-xl">
+          an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
+          technical projects, run by <a
+            href="https://www.purduehackers.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="purdue-hackers-link"
+          >
+            <span class="realistic-marker-highlight hover:text-decoration-underline"
+              >purdue hackers</span
+            ></a
+          >.
+        </p>
+        <p class="font-body text-lg leading-relaxed sm:text-2xl">
+          <span class="realistic-marker-highlight">december 6, 2025 • 6-10pm • venue tba</span>
+        </p>
+      </div>
+    </section>
 
-				<p class="text-base sm:text-lg font-body leading-relaxed pt-8 sm:pt-12 md:pt-[32vh]">
-					projects aren't sterile or perfect—they're made by <span class="realistic-marker-highlight"> people, late nights, </span>
-					<span class="sketch-highlight">spilled coffee</span>, 
-					and lots of <span class="realistic-marker-highlight">trial & error</span>.
-				  </p>
-				<br>
-				<p class="text-base sm:text-lg font-body leading-relaxed">
-					enter a warm coffee shop on a cold night, grab a free drink, and experience interactive installations, digital experiments, and visual stories created by purdue students.
-				</p>
-				
-				
-			</section>
-		</div>
-	</main>
-	
-	<!-- rsvp -->
-	<div id="rsvp-modal-root"></div>
+    <!-- Right side (paragraphs) -->
+    <div
+      class="mt-6 flex flex-col space-y-6 sm:mt-8 md:mt-[10vh] md:ml-20 md:max-w-2xl md:space-y-8"
+    >
+      <section class="z-1 text-left">
+        <p class="font-body pt-8 text-base leading-relaxed sm:pt-12 sm:text-lg md:pt-[32vh]">
+          projects aren't sterile or perfect—they're made by <span
+            class="realistic-marker-highlight"
+          >
+            people, late nights,
+          </span>
+          <span class="sketch-highlight">spilled coffee</span>, and lots of <span
+            class="realistic-marker-highlight">trial & error</span
+          >.
+        </p>
+        <br />
+        <p class="font-body text-base leading-relaxed sm:text-lg">
+          enter a warm coffee shop on a cold night, grab a free drink, and experience interactive
+          installations, digital experiments, and visual stories created by purdue students.
+        </p>
+      </section>
+    </div>
+  </main>
+
+  <!-- rsvp -->
+  <div id="rsvp-modal-root"></div>
 </Layout>
 
 <script>
-	let isFormOpen = false;
-	const modalRoot = document.getElementById('rsvp-modal-root');
-	const rsvpButton = document.getElementById('rsvp-button');
+  let isFormOpen = false;
+  const modalRoot = document.getElementById('rsvp-modal-root');
+  const rsvpButton = document.getElementById('rsvp-button');
 
-	function openForm() {
-		isFormOpen = true;
-		renderForm();
-	}
+  function openForm() {
+    isFormOpen = true;
+    renderForm();
+  }
 
-	function closeForm() {
-		isFormOpen = false;
-		renderForm();
-	}
+  function closeForm() {
+    isFormOpen = false;
+    renderForm();
+  }
 
-	function renderForm() {
-		if (modalRoot) {
-			modalRoot.innerHTML = '';
-			if (isFormOpen) {
-				modalRoot.innerHTML = `
+  function renderForm() {
+    if (modalRoot) {
+      modalRoot.innerHTML = '';
+      if (isFormOpen) {
+        modalRoot.innerHTML = `
 					<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
 						<div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
 							<button id="close-form" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold" aria-label="Close form">
@@ -107,39 +132,39 @@ import Layout from '@/layouts/Layout.astro'
 					</div>
 				`;
 
-				document.getElementById('close-form')?.addEventListener('click', closeForm);
-				document.getElementById('rsvp-form')?.addEventListener('submit', handleFormSubmit);
-			}
-		}
-	}
+        document.getElementById('close-form')?.addEventListener('click', closeForm);
+        document.getElementById('rsvp-form')?.addEventListener('submit', handleFormSubmit);
+      }
+    }
+  }
 
-	async function handleFormSubmit(e) {
-		e.preventDefault();
-		const submitBtn = document.getElementById('submit-btn');
-		const errorDiv = document.getElementById('error-message');
-		const formData = new FormData(e.target);
-		
-		submitBtn.textContent = 'submitting...';
-		submitBtn.disabled = true;
-		errorDiv?.classList.add('hidden');
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    const submitBtn = document.getElementById('submit-btn');
+    const errorDiv = document.getElementById('error-message');
+    const formData = new FormData(e.target);
 
-		try {
-			const response = await fetch('/api/rsvp', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					email: formData.get('email'),
-					name: formData.get('name')
-				}),
-			});
+    submitBtn.textContent = 'submitting...';
+    submitBtn.disabled = true;
+    errorDiv?.classList.add('hidden');
 
-			const result = await response.json();
+    try {
+      const response = await fetch('/api/rsvp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: formData.get('email'),
+          name: formData.get('name')
+        })
+      });
 
-			if (result.success) {
-				// Show success message
-				modalRoot.innerHTML = `
+      const result = await response.json();
+
+      if (result.success) {
+        // Show success message
+        modalRoot.innerHTML = `
 					<div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
 						<div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
 							<div class="text-center">
@@ -149,22 +174,22 @@ import Layout from '@/layouts/Layout.astro'
 						</div>
 					</div>
 				`;
-				// Close form after 2 seconds
-				setTimeout(() => {
-					closeForm();
-				}, 2000);
-			} else {
-				errorDiv.textContent = result.error || 'Something went wrong';
-				errorDiv.classList.remove('hidden');
-			}
-		} catch (error) {
-			errorDiv.textContent = 'Network error. Please try again.';
-			errorDiv.classList.remove('hidden');
-		} finally {
-			submitBtn.textContent = 'RSVP';
-			submitBtn.disabled = false;
-		}
-	}
+        // Close form after 2 seconds
+        setTimeout(() => {
+          closeForm();
+        }, 2000);
+      } else {
+        errorDiv.textContent = result.error || 'Something went wrong';
+        errorDiv.classList.remove('hidden');
+      }
+    } catch (error) {
+      errorDiv.textContent = 'Network error. Please try again.';
+      errorDiv.classList.remove('hidden');
+    } finally {
+      submitBtn.textContent = 'RSVP';
+      submitBtn.disabled = false;
+    }
+  }
 
-	rsvpButton?.addEventListener('click', openForm);
+  rsvpButton?.addEventListener('click', openForm);
 </script>
