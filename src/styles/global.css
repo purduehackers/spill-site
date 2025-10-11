@@ -229,20 +229,21 @@
 .rsvp-button {
 	position: absolute;
 	user-select: none;
-	top:70%;
-	left:70%;
+	/*top:70%;
+	left:70%;*/
 	rotate: 15deg;
 	background: none;
 	border: none;
 	padding: 0;
 	cursor: pointer;
 	display: inline-block;
+	@apply lg:top-[70%] lg:left-[70%] top-[75%] left-[40%];
 }
 
 .rsvp-image {
 	display: block;
 	height: auto;
-	max-width: 200px;
+	max-width: 250px;
 	width: auto;
 	filter: drop-shadow(5px 5px 5px rgb(0,0,0,0.366));
 }
