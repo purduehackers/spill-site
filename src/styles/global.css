@@ -252,7 +252,6 @@
   filter: drop-shadow(5px 5px 5px rgb(0, 0, 0, 0.366));
 }
 
-/* Prevent scrolling when in drawing mode */
 .drawing-active {
   overflow: hidden;
   touch-action: none;
