@@ -41,7 +41,7 @@ import { ClientRouter } from 'astro:transitions';
     </button>
     <canvas id="draw-canvas" class="draw-canvas" aria-hidden="true"></canvas>
 
-    <!-- 
+    <!--
 		i'm debating if i want the purdue hackers logo in the corner xx
 		<a href="https://www.purduehackers.com" target="_blank" rel="noopener noreferrer" class="purdue-hackers-link">
 			<svg width="44" height="57" viewBox="0 0 1759 2278" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -260,6 +260,7 @@ import { ClientRouter } from 'astro:transitions';
 
         //draw :3
         const toggleBtn = document.getElementById('draw-toggle');
+        const pencilIcon = toggleBtn?.querySelector('svg') as SVGElement | null;
         const drawCanvas = document.getElementById('draw-canvas') as HTMLCanvasElement | null;
         const drawCtx = drawCanvas ? drawCanvas.getContext('2d') : null;
         let drawingActive = false;
@@ -324,6 +325,7 @@ import { ClientRouter } from 'astro:transitions';
             const last = current.points[current.points.length - 1];
             if (Math.hypot(last.x - x, last.y - y) > 10) {
               current.points.push({ x, y });
+              renderCurrentFrame();
             }
           }
         }
@@ -376,7 +378,33 @@ import { ClientRouter } from 'astro:transitions';
         const fps = 4;
         const frameDuration = 1000 / fps;
 
-        // animation loop
+        function renderCurrentFrame() {
+          if (!drawCtx || !drawCanvas) return;
+          drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
+
+          for (let strokeIndex = 0; strokeIndex < strokes.length; strokeIndex++) {
+            const stroke = strokes[strokeIndex];
+            if (stroke.points.length < 2) continue;
+            drawCtx.beginPath();
+
+            const isActiveStroke = drawing && strokeIndex === strokes.length - 1;
+
+            for (let i = 0; i < stroke.points.length - 1; i++) {
+              const p = stroke.points[i];
+              const n = stroke.points[i + 1];
+
+              if (isActiveStroke) {
+                if (i === 0) drawCtx.moveTo(p.x, p.y);
+                drawCtx.lineTo(n.x, n.y);
+              } else {
+                if (i === 0) drawCtx.moveTo(p.x, p.y);
+                drawCtx.lineTo(n.x, n.y);
+              }
+            }
+            drawCtx.stroke();
+          }
+        }
+
         function renderJitter(now: number) {
           if (!drawCtx || !drawCanvas) return;
           if (now - lastFrameTime < frameDuration) {
@@ -385,28 +413,48 @@ import { ClientRouter } from 'astro:transitions';
           }
           lastFrameTime = now;
           drawCtx.clearRect(0, 0, drawCanvas.width, drawCanvas.height);
-          for (const stroke of strokes) {
+
+          for (let strokeIndex = 0; strokeIndex < strokes.length; strokeIndex++) {
+            const stroke = strokes[strokeIndex];
             if (stroke.points.length < 2) continue;
             drawCtx.beginPath();
+
+            const isActiveStroke = drawing && strokeIndex === strokes.length - 1;
+
             for (let i = 0; i < stroke.points.length - 1; i++) {
               const p = stroke.points[i];
               const n = stroke.points[i + 1];
 
-              const jitter = 2.0; // px amplitude
-              const jx1 = (Math.random() - 0.5) * jitter * 2;
-              const jy1 = (Math.random() - 0.5) * jitter * 2;
-              const jx2 = (Math.random() - 0.5) * jitter * 2;
-              const jy2 = (Math.random() - 0.5) * jitter * 2;
+              if (isActiveStroke) {
+                if (i === 0) drawCtx.moveTo(p.x, p.y);
+                drawCtx.lineTo(n.x, n.y);
+              } else {
+                const jitter = 2.0; // px amplitude
+                const jx1 = (Math.random() - 0.5) * jitter * 2;
+                const jy1 = (Math.random() - 0.5) * jitter * 2;
+                const jx2 = (Math.random() - 0.5) * jitter * 2;
+                const jy2 = (Math.random() - 0.5) * jitter * 2;
 
-              if (i === 0) drawCtx.moveTo(p.x + jx1, p.y + jy1);
-              drawCtx.lineTo(n.x + jx2, n.y + jy2);
+                if (i === 0) drawCtx.moveTo(p.x + jx1, p.y + jy1);
+                drawCtx.lineTo(n.x + jx2, n.y + jy2);
+              }
             }
             drawCtx.stroke();
           }
+
+          if (drawingActive && pencilIcon) {
+            const jitter = 2.0;
+            const jx = (Math.random() - 0.5) * jitter * 2;
+            const jy = (Math.random() - 0.5) * jitter * 2;
+            const rotation = (Math.random() - 0.5) * 0.5; // Small rotation
+            pencilIcon.style.transform = `translate(${jx}px, ${jy}px) rotate(${rotation}deg)`;
+          } else if (pencilIcon) {
+            pencilIcon.style.transform = 'translate(0px, 0px) rotate(0deg)';
+          }
+
           requestAnimationFrame(renderJitter);
         }
         requestAnimationFrame(renderJitter);
-        //renderJitter();
         animate();
         document.addEventListener('wheel', zoom);
         window.addEventListener('resize', handleResize);
