@@ -15,27 +15,10 @@ import Layout from '@/layouts/Layout.astro';
       >
         spill
       </h1>
-      <!-- RSVP Button! -->
-      <div class="rsvp-button">
-        <button id="rsvp-button" class="rsvp-button group">
-          <img
-            src="/img/rsvp1.png"
-            alt="RSVP"
-            class="rsvp-image group-hover:opacity-0"
-            draggable="false"
-          />
-          <img
-            src="/img/rsvp2.png"
-            alt="RSVP"
-            class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
-            draggable="false"
-          />
-        </button>
-      </div>
       <div class="flex max-w-xl flex-col gap-y-4">
         <p class="font-body mt-2 pt-8 text-base sm:mt-4 sm:text-xl">
           an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
-          technical projects, run by <a
+          technical projects in a café, run by <a
             href="https://www.purduehackers.com"
             target="_blank"
             rel="noopener noreferrer"
@@ -69,10 +52,27 @@ import Layout from '@/layouts/Layout.astro';
         </p>
         <br />
         <p class="font-body text-base leading-relaxed sm:text-lg">
-          enter a warm coffee shop on a cold night, grab a free drink, and experience interactive
-          installations, digital experiments, and visual stories created by purdue students.
+          come experience interactive installations, digital experiments, and visual stories created
+          by purdue students.
         </p>
       </section>
+      <!-- RSVP Button! -->
+      <div class="mt-4 mb-32 flex justify-center">
+        <button id="rsvp-button" class="rsvp-button group">
+          <img
+            src="/img/rsvp1.png"
+            alt="RSVP"
+            class="rsvp-image group-hover:opacity-0"
+            draggable="false"
+          />
+          <img
+            src="/img/rsvp2.png"
+            alt="RSVP"
+            class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
+            draggable="false"
+          />
+        </button>
+      </div>
     </div>
   </main>
 
