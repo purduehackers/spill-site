@@ -260,6 +260,7 @@ import { ClientRouter } from 'astro:transitions';
 
         //draw :3
         const toggleBtn = document.getElementById('draw-toggle');
+        const pencilIcon = toggleBtn?.querySelector('svg') as SVGElement | null;
         const drawCanvas = document.getElementById('draw-canvas') as HTMLCanvasElement | null;
         const drawCtx = drawCanvas ? drawCanvas.getContext('2d') : null;
         let drawingActive = false;
@@ -440,6 +441,17 @@ import { ClientRouter } from 'astro:transitions';
             }
             drawCtx.stroke();
           }
+          // Apply jitter to pencil icon when drawing is active
+          if (drawingActive && pencilIcon) {
+            const jitter = 2.0; // Smaller amplitude for icon
+            const jx = (Math.random() - 0.5) * jitter * 2;
+            const jy = (Math.random() - 0.5) * jitter * 2;
+            const rotation = (Math.random() - 0.5) * 0.5; // Small rotation
+            pencilIcon.style.transform = `translate(${jx}px, ${jy}px) rotate(${rotation}deg)`;
+          } else if (pencilIcon) {
+            pencilIcon.style.transform = 'translate(0px, 0px) rotate(0deg)';
+          }
+
           requestAnimationFrame(renderJitter);
         }
         requestAnimationFrame(renderJitter);
