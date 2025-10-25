@@ -1,11 +1,37 @@
 @import 'tailwindcss';
 
+:root {
+  /* Color variables */
+  --coffee: #4b3732;
+  --paper: #e0dbd3;
+  --moss: #a0a041;
+  --matcha: #7f9541;
+  --cream: #ecdbbf;
+  --chocolate: #744726;
+  --coffee-light: #896258;
+
+  --red-clay: #b95a2d;
+  --sage: #a0aaa0;
+  --pine: #556432;
+}
+
 @theme {
   --font-heading: 'MudClub FranklintheGoth', 'serif';
   --font-body: 'Authentic Sans', 'sans-serif';
-  --color-header: #4b3732;
-  --color-background: #e0dbd3;
-  --color-highlight: #4b3732;
+  --color-header: var(--coffee);
+  --color-background: var(--paper);
+  --color-highlight: var(--coffee);
+
+  --color-coffee: var(--coffee);
+  --color-paper: var(--paper);
+  --color-moss: var(--moss);
+  --color-matcha: var(--matcha);
+  --color-cream: var(--cream);
+  --color-chocolate: var(--chocolate);
+  --color-coffee-light: var(--coffee-light);
+  --color-red-clay: var(--red-clay);
+  --color-sage: var(--sage);
+  --color-pine: var(--pine);
 }
 
 @font-face {
@@ -150,22 +176,56 @@
     mix-blend-mode: hard-light;
     z-index: 0;
   }
+
+  /* Tickets stuff */
+
+  .tea-tag {
+    clip-path: polygon(25% 0%, 75% 0%, 100% 22%, 100% 100%, 0 100%, 0 22%);
+    background-color: var(--matcha);
+    color: var(--paper);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+  }
+
+  .tea-tag-oct {
+    --corner-size: 18%;
+    clip-path: polygon(
+      var(--corner-size) 0%,
+      calc(100% - var(--corner-size)) 0%,
+      100% var(--corner-size),
+      100% calc(100% - var(--corner-size)),
+      calc(100% - var(--corner-size)) 100%,
+      var(--corner-size) 100%,
+      0% calc(100% - var(--corner-size)),
+      0% var(--corner-size)
+    );
+    background-color: var(--matcha);
+    color: var(--paper);
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05rem;
+  }
 }
 
 ::selection {
-  background-color: #4b3732; /* e.g., #FFFF00 for yellow */
-  color: #a0a041; /* e.g., #000000 for black */
+  background-color: var(--coffee); /* e.g., #FFFF00 for yellow */
+  color: var(--moss); /* e.g., #000000 for black */
 }
 
 /* For Firefox compatibility, use the -moz-prefix as well */
 ::-moz-selection {
-  background-color: #4b3732;
-  color: #a0a041;
+  background-color: var(--coffee);
+  color: var(--moss);
 }
 
 .highlight {
-  background-color: #4b3732; /* e.g., #FFFF00 for yellow */
-  color: #c2c241; /* e.g., #000000 for black */
+  background-color: var(--coffee); /* e.g., #FFFF00 for yellow */
+  color: var(--moss); /* e.g., #000000 for black */
 }
 
 .sketch-highlight {
@@ -221,7 +281,7 @@
 
 .realistic-marker-highlight:before {
   content: '';
-  background-color: #a0a041;
+  background-color: var(--moss);
   width: 100%;
   height: 1em;
   position: absolute;
