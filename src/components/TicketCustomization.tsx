@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import ColorSelector from './ColorSelector';
+import Draggable from './Draggable';
 
 interface TicketCustomizationProps {
   name: string;
@@ -72,9 +73,23 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
 
                 {/* Ticket */ }
                 <div className="w-full h-full flex flex-col gap-2">
-                    <img  className="w-2/3 h-full object-cover"
+                    <img className="w-2/3 h-full object-cover"
                         src={`/img/tickets/ticket${ticketDesign}.png`} 
                         alt="Ticket" />
+                </div>
+
+                {/* Spills */}
+                <div className="absolute top-0 right-0">
+                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                        <img className="handle w-64 h-full object-cover select-none"
+                            src={`/img/coffee/85.png`} 
+                            alt="Spill" draggable={false} />
+                    </Draggable>
+                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                        <img className="handle w-64 h-full object-cover select-none"
+                            src={`/img/coffee/89.png`} 
+                            alt="Spill" draggable={false} />
+                    </Draggable>
                 </div>
 
                 <div className="flex flex-col gap-2 p-6">
