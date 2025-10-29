@@ -1,4 +1,7 @@
 import { useState } from 'react';
+import * as htmlToImage from 'html-to-image';
+import { toPng } from 'html-to-image';
+
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 
@@ -27,6 +30,29 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
 
     const handleSpillImageChange = (image: string) => {
         setSpillImage(image);
+    }
+
+    const downloadTicket = () => {
+        const node = document.getElementById('ticket-customization-canvas');
+        if (!node) return;
+        
+        htmlToImage.toPng(node).then((dataUrl) => {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = 'ticket.png';
+            link.click();
+        });
+    }
+
+    const shareTicket = () => {
+        
+    }
+
+    const resetTicket = () => {
+        setTicketDesign('1');
+        setTicketShape('circle');
+        setTicketColor('matcha');
+        setSpillImage('default');
     }
 
     return (
@@ -62,14 +88,29 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
                     </div>
                 </div>
                 <div className="flex flex-row gap-2">
-                    <button className="form-button">download</button>
-                    <button className="form-button">share</button>
-                    <button className="form-button">reset</button>
+                    <button className="form-button"
+                        onClick={downloadTicket}
+                    >
+                        download
+                    </button>
+                    <button className="form-button"
+                        onClick={shareTicket}
+                    >
+                        share
+                    </button>
+                    <button className="form-button"
+                        onClick={resetTicket}
+                    >
+                        reset
+                    </button>
                 </div>
             </div>
 
             {/* Ticket Customization Preview Canvas */}
-            <div className="grow h-full overflow-hidden flex flex-col gap-4 justify-between border-2 border-sage/50 rounded-lg p-4">
+            <div 
+                id="ticket-customization-canvas"
+                className="grow h-full overflow-hidden flex flex-col gap-4 justify-between bg-paper border-2 border-sage/50 rounded-lg p-4"
+            >
 
                 {/* Ticket */ }
                 <div className="w-full h-full flex flex-col gap-2">
@@ -79,7 +120,7 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
                 </div>
 
                 {/* Spills */}
-                <div className="absolute top-0 right-0">
+                <div className="relative top-0 right-0 h-0 flex justify-end">
                     <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
