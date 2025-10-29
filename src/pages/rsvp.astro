@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
+import TicketCustomization from '@/components/TicketCustomization.tsx';
 ---
 
 <BaseLayout
@@ -17,69 +18,8 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
             hihi
         </div>
 
-        <div class="w-full h-3/4 flex gap-4">
-            <div class="w-1/2 h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
-                <div>
-                     ಃ create your ticket ಀ
-                </div>
-                <div>
-                    <input class=""
-                        type="text"
-                        placeholder="name"
-                    />
-                </div>
-            </div>
-
-            <div class="w-1/2 h-full flex flex-col gap-4 justify-between border-2 border-coffee rounded-lg p-4">
-                <div>
-                    hello friends
-                </div>
-
-                <div class="flex flex-col gap-2 p-6">
-                    <div class="flex flex-row gap-2">
-                        <div class="tea-tag w-24 h-24">
-                            <div class="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
-                            </div>
-                        </div>
-                        <div class="tea-tag w-24 h-24 bg-sage">
-                            <div class="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
-                            </div>
-                        </div>
-                        <div class="tea-tag w-24 h-24 bg-coffee-light">
-                            <div class="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="flex flex-col gap-2 p-6">
-                    <div class="flex flex-row gap-2">
-                        <div class="tea-tag-oct w-24 h-24 bg-pine">
-                            <div class="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
-                            </div>
-                        </div>
-                        <div class="tea-tag-oct w-24 h-24 bg-red-clay">
-                            <div class="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
-                            </div>
-                        </div>
-                        <div class="tea-tag-oct w-24 h-24 bg-coffee">
-                            <div class="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <div>
+            <TicketCustomization name="buttholed" />
         </div>
     </div>
   </main>
