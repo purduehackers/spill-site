@@ -95,6 +95,19 @@
     --tw-ring-color: var(--color-highlight);
   }
 
+  button {
+    @apply px-4 py-2 rounded-md cursor-pointer;
+  }
+  .form-button {
+    @apply bg-matcha text-paper;
+  }
+  .color-radio-item {
+    @apply w-5 h-5 rounded-full flex items-center justify-center transition-all duration-100 relative p-0 shrink-0;
+  }
+  .color-radio-indicator {
+    @apply absolute -inset-1.5 m-0.5 rounded-full border-2 border-white pointer-events-none;
+  }
+
   .container {
     width: 93% !important;
     max-width: unset !important;
