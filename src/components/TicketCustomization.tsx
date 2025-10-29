@@ -68,10 +68,7 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
             </div>
 
             {/* Ticket Customization Preview Canvas */}
-            <div className="grow h-full overflow-hidden flex flex-col gap-4 justify-between border-2 border-coffee rounded-lg p-4">
-                <div>
-                    hello friends
-                </div>
+            <div className="grow h-full overflow-hidden flex flex-col gap-4 justify-between border-2 border-sage/50 rounded-lg p-4">
 
                 {/* Ticket */ }
                 <div className="w-full h-full flex flex-col gap-2">
