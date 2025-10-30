@@ -178,7 +178,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Ticket */ }
-                <div className="w-fit h-fit flex items-center justify-center">
+                <div className="absolute w-fit h-fit flex items-center justify-center">
                     <Ticket name={name} ticketDesign={ticketDesign} />
                 </div>
 
@@ -188,6 +188,11 @@ export default function TicketCustomization() {
                         <span className="handle text-base font-bold">{message}</span>
                     </Draggable>
                 </div>
+
+                {/* Coffee Cup */}
+                <img src="/img/coffee-cup-1.jpg" 
+                    alt="Ticket" 
+                    className="hidden scale-215 absolute top-30 -left-20 w-200 h-full object-cover" />
 
                 {/* Spills */}
                 <div className="relative top-0 right-0 h-0 flex justify-end">
