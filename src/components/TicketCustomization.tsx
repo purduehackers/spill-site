@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import * as htmlToImage from 'html-to-image';
-import { toPng } from 'html-to-image';
 
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
+import Ticket from './Ticket';
 
 export default function TicketCustomization() {
 
@@ -21,7 +21,6 @@ export default function TicketCustomization() {
     });
 
     const [ticketDesign, setTicketDesign] = useState<string>('1');
-    const [ticketShape, setTicketShape] = useState<string>('circle');
     const [ticketColor, setTicketColor] = useState<string>('matcha');
     const [backgroundColor, setBackgroundColor] = useState<string>('paper');
     const [spillImage, setSpillImage] = useState<string>('default');
@@ -48,10 +47,6 @@ export default function TicketCustomization() {
 
     const handleTicketDesignChange = (design: string) => {
         setTicketDesign(design);
-    }
-
-    const handleTicketShapeChange = (shape: string) => {
-        setTicketShape(shape);
     }
 
     const handleTicketColorChange = (color: string) => {
@@ -84,7 +79,6 @@ export default function TicketCustomization() {
 
     const resetTicket = () => {
         setTicketDesign('1');
-        setTicketShape('circle');
         setTicketColor('matcha');
         setSpillImage('default');
     }
@@ -99,8 +93,8 @@ export default function TicketCustomization() {
         >
             {/* Options Panel */}
             <div className="w-full md:w-1/2 md:max-w-fit h-fit md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
-                <div>
-                        ಃ create your ticket ಀ
+                <div className="text-moss">
+                    ≋ create your ticket ಀ ಃ
                 </div>
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2">
@@ -122,7 +116,7 @@ export default function TicketCustomization() {
                         <input className=""
                             id="message"
                             type="text"
-                            placeholder="message"
+                            placeholder="come spill with us!!"
                             value={message}
                             onChange={(e) => handleMessageChange(e.target.value)}
                         />
@@ -188,12 +182,13 @@ export default function TicketCustomization() {
 					style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
 				/>
 
-                {/* Ticket */ }
-                <div className="z-10 w-full h-full max-w-full max-h-full mx-auto">
-                    <img className="w-fit h-fit max-w-full max-h-full object-fit"
-                        src={`/img/tickets/ticket${ticketDesign}.png`} 
-                        alt="Ticket" />
+                <div className="text-xs flex justify-between">
+                    <div className="realstic-marker-highlight">december 6, 2025</div>
+                    <div>https://spill.purduehackers.com</div>
                 </div>
+
+                {/* Ticket */ }
+                <Ticket ticketDesign={ticketDesign} />
 
                 {/* Text Overlay */}
                 <div className="w-full h-0 flex flex-col items-center justify-center">
@@ -223,23 +218,28 @@ export default function TicketCustomization() {
                     </Draggable>
                 </div>
 
-                <div className="flex flex-col gap-2 p-6">
+                {/* Regular Tea Tags */}
+                <div className="flex flex-col gap-2 p-6 text-xs"
+                    style={{
+                        '--tea-tag-size': '48px',
+                    } as React.CSSProperties}
+                >
                     <div className="flex flex-row gap-2">
                         <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
-                            <div className="handle tea-tag w-24 h-24">
+                            <div className="handle tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)]">
                                 <div className="w-full h-full flex flex-col items-center justify-center">
                                     <span>tea</span>
                                     <span>tag!</span>
                                 </div>
                             </div>
                         </Draggable>
-                        <div className="tea-tag w-24 h-24 bg-sage">
+                        <div className="tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-sage">
                             <div className="w-full h-full flex flex-col items-center justify-center">
                                 <span>tea</span>
                                 <span>tag!</span>
                             </div>
                         </div>
-                        <div className="tea-tag w-24 h-24 bg-coffee-light">
+                        <div className="tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-coffee-light">
                             <div className="w-full h-full flex flex-col items-center justify-center">
                                 <span>tea</span>
                                 <span>tag!</span>
@@ -247,21 +247,27 @@ export default function TicketCustomization() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-2 p-6">
+
+                {/* Octagon Tea Tags */}
+                <div className="hidden flex flex-col gap-2 p-6"
+                    style={{
+                        '--tea-tag-size': '96px',
+                    } as React.CSSProperties}
+                >
                     <div className="flex flex-row gap-2">
-                        <div className="tea-tag-oct w-24 h-24 bg-pine">
+                        <div className="tea-tag-oct w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-pine">
                             <div className="w-full h-full flex flex-col items-center justify-center">
                                 <span>tea</span>
                                 <span>tag!</span>
                             </div>
                         </div>
-                        <div className="tea-tag-oct w-24 h-24 bg-red-clay">
+                        <div className="tea-tag-oct w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-red-clay">
                             <div className="w-full h-full flex flex-col items-center justify-center">
                                 <span>tea</span>
                                 <span>tag!</span>
                             </div>
                         </div>
-                        <div className="tea-tag-oct w-24 h-24 bg-coffee">
+                        <div className="tea-tag-oct w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-coffee">
                             <div className="w-full h-full flex flex-col items-center justify-center">
                                 <span>tea</span>
                                 <span>tag!</span>

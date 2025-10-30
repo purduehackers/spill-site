@@ -95,6 +95,10 @@
     --tw-ring-color: var(--color-highlight);
   }
 
+  label {
+    color: var(--cream);
+  }
+
   button {
     @apply px-4 py-2 rounded-md cursor-pointer;
   }
@@ -197,7 +201,6 @@
     background-color: var(--matcha);
     color: var(--paper);
     padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05rem;
@@ -218,7 +221,6 @@
     background-color: var(--matcha);
     color: var(--paper);
     padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05rem;

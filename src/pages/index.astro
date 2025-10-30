@@ -184,7 +184,7 @@ import Layout from '@/layouts/Layout.astro';
               },
               body: JSON.stringify({
                 email: formData.get('email'),
-                name: formData.get('name')
+                //name: formData.get('name')
               })
             });
 
@@ -194,7 +194,7 @@ import Layout from '@/layouts/Layout.astro';
               // Show success message
               if (modalRoot) {
                 modalRoot.innerHTML = `
-                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+                <div class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4">
                   <div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
                     <div class="text-center">
                       <p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
@@ -204,9 +204,14 @@ import Layout from '@/layouts/Layout.astro';
                 </div>
               `;
               }
-              // Close form after 2 seconds
+
+              // Set name in local storage
+              localStorage.setItem('ticket-name', formData.get('name') as string);
+
+              // Redirect to ticket page after 2 seconds
               setTimeout(() => {
-                closeForm();
+                //window.location.href = '/rsvp';
+                //closeForm();
               }, 2000);
             } else {
               if (errorDiv) {
