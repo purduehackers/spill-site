@@ -29,7 +29,7 @@ export default function Draggable ({ children, className, zIndex = 50 }: Draggab
             drag
             dragControls={dragControls}
             dragListener={false}
-            dragElastic={0}
+            dragElastic={0.5}
             dragMomentum={false}
             dragConstraints={false}
             whileDrag={{ scale: 1, zIndex: zIndex }}

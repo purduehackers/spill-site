@@ -5,16 +5,26 @@ import { toPng } from 'html-to-image';
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 
-interface TicketCustomizationProps {
-  name: string;
-}
+type TicketColor = "matcha" | "coffee";
 
-export default function TicketCustomization({ name }: TicketCustomizationProps) {
+export default function TicketCustomization() {
+
+    const [name, setName] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
     const [ticketDesign, setTicketDesign] = useState<string>('1');
     const [ticketShape, setTicketShape] = useState<string>('circle');
-    const [ticketColor, setTicketColor] = useState<string>('matcha');
+    const [ticketColor, setTicketColor] = useState<TicketColor>('matcha');
     const [spillImage, setSpillImage] = useState<string>('default');
+
+
+    const handleNameChange = (name: string) => {
+        setName(name);
+    }
+
+    const handleMessageChange = (message: string) => {
+        setMessage(message);
+    }
 
     const handleTicketDesignChange = (design: string) => {
         setTicketDesign(design);
@@ -24,7 +34,7 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
         setTicketShape(shape);
     }
 
-    const handleTicketColorChange = (color: string) => {
+    const handleTicketColorChange = (color: TicketColor) => {
         setTicketColor(color);
     }
 
@@ -56,8 +66,8 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
     }
 
     return (
-        <div className="w-full h-full flex gap-4">
-            <div className="w-1/3 h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
+        <div className="w-full h-full flex flex-col md:flex-row gap-4">
+            <div className="w-full md:w-1/3 h-fit md:h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
                 <div>
                         ಃ create your ticket ಀ
                 </div>
@@ -65,6 +75,14 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
                     <input className=""
                         type="text"
                         placeholder="name"
+                        value={name}
+                        onChange={(e) => handleNameChange(e.target.value)}
+                    />
+                    <input className=""
+                        type="text"
+                        placeholder="message"
+                        value={message}
+                        onChange={(e) => handleMessageChange(e.target.value)}
                     />
                     <ColorSelector handleColorChange={handleTicketColorChange} />
                     <div>
@@ -109,14 +127,30 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
             {/* Ticket Customization Preview Canvas */}
             <div 
                 id="ticket-customization-canvas"
-                className="grow h-full overflow-hidden flex flex-col gap-4 justify-between bg-paper border-2 border-sage/50 rounded-lg p-4"
+				className="relative grow h-full overflow-hidden select-none flex flex-col gap-4 justify-between bg-paper border-2 border-sage/50 rounded-lg p-4"
             >
+				{/* Scoped grain overlay for preview canvas */}
+				<div
+					aria-hidden
+					className="pointer-events-none absolute inset-0 mix-blend-overlay"
+					style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat', opacity: 0.4 }}
+				/>
 
                 {/* Ticket */ }
-                <div className="w-full h-full flex flex-col gap-2">
-                    <img className="w-2/3 h-full object-cover"
+                <div className="w-9/12 h-full mx-auto translate-y-1/2">
+                    <img className="w-full h-full object-cover"
                         src={`/img/tickets/ticket${ticketDesign}.png`} 
                         alt="Ticket" />
+                </div>
+
+                {/* Text Overlay */}
+                <div className="w-full h-0 flex flex-col items-center justify-center">
+                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                        <span className="handle text-2xl font-bold">{name}</span>
+                    </Draggable>
+                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                        <span className="handle text-2xl font-bold">{message}</span>
+                    </Draggable>
                 </div>
 
                 {/* Spills */}
@@ -135,12 +169,14 @@ export default function TicketCustomization({ name }: TicketCustomizationProps) 
 
                 <div className="flex flex-col gap-2 p-6">
                     <div className="flex flex-row gap-2">
-                        <div className="tea-tag w-24 h-24">
-                            <div className="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
+                        <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                            <div className="handle tea-tag w-24 h-24">
+                                <div className="w-full h-full flex flex-col items-center justify-center">
+                                    <span>tea</span>
+                                    <span>tag!</span>
+                                </div>
                             </div>
-                        </div>
+                        </Draggable>
                         <div className="tea-tag w-24 h-24 bg-sage">
                             <div className="w-full h-full flex flex-col items-center justify-center">
                                 <span>tea</span>

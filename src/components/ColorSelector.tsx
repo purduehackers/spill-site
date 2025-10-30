@@ -1,6 +1,8 @@
 import { RadioGroup } from "radix-ui";
 
-export default function ColorSelector({ handleColorChange }: { handleColorChange: (color: string) => void }) {
+type TicketColor = "matcha" | "coffee";
+
+export default function ColorSelector({ handleColorChange }: { handleColorChange: (color: TicketColor) => void }) {
     return (
         <RadioGroup.Root
             className="flex flex-row gap-2"
