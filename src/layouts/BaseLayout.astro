@@ -62,8 +62,9 @@ import { ClientRouter } from 'astro:transitions';
 		</div> -->
     <slot />
 
-    <!-- Grain texture overlay -->
-    <div class="grain-overlay"></div>
+    <!-- Grain texture overlay for UI -->
+    <!-- Goes underneath ticket customization canvas but above everything else -->
+    <div class="grain-overlay z-200 pointer-events-none"></div> 
 
     <!-- SVG Filter for ink bleed effect -->
     <svg

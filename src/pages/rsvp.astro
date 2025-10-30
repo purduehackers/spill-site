@@ -7,18 +7,18 @@ import TicketCustomization from '@/components/TicketCustomization.tsx';
   title="spill | tickets"
   description="an upcoming exhibition of student-made creative technical projects."
 >
-    <div class="h-screen min-h-screen flex flex-col md:flex-col px-4 sm:px-6 md:p-6">
+    <div class="h-fit md:h-screen min-h-screen flex flex-col md:flex-col p-4 md:p-6 px-4 sm:px-6">
         <!--
         <h1 class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]" style="filter: url(#goof);">
             ~~~~
         </h1>
          -->
         
-        <div class="w-full h-1/6">
-            hihi
+        <div class="w-full h-1/6 mb-4 text-xl">
+            ≋ See you at spill!
         </div>
 
-        <div class="w-full grow">
+        <div class="w-full h-full md:h-5/6">
             <TicketCustomization client:load />
         </div>
     </div>

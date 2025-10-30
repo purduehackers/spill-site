@@ -65,7 +65,7 @@
     background-color: var(--color-background);
     color: var(--color-header);
     /* Prevent horizontal scroll on mobile */
-    overflow: hidden;
+    overflow-x: hidden;
   }
 
   body {

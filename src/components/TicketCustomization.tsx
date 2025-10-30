@@ -71,36 +71,40 @@ export default function TicketCustomization() {
     return (
         <div className="w-full h-full flex flex-col md:flex-row gap-4">
             {/* Options Panel */}
-            <div className="w-full md:w-1/3 h-fit md:h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
+            <div className="w-full md:w-80 md:max-w-1/3 h-fit md:h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
                 <div>
                         ಃ create your ticket ಀ
                 </div>
-                <div>
-                    <input className=""
-                        type="text"
-                        placeholder="name"
-                        value={name}
-                        onChange={(e) => handleNameChange(e.target.value)}
-                    />
-                    <input className=""
-                        type="text"
-                        placeholder="message"
-                        value={message}
-                        onChange={(e) => handleMessageChange(e.target.value)}
-                    />
-
-                    <div className="my-2 flex flex-col gap-2">
-                        <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Ticket Color</label>
-                        <ColorSelector colors={['matcha', 'coffee-light']} 
-                            handleColorChange={handleTicketColorChange} />
-                    </div>
-                    <div className="my-2 flex flex-col gap-2">
-                        <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Background Color</label>
-                        <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
-                            handleColorChange={handleBackgroundColorChange} />
+                <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-2">
+                        <input className=""
+                            type="text"
+                            placeholder="name"
+                            value={name}
+                            onChange={(e) => handleNameChange(e.target.value)}
+                        />
+                        <input className=""
+                            type="text"
+                            placeholder="message"
+                            value={message}
+                            onChange={(e) => handleMessageChange(e.target.value)}
+                        />
                     </div>
 
-                    <div>
+                    <div className="flex flex-row md:flex-col gap-4 md:gap-2">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Ticket Color</label>
+                            <ColorSelector colors={['matcha', 'coffee-light']} 
+                                handleColorChange={handleTicketColorChange} />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Background Color</label>
+                            <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
+                                handleColorChange={handleBackgroundColorChange} />
+                        </div>
+                    </div>
+
+                    <div className="my-2">
                         <select value={ticketDesign} 
                             onChange={(e) => handleTicketDesignChange(e.target.value)}
                         >
@@ -142,18 +146,18 @@ export default function TicketCustomization() {
             {/* Ticket Customization Preview Canvas */}
             <div 
                 id="ticket-customization-canvas"
-				className={`relative grow h-full overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/50 rounded-lg p-4`}
+				className={`z-500 relative grow h-screen md:h-full overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/50 rounded-lg p-4`}
             >
-				{/* Scoped grain overlay for preview canvas */}
+				{/* Grain overlay for preview canvas */}
 				<div
 					aria-hidden
-					className="pointer-events-none absolute inset-0 mix-blend-overlay"
-					style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat', opacity: 0.4 }}
+					className="z-1000 pointer-events-none absolute inset-0 mix-blend-overlay opacity-100"
+					style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
 				/>
 
                 {/* Ticket */ }
-                <div className="w-9/12 h-full mx-auto translate-y-1/2">
-                    <img className="w-full h-full object-cover"
+                <div className=" w-full h-full max-w-full max-h-full mx-auto">
+                    <img className="w-fit h-fit max-w-full max-h-full object-fit"
                         src={`/img/tickets/ticket${ticketDesign}.png`} 
                         alt="Ticket" />
                 </div>
@@ -169,7 +173,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Spills */}
-                <div className="relative top-0 right-0 h-0 flex justify-end">
+                <div className="absolute top-0 right-0 h-0 flex justify-end">
                     <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
