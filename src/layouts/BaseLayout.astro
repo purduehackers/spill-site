@@ -146,7 +146,7 @@ import { ClientRouter } from 'astro:transitions';
           // Check if we're at the bottom (with small tolerance)
           const atBottom = scrollTop + windowHeight >= documentHeight - 10;
 
-          if (atBottom && !isAtBottom) {
+          /*if (atBottom && !isAtBottom) {
             isAtBottom = true;
             // Prevent further scrolling
             document.body.style.overflow = 'hidden';
@@ -154,7 +154,7 @@ import { ClientRouter } from 'astro:transitions';
             isAtBottom = false;
             // Allow scrolling
             document.body.style.overflow = 'auto';
-          }
+          }*/
         }
 
         // Throttled scroll handler

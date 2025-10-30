@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import * as htmlToImage from 'html-to-image';
 import { toPng } from 'html-to-image';
 
@@ -7,8 +7,18 @@ import Draggable from './Draggable';
 
 export default function TicketCustomization() {
 
-    const [name, setName] = useState<string>('');
-    const [message, setMessage] = useState<string>('');
+    const [name, setName] = useState<string>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('ticket-name') || '';
+        }
+        return '';
+    });
+    const [message, setMessage] = useState<string>(() => {
+        if (typeof window !== 'undefined') {
+            return localStorage.getItem('ticket-message') || '';
+        }
+        return '';
+    });
 
     const [ticketDesign, setTicketDesign] = useState<string>('1');
     const [ticketShape, setTicketShape] = useState<string>('circle');
@@ -16,6 +26,17 @@ export default function TicketCustomization() {
     const [backgroundColor, setBackgroundColor] = useState<string>('paper');
     const [spillImage, setSpillImage] = useState<string>('default');
 
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('ticket-name', name);
+        }
+    }, [name]);
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('ticket-message', message);
+        }
+    }, [message]);
 
     const handleNameChange = (name: string) => {
         setName(name);
@@ -69,21 +90,37 @@ export default function TicketCustomization() {
     }
 
     return (
-        <div className="w-full h-full flex flex-col md:flex-row gap-4">
+        <div className="w-full h-full flex flex-col md:flex-row gap-4 justify-center"  
+            style={{
+                '--preview-size-small': '80px',
+                '--preview-size-medium': '400px',
+                '--preview-size-large': '520px',
+            } as React.CSSProperties}
+        >
             {/* Options Panel */}
-            <div className="w-full md:w-80 md:max-w-1/3 h-fit md:h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
+            <div className="w-full md:w-1/2 md:max-w-fit h-fit md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
                 <div>
                         ಃ create your ticket ಀ
                 </div>
                 <div className="flex flex-col gap-2">
                     <div className="flex flex-col gap-2">
+                        <label className="text-xs font-bold lowercase" 
+                                htmlFor="name">
+                            Name
+                        </label>
                         <input className=""
+                            id="name"
                             type="text"
-                            placeholder="name"
+                            placeholder="wack hacker"
                             value={name}
                             onChange={(e) => handleNameChange(e.target.value)}
                         />
+                        <label className="text-xs font-bold lowercase" 
+                                htmlFor="message">
+                            Message
+                        </label>
                         <input className=""
+                            id="message"
                             type="text"
                             placeholder="message"
                             value={message}
@@ -115,9 +152,6 @@ export default function TicketCustomization() {
                         </select>
                     </div>
                     <div>
-                        ticket design, shape, color
-                    </div>
-                    <div>
                         spill/stain image
                     </div>
                     <div>
@@ -144,9 +178,8 @@ export default function TicketCustomization() {
             </div>
 
             {/* Ticket Customization Preview Canvas */}
-            <div 
-                id="ticket-customization-canvas"
-				className={`z-500 relative grow h-screen md:h-full overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/50 rounded-lg p-4`}
+            <div id="ticket-customization-canvas"
+				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-screen md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
             >
 				{/* Grain overlay for preview canvas */}
 				<div
@@ -156,7 +189,7 @@ export default function TicketCustomization() {
 				/>
 
                 {/* Ticket */ }
-                <div className=" w-full h-full max-w-full max-h-full mx-auto">
+                <div className="z-10 w-full h-full max-w-full max-h-full mx-auto">
                     <img className="w-fit h-fit max-w-full max-h-full object-fit"
                         src={`/img/tickets/ticket${ticketDesign}.png`} 
                         alt="Ticket" />
@@ -165,21 +198,25 @@ export default function TicketCustomization() {
                 {/* Text Overlay */}
                 <div className="w-full h-0 flex flex-col items-center justify-center">
                     <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
-                        <span className="handle text-2xl font-bold">{name}</span>
+                        <span className="handle text-base font-bold">{name}</span>
                     </Draggable>
                     <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
-                        <span className="handle text-2xl font-bold">{message}</span>
+                        <span className="handle text-base font-bold">{message}</span>
                     </Draggable>
                 </div>
 
                 {/* Spills */}
-                <div className="absolute top-0 right-0 h-0 flex justify-end">
-                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                <div className="relative top-0 right-0 h-0 flex justify-end">
+                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing"
+                        zIndex={0}
+                    >
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
                             alt="Spill" draggable={false} />
                     </Draggable>
-                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing"
+                        zIndex={0}
+                    >
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/89.png`} 
                             alt="Spill" draggable={false} />
