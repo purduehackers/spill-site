@@ -121,28 +121,32 @@ import Layout from '@/layouts/Layout.astro';
                   ×
                 </button>
                 <form id="rsvp-form" class="space-y-4">
-                  <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
-                      Email *
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
-                      placeholder="your.email@example.com"
-                    />
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
-                      Name *
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
-                      placeholder="wack hacker"
-                    />
+                  <div class="flex flex-col gap-2">
+                    <div>
+                      <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+                        Email *
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        required
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
+                        placeholder="your.email@example.com"
+                      />
+                    </div>
+                    <div>
+                      <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+                        Name
+                      </label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
+                        placeholder="wack hacker"
+                      />
+                    </div>
                   </div>
                   <div id="error-message" class="text-red-600 text-sm hidden"></div>
                   <button
@@ -210,8 +214,9 @@ import Layout from '@/layouts/Layout.astro';
               `;
               }
 
-              // Set name in local storage
+              // Set name and ticket number in local storage
               localStorage.setItem('ticket-name', formData.get('name') as string);
+              localStorage.setItem('ticket-number', result.recordCount.toString());
 
               // Redirect to ticket page after 2 seconds
               setTimeout(() => {

@@ -5,6 +5,8 @@ export const prerender = false;
 
 import pkg from 'airtable-ts';
 const { AirtableTs } = pkg;
+import type { FieldSet } from 'airtable';
+import type { Records } from 'airtable';
 
 const db = new AirtableTs({
   apiKey: import.meta.env.AIRTABLE_API_KEY
@@ -52,19 +54,24 @@ export const POST: APIRoute = async ({ request }) => {
     const table = base('tblK9NsD5WoD1zxhY');
     console.log('table accessed get info...');
 
+    // Get number of records in table
+    let recordCount = 0;
     try {
-      const records = await table
+      const allRecords = await table
         .select({
-          maxRecords: 1
+          pageSize: 100
         })
-        .firstPage();
-      console.log('table accessible, found', records.length, 'records');
-      if (records.length > 0) {
-        console.log('sample record fields:', Object.keys(records[0].fields));
+        .all();
+      if (allRecords.length > 0) {
+        console.log('sample record fields:', Object.keys(allRecords[0].fields));
       }
+
+      recordCount = allRecords.length;
     } catch (schemaError) {
-      console.log('er');
+      console.log('error getting records:', schemaError);
     }
+
+    console.log('table read, found', recordCount, 'records');
 
     console.log('creating record...');
     const record = await table.create({
@@ -76,7 +83,8 @@ export const POST: APIRoute = async ({ request }) => {
       JSON.stringify({
         success: true,
         message: 'submitted!!',
-        recordId: record.id
+        recordId: record.id,
+        recordCount: recordCount
       }),
       {
         status: 200,

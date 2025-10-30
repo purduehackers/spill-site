@@ -6,24 +6,18 @@ import Draggable from './Draggable';
 import Ticket from './Ticket';
 
 export default function TicketCustomization() {
-
-    const [name, setName] = useState<string>(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('ticket-name') || '';
-        }
-        return '';
-    });
-    const [message, setMessage] = useState<string>(() => {
-        if (typeof window !== 'undefined') {
-            return localStorage.getItem('ticket-message') || '';
-        }
-        return '';
-    });
+    const [name, setName] = useState<string>('');
+    const [message, setMessage] = useState<string>('');
 
     const [ticketDesign, setTicketDesign] = useState<string>('1');
     const [ticketColor, setTicketColor] = useState<string>('matcha');
     const [backgroundColor, setBackgroundColor] = useState<string>('paper');
     const [spillImage, setSpillImage] = useState<string>('default');
+
+    useEffect(() => {
+        setName(localStorage.getItem('ticket-name') || '');
+        setMessage(localStorage.getItem('ticket-message') || '');
+    }, []);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -146,9 +140,7 @@ export default function TicketCustomization() {
                         </select>
                     </div>
                     <div>
-                        spill/stain image
-                    </div>
-                    <div>
+                        spill/stain image,
                         tea tag doodle
                     </div>
                 </div>
@@ -188,7 +180,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Ticket */ }
-                <Ticket ticketDesign={ticketDesign} />
+                <Ticket name={name} ticketDesign={ticketDesign} />
 
                 {/* Text Overlay */}
                 <div className="w-full h-0 flex flex-col items-center justify-center">
