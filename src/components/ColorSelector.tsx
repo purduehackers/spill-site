@@ -1,27 +1,27 @@
 import { RadioGroup } from "radix-ui";
 
-type TicketColor = "matcha" | "coffee";
+interface ColorSelectorProps {
+    colors: string[];
+    handleColorChange: (color: string) => void;
+}
 
-export default function ColorSelector({ handleColorChange }: { handleColorChange: (color: TicketColor) => void }) {
+export default function ColorSelector({ colors, handleColorChange }: ColorSelectorProps) {
     return (
         <RadioGroup.Root
             className="flex flex-row gap-2"
             aria-label="Ticket color"
             onValueChange={handleColorChange}
-            defaultValue="matcha"
+            defaultValue={colors[0]}
         >
-            <RadioGroup.Item
-                value="matcha"
-                className="bg-matcha color-radio-item"
-            >
-                <RadioGroup.Indicator className="color-radio-indicator" />
-            </RadioGroup.Item>
-            <RadioGroup.Item
-                value="coffee"
-                className="bg-coffee-light color-radio-item"
-            >
-                <RadioGroup.Indicator className="color-radio-indicator" />
-            </RadioGroup.Item>
+            <div className="w-0 h-0 bg-matcha bg-coffee-light bg-paper bg-moss bg-cream bg-chocolate bg-sage"></div>
+            {colors.map((color) => (
+                <RadioGroup.Item
+                    value={color}
+                    className={`bg-${color} color-radio-item`}
+                >
+                    <RadioGroup.Indicator className="color-radio-indicator" />
+                </RadioGroup.Item>
+            ))}
         </RadioGroup.Root>
     )
 }

@@ -5,8 +5,6 @@ import { toPng } from 'html-to-image';
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 
-type TicketColor = "matcha" | "coffee";
-
 export default function TicketCustomization() {
 
     const [name, setName] = useState<string>('');
@@ -14,7 +12,8 @@ export default function TicketCustomization() {
 
     const [ticketDesign, setTicketDesign] = useState<string>('1');
     const [ticketShape, setTicketShape] = useState<string>('circle');
-    const [ticketColor, setTicketColor] = useState<TicketColor>('matcha');
+    const [ticketColor, setTicketColor] = useState<string>('matcha');
+    const [backgroundColor, setBackgroundColor] = useState<string>('paper');
     const [spillImage, setSpillImage] = useState<string>('default');
 
 
@@ -34,8 +33,12 @@ export default function TicketCustomization() {
         setTicketShape(shape);
     }
 
-    const handleTicketColorChange = (color: TicketColor) => {
+    const handleTicketColorChange = (color: string) => {
         setTicketColor(color);
+    }
+
+    const handleBackgroundColorChange = (color: string) => {
+        setBackgroundColor(color);
     }
 
     const handleSpillImageChange = (image: string) => {
@@ -67,6 +70,7 @@ export default function TicketCustomization() {
 
     return (
         <div className="w-full h-full flex flex-col md:flex-row gap-4">
+            {/* Options Panel */}
             <div className="w-full md:w-1/3 h-fit md:h-full flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
                 <div>
                         ಃ create your ticket ಀ
@@ -84,7 +88,18 @@ export default function TicketCustomization() {
                         value={message}
                         onChange={(e) => handleMessageChange(e.target.value)}
                     />
-                    <ColorSelector handleColorChange={handleTicketColorChange} />
+
+                    <div className="my-2 flex flex-col gap-2">
+                        <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Ticket Color</label>
+                        <ColorSelector colors={['matcha', 'coffee-light']} 
+                            handleColorChange={handleTicketColorChange} />
+                    </div>
+                    <div className="my-2 flex flex-col gap-2">
+                        <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Background Color</label>
+                        <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
+                            handleColorChange={handleBackgroundColorChange} />
+                    </div>
+
                     <div>
                         <select value={ticketDesign} 
                             onChange={(e) => handleTicketDesignChange(e.target.value)}
@@ -127,7 +142,7 @@ export default function TicketCustomization() {
             {/* Ticket Customization Preview Canvas */}
             <div 
                 id="ticket-customization-canvas"
-				className="relative grow h-full overflow-hidden select-none flex flex-col gap-4 justify-between bg-paper border-2 border-sage/50 rounded-lg p-4"
+				className={`relative grow h-full overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/50 rounded-lg p-4`}
             >
 				{/* Scoped grain overlay for preview canvas */}
 				<div
