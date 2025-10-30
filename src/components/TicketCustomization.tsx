@@ -78,7 +78,7 @@ export default function TicketCustomization() {
     }
 
     return (
-        <div className="w-full h-full flex flex-col md:flex-row gap-4 justify-center"  
+        <div className="w-fit h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center"  
             style={{
                 '--preview-size-small': '80px',
                 '--preview-size-medium': '400px',
@@ -90,13 +90,13 @@ export default function TicketCustomization() {
                 <div className="text-moss">
                     ≋ create your ticket ಀ ಃ
                 </div>
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
                         <label className="text-xs font-bold lowercase" 
                                 htmlFor="name">
                             Name
                         </label>
-                        <input className=""
+                        <input className="border-b-2 border-dotted border-coffee-light"
                             id="name"
                             type="text"
                             placeholder="wack hacker"
@@ -107,7 +107,7 @@ export default function TicketCustomization() {
                                 htmlFor="message">
                             Message
                         </label>
-                        <input className=""
+                        <input className="border-b-2 border-dotted border-coffee-light"
                             id="message"
                             type="text"
                             placeholder="come spill with us!!"
@@ -116,7 +116,7 @@ export default function TicketCustomization() {
                         />
                     </div>
 
-                    <div className="flex flex-row md:flex-col gap-4 md:gap-2">
+                    <div className="flex flex-row md:flex-col gap-4 md:gap-4">
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Ticket Color</label>
                             <ColorSelector colors={['matcha', 'coffee-light']} 
@@ -138,10 +138,6 @@ export default function TicketCustomization() {
                             <option value="3">3</option>
                             <option value="4">4</option>
                         </select>
-                    </div>
-                    <div>
-                        spill/stain image,
-                        tea tag doodle
                     </div>
                 </div>
                 <div className="flex flex-row gap-2">
@@ -165,7 +161,8 @@ export default function TicketCustomization() {
 
             {/* Ticket Customization Preview Canvas */}
             <div id="ticket-customization-canvas"
-				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-screen md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
+				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-screen md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
+                    overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
             >
 				{/* Grain overlay for preview canvas */}
 				<div
@@ -174,19 +171,19 @@ export default function TicketCustomization() {
 					style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
 				/>
 
+                {/* Event Info */}
                 <div className="text-xs flex justify-between">
-                    <div className="realstic-marker-highlight">december 6, 2025</div>
+                    <div className="text-transparent realstic-marker-highlight">december 6, 2025</div>
                     <div>https://spill.purduehackers.com</div>
                 </div>
 
                 {/* Ticket */ }
-                <Ticket name={name} ticketDesign={ticketDesign} />
+                <div className="w-fit h-fit flex items-center justify-center">
+                    <Ticket name={name} ticketDesign={ticketDesign} />
+                </div>
 
                 {/* Text Overlay */}
                 <div className="w-full h-0 flex flex-col items-center justify-center">
-                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
-                        <span className="handle text-base font-bold">{name}</span>
-                    </Draggable>
                     <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
                         <span className="handle text-base font-bold">{message}</span>
                     </Draggable>
@@ -220,21 +217,18 @@ export default function TicketCustomization() {
                         <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
                             <div className="handle tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)]">
                                 <div className="w-full h-full flex flex-col items-center justify-center">
-                                    <span>tea</span>
-                                    <span>tag!</span>
+
                                 </div>
                             </div>
                         </Draggable>
                         <div className="tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-sage">
                             <div className="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
+
                             </div>
                         </div>
                         <div className="tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-coffee-light">
                             <div className="w-full h-full flex flex-col items-center justify-center">
-                                <span>tea</span>
-                                <span>tag!</span>
+
                             </div>
                         </div>
                     </div>

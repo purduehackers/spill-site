@@ -13,14 +13,12 @@ export default function Ticket({ name, ticketDesign }: TicketProps) {
     }, []);
 
     return (
-        <div className="z-10 w-full h-full max-w-full max-h-full mx-auto">
-            <img className="w-fit h-fit max-w-full max-h-full object-fit"
+        <div className="z-10 scale-115 rotate-15 translate-y-4 w-fit h-fit mx-auto">
+            <img className="w-124 h-fit object-fit"
                 src={`/img/tickets/ticket${ticketDesign}.png`} 
                 alt="Ticket" />
             <div className="">
-                {name}
-                <br />
-                #{number.padStart(3, '0')}
+                {name} // #{number.padStart(3, '0')}
             </div>
         </div>
     );
