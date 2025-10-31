@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import * as htmlToImage from 'html-to-image';
+import html2canvas from 'html2canvas';
 
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
@@ -81,7 +82,7 @@ export default function TicketCustomization() {
         if (!node) return;
 
         // Enter export mode: neutralize heavy effects that can break iOS captures
-        node.classList.add('exporting');
+        //node.classList.add('exporting');
 
         try {
             const width = node.clientWidth;
@@ -103,6 +104,36 @@ export default function TicketCustomization() {
             link.click();
         } finally {
             // Exit export mode
+            node.classList.remove('exporting');
+        }
+    }
+
+    // iOS/mobile-friendly fallback using html2canvas
+    const downloadTicketToCanvas = async () => {
+        const node = document.getElementById('ticket-customization-canvas');
+        if (!node) return;
+
+        node.classList.add('exporting');
+        try {
+            const backgroundColor = getComputedStyle(node).backgroundColor || '#ffffff';
+            const scale = Math.min(2, (window.devicePixelRatio || 1));
+
+            const canvas = await html2canvas(node, {
+                backgroundColor,
+                useCORS: true,
+                scale,
+                logging: false,
+                removeContainer: true,
+                windowWidth: node.scrollWidth,
+                windowHeight: node.scrollHeight,
+            });
+
+            const dataUrl = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = 'ticket.png';
+            link.click();
+        } finally {
             node.classList.remove('exporting');
         }
     }
@@ -192,6 +223,11 @@ export default function TicketCustomization() {
                         onClick={downloadTicket}
                     >
                         download
+                    </button>
+                    <button className="form-button"
+                        onClick={downloadTicketToCanvas}
+                    >
+                        download (ios)
                     </button>
                     <button className="form-button"
                         onClick={shareTicket}
