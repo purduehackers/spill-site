@@ -10,7 +10,7 @@ export default function TicketCustomization() {
     const [number, setNumber] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-    const [ticketDesign, setTicketDesign] = useState<string>('1');
+    const [ticketDesign, setTicketDesign] = useState<string>('4');
     const [ticketColor, setTicketColor] = useState<string>('matcha');
     const [backgroundColor, setBackgroundColor] = useState<string>('paper');
     const [spillImage, setSpillImage] = useState<string>('default');
@@ -106,6 +106,7 @@ export default function TicketCustomization() {
                         <input className="border-b-2 border-dotted border-coffee-light"
                             id="name"
                             type="text"
+                            maxLength={12}
                             placeholder="wack hacker"
                             value={name}
                             onChange={(e) => handleNameChange(e.target.value)}

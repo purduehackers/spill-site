@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Nothing+You+Could+Do');
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Libre+Barcode+128&family=Nothing+You+Could+Do');
 @import 'tailwindcss';
 
 :root {
@@ -21,9 +21,11 @@
   --font-heading: 'MudClub FranklintheGoth', 'serif';
   --font-body: 'Authentic Sans', 'sans-serif';
   --font-mono: 'OCR B Pro', 'monospace';
+  --font-serif: 'CMU Serif', 'serif';
   --font-caveat: 'Caveat', 'cursive';
   --font-nycd: 'Nothing You Could Do', 'cursive';
-  
+  --font-barcode: 'Libre Barcode 128', 'sans-serif';
+
   --color-header: var(--coffee);
   --color-background: var(--paper);
   --color-highlight: var(--coffee);
@@ -68,6 +70,14 @@
 @font-face {
   font-family: 'OCR B Pro';
   src: url('/fonts/OCRBPro.TTF') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CMU Serif';
+  src: url('/fonts/cmunrm.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
   font-display: swap;
