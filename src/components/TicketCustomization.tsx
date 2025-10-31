@@ -7,6 +7,7 @@ import Ticket from './Ticket';
 
 export default function TicketCustomization() {
     const [name, setName] = useState<string>('');
+    const [number, setNumber] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
     const [ticketDesign, setTicketDesign] = useState<string>('1');
@@ -16,6 +17,7 @@ export default function TicketCustomization() {
 
     useEffect(() => {
         setName(localStorage.getItem('ticket-name') || '');
+        setNumber(localStorage.getItem('ticket-number') || 'HAK');
         setMessage(localStorage.getItem('ticket-message') || '');
     }, []);
 
@@ -87,8 +89,13 @@ export default function TicketCustomization() {
         >
             {/* Options Panel */}
             <div className="w-full md:w-1/2 md:max-w-fit h-fit md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
-                <div className="text-moss">
-                    ≋ create your ticket ಀ ಃ
+                <div className="flex flex-row justify-between">
+                    <div className="text-moss">
+                        ≋ create your ticket ಃ
+                    </div>
+                    <div className="text-moss">
+                        #{number.padStart(3, '0')}
+                    </div>
                 </div>
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
@@ -130,6 +137,7 @@ export default function TicketCustomization() {
                     </div>
 
                     <div className="my-2">
+                        ticket design: 
                         <select value={ticketDesign} 
                             onChange={(e) => handleTicketDesignChange(e.target.value)}
                         >
@@ -179,14 +187,14 @@ export default function TicketCustomization() {
 
                 {/* Ticket */ }
                 <div className="z-15 absolute w-fit h-fit flex items-center justify-center">
-                    <Ticket name={name} ticketDesign={ticketDesign} />
+                    <Ticket name={name} number={number} ticketDesign={ticketDesign} />
                 </div>
 
                 {/* Sticky NoteText Overlay */}
                 <Draggable className="handle w-64 h-64 absolute inset-0 top-[40%] left-[60%] drop-shadow-lg cursor-grab active:cursor-grabbing"
                     zIndex={1}
                 >
-                    <img className="absolute top-0 left-0 w-full h-full object-contain select-none"
+                    <img className="hue-rotate-15 absolute top-0 left-0 w-full h-full object-contain select-none"
                         src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" 
                         alt="sticky note" />
                     <div className="w-full h-full -rotate-15 flex items-center justify-center">

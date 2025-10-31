@@ -2,15 +2,11 @@ import { useState, useEffect } from 'react';
 
 interface TicketProps {
     name: string;
+    number: string;
     ticketDesign: string;
 }
 
-export default function Ticket({ name, ticketDesign }: TicketProps) {
-    const [number, setNumber] = useState<string>('');
-
-    useEffect(() => {
-        setNumber(localStorage.getItem('ticket-number') || '');
-    }, []);
+export default function Ticket({ name, number, ticketDesign }: TicketProps) {
 
     if (ticketDesign !== '4') {
         return (
