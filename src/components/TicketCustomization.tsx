@@ -110,7 +110,7 @@ export default function TicketCustomization() {
                         <input className="border-b-2 border-dotted border-coffee-light"
                             id="message"
                             type="text"
-                            placeholder="come spill with us!!"
+                            placeholder="join me at spill 2025!!"
                             value={message}
                             onChange={(e) => handleMessageChange(e.target.value)}
                         />
@@ -183,6 +183,10 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Text Overlay */}
+                <div className="z-1 w-64 h-auto absolute bottom-0 left-0 drop-shadow-lg">
+                    <img src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" alt="sticky note" 
+                        className="w-full h-full object-cover"/>
+                </div>
                 <div className="w-full h-0 flex flex-col items-center justify-center">
                     <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
                         <span className="handle text-base font-bold">{message}</span>

@@ -15,7 +15,7 @@ export default function Ticket({ name, ticketDesign }: TicketProps) {
     if (ticketDesign !== '4') {
         return (
             <div className="z-10 scale-115 rotate-15 translate-y-20 w-fit h-fit mx-auto">
-                <img className="w-124 h-fit object-fit"
+                <img className="w-124 h-fit object-fit drop-shadow-lg"
                     src={`/img/tickets/ticket${ticketDesign}.png`} 
                     alt="Ticket" />
             </div>
@@ -24,7 +24,7 @@ export default function Ticket({ name, ticketDesign }: TicketProps) {
 
     return (
         <div className="z-10 scale-95 rotate-0 translate-x-1/2 translate-y-2 w-fit h-fit">
-            <img className="w-fit h-124 object-fit"
+            <img className="w-fit h-124 object-cover drop-shadow-lg"
                 src={`/img/tickets/ticket${ticketDesign}.png`} 
                 alt="Ticket" />
             <div className="">
