@@ -6,6 +6,8 @@ import Draggable from './Draggable';
 import Ticket from './Ticket';
 
 export default function TicketCustomization() {
+    const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
+
     const [name, setName] = useState<string>('');
     const [number, setNumber] = useState<string>('');
     const [message, setMessage] = useState<string>('');
@@ -143,7 +145,7 @@ export default function TicketCustomization() {
                     </div>
 
                     <div className="my-2">
-                        ticket design: 
+                        ticket design test: 
                         <select value={ticketDesign} 
                             onChange={(e) => handleTicketDesignChange(e.target.value)}
                         >
@@ -177,6 +179,15 @@ export default function TicketCustomization() {
             <div id="ticket-customization-canvas"
 				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
                     overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
+                onMouseMove={e => {
+                    setMousePos({ x: e.clientX, y: e.clientY }); 
+                }}
+                onMouseEnter={e => {
+                    setMousePos({ x: e.clientX, y: e.clientY }); 
+                }}
+                onMouseLeave={() => {
+                    setMousePos(null);
+                }}
             >
 				{/* Grain overlay for preview canvas */}
 				<div
@@ -193,7 +204,7 @@ export default function TicketCustomization() {
 
                 {/* Ticket */ }
                 <div className="z-15 absolute w-fit h-fit flex items-center justify-center">
-                    <Ticket name={name} number={number} ticketDesign={ticketDesign} />
+                    <Ticket name={name} number={number} ticketDesign={ticketDesign} mousePos={mousePos} />
                 </div>
 
                 {/* Sticky NoteText Overlay */}
