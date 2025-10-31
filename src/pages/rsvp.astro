@@ -7,20 +7,16 @@ import TicketCustomization from '@/components/TicketCustomization.tsx';
   title="spill | tickets"
   description="an upcoming exhibition of student-made creative technical projects."
 >
-    <div class="h-fit md:h-screen min-h-screen flex flex-col md:flex-col px-4 md:px-12 lg:px-24 py-4 md:py-12">
+    <div class="w-full h-full md:h-screen min-h-screen flex flex-col items-center justify-center px-4 md:px-12 lg:px-24 py-4 md:py-12">
         <!--
         <h1 class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]" style="filter: url(#goof);">
             ~~~~
         </h1>
          -->
         
-        
-
-        <div class="w-fit h-fit mx-auto">
-            <div class="w-fit h-fit mb-12 text-xl">
-                <a href="/">
-                    ~/Ticket Generator
-                </a>
+        <div class="w-full md:w-fit h-fit mx-auto mt-12">
+            <div class="hidden w-fit h-fit mb-12 text-xl">
+                ~/Ticket Generator
             </div>
             <TicketCustomization client:load />
         </div>

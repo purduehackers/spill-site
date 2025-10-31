@@ -78,7 +78,7 @@ export default function TicketCustomization() {
     }
 
     return (
-        <div className="w-fit h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center"  
+        <div className="w-full h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center"  
             style={{
                 '--preview-size-small': '80px',
                 '--preview-size-medium': '400px',
@@ -174,7 +174,7 @@ export default function TicketCustomization() {
                 {/* Event Info */}
                 <div className="text-xs flex justify-between">
                     <div className="text-transparent realstic-marker-highlight">december 6, 2025</div>
-                    <div>https://spill.purduehackers.com</div>
+                    <div>spill.purduehackers.com</div>
                 </div>
 
                 {/* Ticket */ }
@@ -195,15 +195,15 @@ export default function TicketCustomization() {
                     className="hidden scale-215 absolute top-30 -left-20 w-200 h-full object-cover" />
 
                 {/* Spills */}
-                <div className="relative top-0 right-0 h-0 flex justify-end">
-                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing"
+                <div className="absolute inset-0 top-0 right-0">
+                    <Draggable className="absolute -top-24 left-[58%] w-fit h-fit cursor-grab active:cursor-grabbing"
                         zIndex={0}
                     >
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
                             alt="Spill" draggable={false} />
                     </Draggable>
-                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing"
+                    <Draggable className="absolute -top-24 -left-24 w-fit h-fit cursor-grab active:cursor-grabbing"
                         zIndex={0}
                     >
                         <img className="handle w-64 h-full object-cover select-none"
