@@ -81,7 +81,7 @@ export default function TicketCustomization() {
         if (!node) return;
 
         // Enter export mode: neutralize heavy effects that can break iOS captures
-        //node.classList.add('exporting');
+        node.classList.add('exporting');
 
         try {
             const width = node.clientWidth;
