@@ -81,7 +81,7 @@ export default function TicketCustomization() {
         <div className="w-full h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center"  
             style={{
                 '--preview-size-small': '80px',
-                '--preview-size-medium': '400px',
+                '--preview-size-medium': '500px',
                 '--preview-size-large': '520px',
             } as React.CSSProperties}
         >
@@ -161,7 +161,7 @@ export default function TicketCustomization() {
 
             {/* Ticket Customization Preview Canvas */}
             <div id="ticket-customization-canvas"
-				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-screen md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
+				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
                     overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
             >
 				{/* Grain overlay for preview canvas */}
@@ -172,26 +172,29 @@ export default function TicketCustomization() {
 				/>
 
                 {/* Event Info */}
-                <div className="text-xs flex justify-between">
+                <div className="z-200 text-xs flex justify-between">
                     <div className="text-transparent realstic-marker-highlight">december 6, 2025</div>
                     <div>spill.purduehackers.com</div>
                 </div>
 
                 {/* Ticket */ }
-                <div className="absolute w-fit h-fit flex items-center justify-center">
+                <div className="z-15 absolute w-fit h-fit flex items-center justify-center">
                     <Ticket name={name} ticketDesign={ticketDesign} />
                 </div>
 
-                {/* Text Overlay */}
-                <div className="z-1 w-64 h-auto absolute bottom-0 left-0 drop-shadow-lg">
-                    <img src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" alt="sticky note" 
-                        className="w-full h-full object-cover"/>
-                </div>
-                <div className="w-full h-0 flex flex-col items-center justify-center">
-                    <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
-                        <span className="handle text-base font-bold">{message}</span>
-                    </Draggable>
-                </div>
+                {/* Sticky NoteText Overlay */}
+                <Draggable className="handle w-64 h-64 absolute inset-0 top-[40%] left-[60%] drop-shadow-lg cursor-grab active:cursor-grabbing"
+                    zIndex={1}
+                >
+                    <img className="absolute top-0 left-0 w-full h-full object-contain select-none"
+                        src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" 
+                        alt="sticky note" />
+                    <div className="w-full h-full -rotate-15 flex items-center justify-center">
+                        <div className="relative left-4 w-33 p-1 line-clamp-5 text-base text-coffee/80 font-nycd font-bold">
+                            {message}
+                        </div>
+                    </div>
+                </Draggable>
 
                 {/* Coffee Cup */}
                 <img src="/img/coffee-cup-1.jpg" 
@@ -207,7 +210,7 @@ export default function TicketCustomization() {
                             src={`/img/coffee/85.png`} 
                             alt="Spill" draggable={false} />
                     </Draggable>
-                    <Draggable className="absolute -top-24 -left-24 w-fit h-fit cursor-grab active:cursor-grabbing"
+                    <Draggable className="absolute -top-24 -left-45 w-fit h-fit cursor-grab active:cursor-grabbing"
                         zIndex={0}
                     >
                         <img className="handle w-64 h-full object-cover select-none"
@@ -219,7 +222,7 @@ export default function TicketCustomization() {
                 {/* Regular Tea Tags */}
                 <div className="flex flex-col gap-2 p-6 text-xs"
                     style={{
-                        '--tea-tag-size': '48px',
+                        '--tea-tag-size': '0px',
                     } as React.CSSProperties}
                 >
                     <div className="flex flex-row gap-2">

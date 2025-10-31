@@ -18,6 +18,11 @@ export default function Ticket({ name, ticketDesign }: TicketProps) {
                 <img className="w-full md:w-124 h-fit object-contain drop-shadow-lg"
                     src={`/img/tickets/ticket${ticketDesign}.png`} 
                     alt="Ticket" />
+                <div className="absolute top-0 -left-0 -rotate-90 ">
+                    <div className="text-fern text-[10px] font-mono uppercase">
+                        {name} // #{number.padStart(3, '0')}
+                    </div>
+                </div>
             </div>
         );
     }

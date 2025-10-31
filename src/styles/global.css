@@ -1,9 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Nothing+You+Could+Do');
 @import 'tailwindcss';
 
 :root {
   /* Color variables */
   --coffee: #4b3732;
   --paper: #e0dbd3;
+  --fern: #b0b69a;
   --moss: #a0a041;
   --matcha: #7f9541;
   --cream: #ecdbbf;
@@ -18,12 +20,17 @@
 @theme {
   --font-heading: 'MudClub FranklintheGoth', 'serif';
   --font-body: 'Authentic Sans', 'sans-serif';
+  --font-mono: 'OCR B Pro', 'monospace';
+  --font-caveat: 'Caveat', 'cursive';
+  --font-nycd: 'Nothing You Could Do', 'cursive';
+  
   --color-header: var(--coffee);
   --color-background: var(--paper);
   --color-highlight: var(--coffee);
 
   --color-coffee: var(--coffee);
   --color-paper: var(--paper);
+  --color-fern: var(--fern);
   --color-moss: var(--moss);
   --color-matcha: var(--matcha);
   --color-cream: var(--cream);
@@ -54,6 +61,14 @@
   font-family: 'Authentic Sans';
   src: url('/fonts/authentic-sans-130.otf') format('opentype');
   font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'OCR B Pro';
+  src: url('/fonts/OCRBPro.TTF') format('truetype');
+  font-weight: normal;
   font-style: normal;
   font-display: swap;
 }
