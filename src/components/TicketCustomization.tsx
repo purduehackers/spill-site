@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import * as htmlToImage from 'html-to-image';
-import html2canvas from 'html2canvas';
 
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
@@ -65,7 +64,7 @@ export default function TicketCustomization() {
         setSpillImage(image);
     }
 
-    const downloadTicket2 = () => {
+    const downloadTicket = () => {
         const node = document.getElementById('ticket-customization-canvas');
         if (!node) return;
         
@@ -77,7 +76,7 @@ export default function TicketCustomization() {
         });
     }
 
-    const downloadTicket = async () => {
+    const downloadTicket2 = async () => {
         const node = document.getElementById('ticket-customization-canvas');
         if (!node) return;
 
@@ -87,11 +86,10 @@ export default function TicketCustomization() {
         try {
             const width = node.clientWidth;
             const height = node.clientHeight;
-            const pixelRatio = Math.min(1, (window.devicePixelRatio || 1));
+            const pixelRatio = Math.min(2, (window.devicePixelRatio || 1));
             const backgroundColor = getComputedStyle(node).backgroundColor || '#ffffff';
 
             const dataUrl = await htmlToImage.toPng(node, {
-                //cacheBust: true,
                 pixelRatio,
                 width,
                 height,
@@ -104,36 +102,6 @@ export default function TicketCustomization() {
             link.click();
         } finally {
             // Exit export mode
-            node.classList.remove('exporting');
-        }
-    }
-
-    // iOS/mobile-friendly fallback using html2canvas
-    const downloadTicketToCanvas = async () => {
-        const node = document.getElementById('ticket-customization-canvas');
-        if (!node) return;
-
-        node.classList.add('exporting');
-        try {
-            const backgroundColor = getComputedStyle(node).backgroundColor || '#ffffff';
-            const scale = Math.min(2, (window.devicePixelRatio || 1));
-
-            const canvas = await html2canvas(node, {
-                backgroundColor,
-                useCORS: true,
-                scale,
-                logging: false,
-                removeContainer: true,
-                windowWidth: node.scrollWidth,
-                windowHeight: node.scrollHeight,
-            });
-
-            const dataUrl = canvas.toDataURL('image/png');
-            const link = document.createElement('a');
-            link.href = dataUrl;
-            link.download = 'ticket.png';
-            link.click();
-        } finally {
             node.classList.remove('exporting');
         }
     }
@@ -225,7 +193,7 @@ export default function TicketCustomization() {
                         download
                     </button>
                     <button className="form-button"
-                        onClick={downloadTicketToCanvas}
+                        onClick={downloadTicket2}
                     >
                         download (ios)
                     </button>
