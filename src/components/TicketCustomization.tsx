@@ -16,7 +16,12 @@ export default function TicketCustomization() {
     const [spillImage, setSpillImage] = useState<string>('default');
 
     useEffect(() => {
-        setName(localStorage.getItem('ticket-name') || '');
+        const name = localStorage.getItem('ticket-name') || '';
+        if (name.length > 12) {
+            setName(name.slice(0, 12));
+        } else {
+            setName(name);
+        }
         setNumber(localStorage.getItem('ticket-number') || 'HAK');
         setMessage(localStorage.getItem('ticket-message') || '');
     }, []);
