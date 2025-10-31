@@ -64,6 +64,18 @@ export default function TicketCustomization() {
         setSpillImage(image);
     }
 
+    const downloadTicket2 = () => {
+        const node = document.getElementById('ticket-customization-canvas');
+        if (!node) return;
+        
+        htmlToImage.toPng(node).then((dataUrl) => {
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = 'ticket.png';
+            link.click();
+        });
+    }
+
     const downloadTicket = async () => {
         const node = document.getElementById('ticket-customization-canvas');
         if (!node) return;
@@ -72,13 +84,13 @@ export default function TicketCustomization() {
         node.classList.add('exporting');
 
         try {
-            const width = node.scrollWidth;
-            const height = node.scrollHeight;
+            const width = node.clientWidth;
+            const height = node.clientHeight;
             const pixelRatio = Math.min(2, (window.devicePixelRatio || 1));
             const backgroundColor = getComputedStyle(node).backgroundColor || '#ffffff';
 
             const dataUrl = await htmlToImage.toPng(node, {
-                cacheBust: true,
+                //cacheBust: true,
                 pixelRatio,
                 width,
                 height,
