@@ -213,7 +213,8 @@ export default function TicketCustomization() {
                 >
                     <img className="hue-rotate-15 absolute top-0 left-0 w-full h-full object-contain select-none"
                         src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" 
-                        alt="sticky note" />
+                        alt="sticky note" 
+                        crossOrigin="anonymous" />
                     <div className="w-full h-full -rotate-15 flex items-center justify-center">
                         <div className="relative left-4 w-33 p-1 line-clamp-5 text-base text-coffee/80 font-nycd font-bold">
                             {message}
@@ -224,7 +225,8 @@ export default function TicketCustomization() {
                 {/* Coffee Cup */}
                 <img src="/img/coffee-cup-1.jpg" 
                     alt="Ticket" 
-                    className="hidden scale-215 absolute top-30 -left-20 w-200 h-full object-cover" />
+                    className="hidden scale-215 absolute top-30 -left-20 w-200 h-full object-cover" 
+                    crossOrigin="anonymous" />
 
                 {/* Spills */}
                 <div className="absolute inset-0 top-0 right-0">
@@ -233,14 +235,16 @@ export default function TicketCustomization() {
                     >
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
-                            alt="Spill" draggable={false} />
+                            alt="Spill"
+                            crossOrigin="anonymous"/>
                     </Draggable>
                     <Draggable className="absolute -top-24 -left-45 w-fit h-fit cursor-grab active:cursor-grabbing"
                         zIndex={0}
                     >
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/89.png`} 
-                            alt="Spill" draggable={false} />
+                            alt="Spill"
+                            crossOrigin="anonymous" />
                     </Draggable>
                 </div>
 

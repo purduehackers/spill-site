@@ -34,7 +34,8 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
             >
                 <img className="w-full md:w-[var(--ticket-width-large)] h-fit object-contain drop-shadow-lg"
                     src={`/img/tickets/ticket${ticketDesign}.png`} 
-                    alt="Ticket" />
+                    alt="Ticket" 
+                    crossOrigin="anonymous"/>
                 <div className="hidden absolute bottom-0 -left-0 w-full h-[calc(var(--ticket-height-large)_*_.19)] flex items-center justify-center">
                     <div className="w-[70%] h-[55%] text-fern uppercase flex flex-col justify-between">
                         <div className="text-[12px] font-mono flex justify-between">
@@ -69,7 +70,8 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
         >
             <img className="w-fit h-[var(--ticket-height-large)] object-contain drop-shadow-lg"
                 src={`/img/tickets/ticket${ticketDesign}.png`} 
-                alt="Ticket" />
+                alt="Ticket" 
+                crossOrigin="anonymous" />
             <div className="absolute bottom-0 left-0 w-full h-[calc(var(--ticket-height-large)_*_.19)] flex items-center justify-center">
                 <div className="w-[70%] h-[55%] text-fern uppercase flex flex-col justify-between">
                     <div className="text-[12px] font-mono flex justify-between">
