@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import * as htmlToImage from 'html-to-image';
 
 import ColorSelector from './ColorSelector';
@@ -6,6 +6,7 @@ import Draggable from './Draggable';
 import Ticket from './Ticket';
 import ToggleGroup from './ToggleGroup';
 import Select from './Select';
+import DrawCanvas from './DrawCanvas';
 import { ticketDesigns } from '@/data/ticketDesigns';
 
 export default function TicketCustomization() {
@@ -19,6 +20,9 @@ export default function TicketCustomization() {
     const [ticketDesign, setTicketDesign] = useState<string>('/img/tickets/landscape/green/matcha-latte.png');
     const [ticketColor, setTicketColor] = useState<string>('green');
     const [backgroundColor, setBackgroundColor] = useState<string>('paper');
+
+    const [drawingActive, setDrawingActive] = useState<boolean>(false);
+    const canvasContainerRef = useRef<HTMLDivElement>(null);
 
     // Load name, number, and message from localStorage
     useEffect(() => {
@@ -245,6 +249,11 @@ export default function TicketCustomization() {
                     >
                         download
                     </button>
+                    <button className="form-button"
+                        onClick={() => setDrawingActive(!drawingActive)}
+                    >
+                        draw
+                    </button>
                     {/*<button className="form-button"
                         onClick={shareTicket}
                     >
@@ -260,6 +269,7 @@ export default function TicketCustomization() {
 
             {/* Ticket Customization Preview Canvas */}
             <div id="ticket-customization-canvas"
+				ref={canvasContainerRef}
 				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
                     overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
                 onMouseMove={e => {
@@ -272,6 +282,12 @@ export default function TicketCustomization() {
                     setMousePos(null);
                 }}
             >
+				{/* Drawing canvas overlay */}
+				<DrawCanvas 
+					containerRef={canvasContainerRef}
+					active={drawingActive}
+					className="absolute inset-0 w-full h-full pointer-events-none z-5000"
+				/>
 				{/* Grain overlay for preview canvas */}
 				<div
 					aria-hidden
