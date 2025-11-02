@@ -4,10 +4,11 @@ interface TicketProps {
     name: string;
     number: string;
     ticketDesign: string; // file path to ticket image
+    ticketColor: string;
     mousePos: { x: number; y: number } | null;
 }
 
-export default function Ticket({ name, number, ticketDesign, mousePos }: TicketProps) {
+export default function Ticket({ name, number, ticketDesign, ticketColor, mousePos }: TicketProps) {
     const [relativeMousePos, setRelativeMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -29,19 +30,22 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
     if (!isPortrait) {
         return (
             <div id="ticket-container" 
-                className="z-10 scale-115 rotate-15 translate-y-20 w-fit h-fit mx-auto"
+                className="relative z-10 scale-115 rotate-20 translate-y-0 w-fit h-fit mx-auto"
                 style={{
                     '--ticket-width-large': '496px',
+                    '--ticket-height-large': '200px',
                     transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.06}deg)`
                 } as React.CSSProperties}
             >
-                <img className="w-full md:w-[var(--ticket-width-large)] h-fit object-contain drop-shadow-lg"
+                <img className="w-full md:w-[var(--ticket-width-large)] h-fit object-contain drop-shadow-lg text-fern text-light-brown"
                     src={ticketDesign} 
                     alt="Ticket" 
                     crossOrigin="anonymous"/>
-                <div className="hidden absolute bottom-0 -left-0 w-full h-[calc(var(--ticket-height-large)_*_.19)] flex items-center justify-center">
-                    <div className="w-[70%] h-[55%] text-fern uppercase flex flex-col justify-between">
-                        <div className="text-[12px] font-mono flex justify-between">
+                
+                {/* Side text */}
+                <div className=" w-[31%] h-[60%] absolute -left-7 top-1/2 -translate-y-1/2 rotate-90 origin-center flex items-center justify-center pointer-events-none">
+                    <div className={`w-[84%] h-[40%] text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col justify-between`}>
+                        <div className="text-[9px] font-mono flex justify-between origin-center rotate-180">
                             <div>
                                 {name.concat(' ').padEnd(12, '*')}
                             </div>
@@ -50,10 +54,10 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
                             </div>
                         </div>
                         <div className="flex items-center justify-between gap-0">
-                            <div className="scale-y-120 h-2/3 font-barcode text-5xl leading-none">
+                            <div className="scale-y-120 h-2/3 font-barcode text-4xl leading-none">
                                 purdueha
                             </div>
-                            <div className="-rotate-90 translate-x-2 font-serif text-[26px]">
+                            <div className="-rotate-90 translate-x-2 font-serif text-[20px]">
                                 PH
                             </div>
                         </div>

@@ -9,6 +9,10 @@ export const ticketDesigns = {
         green: [
             {
                 filename: 'matcha-latte.png',
+                name: 'matcha latte',
+            },
+            {
+                filename: 'matcha.png',
                 name: 'matcha',
             },
             {

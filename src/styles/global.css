@@ -9,6 +9,7 @@
   --moss: #a0a041;
   --matcha: #6b8034;
   --cream: #ecdbbf;
+  --light-brown: #d0c1b6;
   --chocolate: #744726;
   --coffee-light: #896258;
 
@@ -36,6 +37,7 @@
   --color-moss: var(--moss);
   --color-matcha: var(--matcha);
   --color-cream: var(--cream);
+  --color-light-brown: var(--light-brown);
   --color-chocolate: var(--chocolate);
   --color-coffee-light: var(--coffee-light);
   --color-red-clay: var(--red-clay);

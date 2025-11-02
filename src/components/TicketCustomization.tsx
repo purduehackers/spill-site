@@ -198,9 +198,9 @@ export default function TicketCustomization() {
                                 />
                             </div>
 
-                            {/* Drink */}
+                            {/* Color */}
                             <div className="flex flex-col gap-2">
-                                <label className="text-xs font-bold lowercase" htmlFor="ticket-type">Drink</label>
+                                <label className="text-xs font-bold lowercase" htmlFor="ticket-type">Flavor</label>
                                 <ToggleGroup 
                                     value={ticketColor === 'green' ? 'tea' : 'coffee'}
                                     onValueChange={handleTicketColorChange}
@@ -214,10 +214,10 @@ export default function TicketCustomization() {
                             </div>
                         </div>
 
-                        {/* Flavor */}
+                        {/* Design */}
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
-                                Flavor
+                                Design
                             </label>
                             <select value={ticketDesign.split('/').pop() || ''} 
                                 onChange={(e) => handleTicketDesignChange(e.target.value)}
@@ -285,7 +285,7 @@ export default function TicketCustomization() {
 
                 {/* Ticket */ }
                 <div className="z-15 absolute inset-0 w-full h-full flex items-center justify-center">
-                    <Ticket name={name} number={number} ticketDesign={ticketDesign} mousePos={mousePos} />
+                    <Ticket name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
                 </div>
 
                 {/* Sticky NoteText Overlay */}
