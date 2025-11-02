@@ -5,6 +5,7 @@ import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 import Ticket from './Ticket';
 import ToggleGroup from './ToggleGroup';
+import Select from './Select';
 import { ticketDesigns } from '@/data/ticketDesigns';
 
 export default function TicketCustomization() {
@@ -219,15 +220,16 @@ export default function TicketCustomization() {
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
                                 Design
                             </label>
-                            <select value={ticketDesign.split('/').pop() || ''} 
-                                onChange={(e) => handleTicketDesignChange(e.target.value)}
-                            >
-                                {ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[ticketColor as 'green' | 'brown']?.map((design) => (
-                                    <option key={design.filename} value={design.filename}>
-                                        {design.name}
-                                    </option>
-                                ))}
-                            </select>
+                            <Select
+                                id="ticket-design"
+                                value={ticketDesign.split('/').pop() || ''}
+                                onValueChange={handleTicketDesignChange}
+                                options={ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[ticketColor as 'green' | 'brown']?.map((design) => ({
+                                    value: design.filename,
+                                    label: design.name
+                                })) || []}
+                                ariaLabel="Ticket design"
+                            />
                         </div>
 
                         <div className="flex flex-col gap-2">
