@@ -6,7 +6,7 @@ import Draggable from './Draggable';
 import Ticket from './Ticket';
 import ToggleGroup from './ToggleGroup';
 import Select from './Select';
-import DrawCanvas from './DrawCanvas';
+import PaintCanvas from './PaintCanvas';
 import { ticketDesigns } from '@/data/ticketDesigns';
 
 export default function TicketCustomization() {
@@ -283,11 +283,13 @@ export default function TicketCustomization() {
                 }}
             >
 				{/* Drawing canvas overlay */}
-				<DrawCanvas 
-					containerRef={canvasContainerRef}
-					active={drawingActive}
-					className="absolute inset-0 w-full h-full pointer-events-none z-5000"
-				/>
+				<div className={`z-[614] absolute inset-0 w-full h-full ${drawingActive ? '' : 'pointer-events-none'}`}>
+					<PaintCanvas 
+						containerRef={canvasContainerRef}
+						active={drawingActive}
+						className="absolute inset-0 w-full h-full"
+					/>
+				</div>
 				{/* Grain overlay for preview canvas */}
 				<div
 					aria-hidden
@@ -296,13 +298,13 @@ export default function TicketCustomization() {
 				/>
 
                 {/* Event Info */}
-                <div className="z-200 text-xs flex justify-between">
+                <div className="z-[700] text-xs flex justify-between pointer-events-none">
                     <div className="text-transparent realstic-marker-highlight">december 6, 2025</div>
                     <div>spill.purduehackers.com</div>
                 </div>
 
                 {/* Ticket */ }
-                <div className="z-15 absolute inset-0 w-full h-full flex items-center justify-center">
+                <div className="z-[615] absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
                     <Ticket name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
                 </div>
 
@@ -346,7 +348,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Regular Tea Tags */}
-                <div className="flex flex-col gap-2 p-6 text-xs"
+                <div className="hidden flex flex-col gap-2 p-6 text-xs"
                     style={{
                         '--tea-tag-size': '40px',
                     } as React.CSSProperties}
