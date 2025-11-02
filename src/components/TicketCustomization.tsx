@@ -143,7 +143,7 @@ export default function TicketCustomization() {
             } as React.CSSProperties}
         >
             {/* Options Panel */}
-            <div className="w-full md:w-1/2 md:max-w-fit h-fit md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
+            <div className="w-full md:w-[40%] h-fit md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] flex flex-col gap-4 bg-coffee text-paper border-2 border-coffee rounded-lg p-4">
                 <div className="flex flex-row justify-between">
                     <div className="text-moss">
                         ≋ create your ticket ಃ
@@ -180,23 +180,41 @@ export default function TicketCustomization() {
                         />
                     </div>
 
-                    {/* Ticket Color and Background Color */}
+                    {/* Ticket Design */}
                     <div className="flex flex-row md:flex-col gap-4 md:gap-4">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold lowercase" htmlFor="ticket-type">Type</label>
-                            <ToggleGroup 
-                                value={ticketColor === 'green' ? 'tea' : 'coffee'}
-                                onValueChange={handleTicketColorChange}
-                                options={[
-                                    { value: 'tea', label: 'tea' },
-                                    { value: 'coffee', label: 'coffee' }
-                                ]}
-                                required={true}
-                                ariaLabel="Ticket type"
-                            />
+                        <div className="flex gap-4">
+                            {/* Orientation */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold lowercase" htmlFor="ticket-orientation">Orientation</label>
+                                <ToggleGroup 
+                                    value={ticketOrientation}
+                                    onValueChange={handleTicketOrientationChange}
+                                    options={[
+                                        { value: 'portrait', label: '||', className: 'bg-coffee-light' },
+                                        { value: 'landscape', label: '=', className: 'bg-coffee-light' }
+                                    ]}
+                                    required={true}
+                                    ariaLabel="Ticket orientation"
+                                />
+                            </div>
+
+                            {/* Drink */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold lowercase" htmlFor="ticket-type">Drink</label>
+                                <ToggleGroup 
+                                    value={ticketColor === 'green' ? 'tea' : 'coffee'}
+                                    onValueChange={handleTicketColorChange}
+                                    options={[
+                                        { value: 'tea', label: 'tea', className: 'bg-matcha' },
+                                        { value: 'coffee', label: 'coffee', className: 'bg-coffee-light' }
+                                    ]}
+                                    required={true}
+                                    ariaLabel="Ticket type"
+                                />
+                            </div>
                         </div>
 
-                        {/* Ticket Design */}
+                        {/* Flavor */}
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
                                 Flavor
@@ -225,7 +243,7 @@ export default function TicketCustomization() {
                     >
                         download
                     </button>
-                    <button className="form-button"
+                    {/*<button className="form-button"
                         onClick={shareTicket}
                     >
                         share
@@ -234,7 +252,7 @@ export default function TicketCustomization() {
                         onClick={resetTicket}
                     >
                         reset
-                    </button>
+                    </button>*/}
                 </div>
             </div>
 

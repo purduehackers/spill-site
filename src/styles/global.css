@@ -7,7 +7,7 @@
   --paper: #e0dbd3;
   --fern: #b0b69a;
   --moss: #a0a041;
-  --matcha: #7f9541;
+  --matcha: #6b8034;
   --cream: #ecdbbf;
   --chocolate: #744726;
   --coffee-light: #896258;
@@ -135,7 +135,6 @@
   }
   .color-radio-indicator {
     @apply absolute -inset-1.5 m-0.5 rounded-full border-2 border-white pointer-events-none;
-    opacity: 0;
   }
   [data-state="on"] .color-radio-indicator {
     opacity: 1;

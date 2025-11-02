@@ -33,29 +33,24 @@ export default function ToggleGroup({
                     onValueChange('');
                 }
             }}
-            className="flex flex-row"
+            className="w-fit flex flex-row border-2 border-coffee-light rounded-md"
             aria-label={ariaLabel}
         >
-            {options.map((option, index) => (
-                <RadixToggleGroup.Item 
-                    key={option.value}
-                    value={option.value}
-                    className={`
-                        px-4 py-2 text-xs font-bold lowercase
-                        border-y-2 border-coffee
-                        ${index === 0 ? 'border-l-2 rounded-l-md' : 'border-l-0'}
-                        ${index === options.length - 1 ? 'border-r-2 rounded-r-md' : 'border-r-0'}
-                        bg-coffee-light text-paper
-                        transition-all duration-100
-                        hover:bg-coffee
-                        cursor-pointer
-                        ${option.className || ''}
-                        [&[data-state=on]]:bg-coffee [&[data-state=on]]:text-paper
-                    `}
-                >
-                    {option.label || option.value}
-                </RadixToggleGroup.Item>
-            ))}
+            {options.map((option) => {
+                const isActive = value === option.value;
+                const customClass = isActive && option.className ? option.className : '';
+                const defaultActiveClass = !option.className ? '[&[data-state=on]]:bg-coffee [&[data-state=on]]:text-paper' : '';
+                
+                return (
+                    <RadixToggleGroup.Item 
+                        key={option.value}
+                        value={option.value}
+                        className={`px-3 py-1 text-xs font-bold text-paper rounded-sm cursor-pointer ${customClass} ${defaultActiveClass}`.trim()}
+                    >
+                        {option.label || option.value}
+                    </RadixToggleGroup.Item>
+                );
+            })}
         </RadixToggleGroup.Root>
     );
 }
