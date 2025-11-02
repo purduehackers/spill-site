@@ -62,21 +62,21 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
 
     return (
         <div id="ticket-container"
-            className="z-10 scale-95 rotate-0 translate-y-3 w-[var(--ticket-width-large)] h-fit"
+            className="relative z-10 scale-95 rotate-0 translate-y-3 w-[var(--ticket-width-large)] h-fit"
             style={{
                 '--ticket-width-large': '230px',
                 '--ticket-height-large': '496px',
                 transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.06}deg)`
             } as React.CSSProperties}
         >
-            <img className="w-full h-fit object-contain drop-shadow-lg"
+            <img className="w-full h-auto object-contain drop-shadow-lg block"
                 src={`/img/tickets/ticket${ticketDesign}.png`} 
                 alt="Ticket" 
                 crossOrigin="anonymous" />
             
             {/* Bottom text */}
-            <div className="absolute bottom-0 left-0 w-full h-[20%] flex items-center justify-center">
-                <div className="w-[70%] h-[55%] text-fern uppercase flex flex-col justify-between">
+            <div className="absolute bottom-0 left-0 right-0 w-full h-[20%] min-h-[80px] flex items-center justify-center pointer-events-none">
+                <div className="w-[70%] max-w-[161px] h-[55%] text-fern uppercase flex flex-col justify-between">
                     <div className="text-[12px] font-mono flex justify-between whitespace-nowrap">
                         <div>
                             {name.concat(' ').padEnd(12, '*')}
