@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 interface TicketProps {
     name: string;
     number: string;
-    ticketDesign: string;
+    ticketDesign: string; // file path to ticket image
     mousePos: { x: number; y: number } | null;
 }
 
@@ -23,7 +23,10 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
         setRelativeMousePos({ x: mouseX, y: mouseY });
     }, [mousePos]);
 
-    if (ticketDesign !== '4') {
+    // Determine if this is a portrait ticket (for different styling)
+    const isPortrait = ticketDesign.includes('/portrait/');
+    
+    if (!isPortrait) {
         return (
             <div id="ticket-container" 
                 className="z-10 scale-115 rotate-15 translate-y-20 w-fit h-fit mx-auto"
@@ -33,7 +36,7 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
                 } as React.CSSProperties}
             >
                 <img className="w-full md:w-[var(--ticket-width-large)] h-fit object-contain drop-shadow-lg"
-                    src={`/img/tickets/ticket${ticketDesign}.png`} 
+                    src={ticketDesign} 
                     alt="Ticket" 
                     crossOrigin="anonymous"/>
                 <div className="hidden absolute bottom-0 -left-0 w-full h-[calc(var(--ticket-height-large)_*_.19)] flex items-center justify-center">
@@ -70,7 +73,7 @@ export default function Ticket({ name, number, ticketDesign, mousePos }: TicketP
             } as React.CSSProperties}
         >
             <img className="w-full h-auto object-contain drop-shadow-lg block"
-                src={`/img/tickets/ticket${ticketDesign}.png`} 
+                src={ticketDesign} 
                 alt="Ticket" 
                 crossOrigin="anonymous" />
             

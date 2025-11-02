@@ -4,6 +4,8 @@ import * as htmlToImage from 'html-to-image';
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 import Ticket from './Ticket';
+import ToggleGroup from './ToggleGroup';
+import { ticketDesigns } from '@/data/ticketDesigns';
 
 export default function TicketCustomization() {
     const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -12,11 +14,12 @@ export default function TicketCustomization() {
     const [number, setNumber] = useState<string>('');
     const [message, setMessage] = useState<string>('');
 
-    const [ticketDesign, setTicketDesign] = useState<string>('4');
-    const [ticketColor, setTicketColor] = useState<string>('matcha');
+    const [ticketOrientation, setTicketOrientation] = useState<string>('landscape');
+    const [ticketDesign, setTicketDesign] = useState<string>('/img/tickets/landscape/green/matcha-latte.png');
+    const [ticketColor, setTicketColor] = useState<string>('green');
     const [backgroundColor, setBackgroundColor] = useState<string>('paper');
-    const [spillImage, setSpillImage] = useState<string>('default');
 
+    // Load name, number, and message from localStorage
     useEffect(() => {
         const name = localStorage.getItem('ticket-name') || '';
         if (name.length > 12) {
@@ -27,13 +30,11 @@ export default function TicketCustomization() {
         setNumber(localStorage.getItem('ticket-number') || 'HAK');
         setMessage(localStorage.getItem('ticket-message') || '');
     }, []);
-
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('ticket-name', name);
         }
     }, [name]);
-
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('ticket-message', message);
@@ -48,20 +49,37 @@ export default function TicketCustomization() {
         setMessage(message);
     }
 
-    const handleTicketDesignChange = (design: string) => {
-        setTicketDesign(design);
+    const handleTicketDesignChange = (filename: string) => {
+        const filePath = `/img/tickets/${ticketOrientation}/${ticketColor}/${filename}`;
+        console.log(filePath);
+        setTicketDesign(filePath);
     }
 
     const handleTicketColorChange = (color: string) => {
-        setTicketColor(color);
+        // Convert ticket color (tea/coffee) to path color (green/brown)
+        const pathColor = color === 'tea' ? 'green' : 'brown';
+        setTicketColor(pathColor);
+        
+        // Update ticket design to first available design for the new color
+        const designs = ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[pathColor];
+        if (designs && designs.length > 0) {
+            const filePath = `/img/tickets/${ticketOrientation}/${pathColor}/${designs[0].filename}`;
+            setTicketDesign(filePath);
+        }
     }
 
     const handleBackgroundColorChange = (color: string) => {
         setBackgroundColor(color);
     }
 
-    const handleSpillImageChange = (image: string) => {
-        setSpillImage(image);
+    const handleTicketOrientationChange = (orientation: string) => {
+        setTicketOrientation(orientation);
+        // Update ticket design to first available design for the new orientation
+        const designs = ticketDesigns[orientation as keyof typeof ticketDesigns]?.[ticketColor as 'green' | 'brown'];
+        if (designs && designs.length > 0) {
+            const filePath = `/img/tickets/${orientation}/${ticketColor}/${designs[0].filename}`;
+            setTicketDesign(filePath);
+        }
     }
 
     const downloadTicket = () => {
@@ -111,9 +129,9 @@ export default function TicketCustomization() {
     }
 
     const resetTicket = () => {
-        setTicketDesign('1');
-        setTicketColor('matcha');
-        setSpillImage('default');
+        setTicketOrientation('portrait');
+        setTicketColor('green');
+        setTicketDesign('/img/tickets/portrait/green/matcha.png');
     }
 
     return (
@@ -135,6 +153,7 @@ export default function TicketCustomization() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-6">
+                    {/* Name and Message */}
                     <div className="flex flex-col gap-2">
                         <label className="text-xs font-bold lowercase" 
                                 htmlFor="name">
@@ -161,29 +180,43 @@ export default function TicketCustomization() {
                         />
                     </div>
 
+                    {/* Ticket Color and Background Color */}
                     <div className="flex flex-row md:flex-col gap-4 md:gap-4">
                         <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Ticket Color</label>
-                            <ColorSelector colors={['matcha', 'coffee-light']} 
-                                handleColorChange={handleTicketColorChange} />
+                            <label className="text-xs font-bold lowercase" htmlFor="ticket-type">Type</label>
+                            <ToggleGroup 
+                                value={ticketColor === 'green' ? 'tea' : 'coffee'}
+                                onValueChange={handleTicketColorChange}
+                                options={[
+                                    { value: 'tea', label: 'tea' },
+                                    { value: 'coffee', label: 'coffee' }
+                                ]}
+                                required={true}
+                                ariaLabel="Ticket type"
+                            />
                         </div>
+
+                        {/* Ticket Design */}
+                        <div className="flex flex-col gap-2">
+                            <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
+                                Flavor
+                            </label>
+                            <select value={ticketDesign.split('/').pop() || ''} 
+                                onChange={(e) => handleTicketDesignChange(e.target.value)}
+                            >
+                                {ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[ticketColor as 'green' | 'brown']?.map((design) => (
+                                    <option key={design.filename} value={design.filename}>
+                                        {design.name}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Background Color</label>
                             <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
                                 handleColorChange={handleBackgroundColorChange} />
                         </div>
-                    </div>
-
-                    <div className="my-2">
-                        ticket design test: 
-                        <select value={ticketDesign} 
-                            onChange={(e) => handleTicketDesignChange(e.target.value)}
-                        >
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
                     </div>
                 </div>
                 <div className="flex flex-row gap-2">
