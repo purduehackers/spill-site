@@ -4,6 +4,7 @@ import * as htmlToImage from 'html-to-image';
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 import Ticket from './Ticket';
+import TicketCanvas from './TicketCanvas';
 
 export default function TicketCustomization() {
     const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -193,11 +194,6 @@ export default function TicketCustomization() {
                         download
                     </button>
                     <button className="form-button"
-                        onClick={downloadTicket2}
-                    >
-                        download (ios)
-                    </button>
-                    <button className="form-button"
                         onClick={shareTicket}
                     >
                         share
@@ -238,7 +234,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Ticket */ }
-                <div className="z-15 absolute w-fit h-fit flex items-center justify-center">
+                <div className="z-15 absolute inset-0 w-full h-full flex items-center justify-center">
                     <Ticket name={name} number={number} ticketDesign={ticketDesign} mousePos={mousePos} />
                 </div>
 
@@ -338,6 +334,15 @@ export default function TicketCustomization() {
                     </div>
                 </div>
             </div>
+
+            <TicketCanvas 
+                className="hidden"
+                name={name} 
+                number={number} 
+                message={message} 
+                ticketDesign={ticketDesign} 
+                backgroundColor={backgroundColor} 
+            />
         </div>
     );
 }
