@@ -1,4 +1,3 @@
-import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
 import { ChevronDownIcon, ChevronUpIcon, CheckIcon } from "@radix-ui/react-icons";
 
@@ -43,7 +42,7 @@ export default function Select({
         >
             <SelectPrimitive.Trigger
                 id={id}
-                className={`inline-flex items-center justify-between px-3 py-2 text-sm font-bold bg-white border-2 border-coffee-light rounded-md text-coffee focus:outline-none focus:ring-2 focus:ring-coffee disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+                className={`inline-flex items-center justify-between px-2 py-1.5 text-sm font-bold bg-coffee text-white border-2 border-coffee-light rounded-md focus:outline-none focus:ring-2 focus:ring-coffee disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
                 aria-label={ariaLabel}
             >
                 <SelectPrimitive.Value placeholder={placeholder}>
@@ -56,7 +55,7 @@ export default function Select({
 
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className="overflow-hidden bg-white border-2 border-coffee-light rounded-md shadow-lg z-50"
+                    className="overflow-hidden bg-paper border-2 border-coffee-light rounded-md shadow-lg z-50"
                     position="popper"
                     sideOffset={4}
                 >
@@ -70,12 +69,12 @@ export default function Select({
                                 key={option.value}
                                 value={option.value}
                                 disabled={option.disabled}
-                                className="relative flex items-center px-3 py-2 text-sm font-bold text-coffee rounded-sm cursor-pointer select-none outline-none hover:bg-coffee-light/20 focus:bg-coffee-light/20 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
+                                className="relative flex items-center px-2 py-1.5 text-sm font-bold text-coffee rounded-sm cursor-pointer select-none outline-none hover:bg-coffee-light/20 focus:bg-coffee-light/20 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
                             >
-                                <SelectPrimitive.ItemIndicator className="absolute left-0 w-6 inline-flex items-center justify-center">
+                                <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
+                                <SelectPrimitive.ItemIndicator className="w-6 inline-flex items-center justify-center">
                                     <CheckIcon className="w-4 h-4" />
                                 </SelectPrimitive.ItemIndicator>
-                                <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
                             </SelectPrimitive.Item>
                         ))}
                     </SelectPrimitive.Viewport>

@@ -233,7 +233,7 @@ export default function TicketCustomization() {
                         </div>
 
                         <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Background Color</label>
+                            <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Tea Tags</label>
                             <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
                                 handleColorChange={handleBackgroundColorChange} />
                         </div>
@@ -291,9 +291,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Sticky NoteText Overlay */}
-                <Draggable className="handle w-64 h-64 absolute inset-0 top-[40%] left-[60%] drop-shadow-lg cursor-grab active:cursor-grabbing"
-                    zIndex={1}
-                >
+                <div className="z-1 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg cursor-grab active:cursor-grabbing">
                     <img className="hue-rotate-15 absolute top-0 left-0 w-full h-full object-contain select-none"
                         src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" 
                         alt="sticky note" 
@@ -303,7 +301,7 @@ export default function TicketCustomization() {
                             {message}
                         </div>
                     </div>
-                </Draggable>
+                </div>
 
                 {/* Coffee Cup */}
                 <img src="/img/coffee-cup-1.jpg" 
@@ -334,18 +332,18 @@ export default function TicketCustomization() {
                 {/* Regular Tea Tags */}
                 <div className="flex flex-col gap-2 p-6 text-xs"
                     style={{
-                        '--tea-tag-size': '0px',
+                        '--tea-tag-size': '40px',
                     } as React.CSSProperties}
                 >
                     <div className="flex flex-row gap-2">
                         <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
-                            <div className="handle tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)]">
+                            <div className="handle tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] shadow-lg">
                                 <div className="w-full h-full flex flex-col items-center justify-center">
 
                                 </div>
                             </div>
                         </Draggable>
-                        <div className="tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-sage">
+                        <div className="tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] bg-sage shadow-lg">
                             <div className="w-full h-full flex flex-col items-center justify-center">
 
                             </div>
