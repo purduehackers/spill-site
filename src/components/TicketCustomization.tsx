@@ -4,7 +4,6 @@ import * as htmlToImage from 'html-to-image';
 import ColorSelector from './ColorSelector';
 import Draggable from './Draggable';
 import Ticket from './Ticket';
-import TicketCanvas from './TicketCanvas';
 
 export default function TicketCustomization() {
     const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -334,15 +333,6 @@ export default function TicketCustomization() {
                     </div>
                 </div>
             </div>
-
-            <TicketCanvas 
-                className="hidden"
-                name={name} 
-                number={number} 
-                message={message} 
-                ticketDesign={ticketDesign} 
-                backgroundColor={backgroundColor} 
-            />
         </div>
     );
 }
