@@ -43,7 +43,7 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                     crossOrigin="anonymous"/>
                 
                 {/* Side text */}
-                <div className=" w-[31%] h-[60%] absolute -left-7 top-1/2 -translate-y-1/2 rotate-90 origin-center flex items-center justify-center pointer-events-none">
+                <div className="w-[31%] h-[40%] md:h-[60%] max-h-[161px] absolute -left-7 top-1/2 -translate-y-1/2 rotate-90 origin-center flex items-center justify-center pointer-events-none">
                     <div className={`w-[84%] h-[40%] text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col justify-between`}>
                         <div className="text-[9px] font-mono flex justify-between origin-center rotate-180">
                             <div>
@@ -76,14 +76,14 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                 transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.06}deg)`
             } as React.CSSProperties}
         >
-            <img className="w-full h-auto object-contain drop-shadow-lg block"
+            <img className="w-full h-auto object-contain drop-shadow-lg block text-fern text-light-brown"
                 src={ticketDesign} 
                 alt="Ticket" 
                 crossOrigin="anonymous" />
             
             {/* Bottom text */}
             <div className="absolute bottom-0 left-0 right-0 w-full h-[20%] min-h-[80px] flex items-center justify-center pointer-events-none">
-                <div className="w-[70%] max-w-[161px] h-[55%] text-fern uppercase flex flex-col justify-between">
+                <div className={`w-[70%] max-w-[161px] h-[55%] text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col justify-between`}>
                     <div className="text-[12px] font-mono flex justify-between whitespace-nowrap">
                         <div>
                             {name.concat(' ').padEnd(12, '*')}
