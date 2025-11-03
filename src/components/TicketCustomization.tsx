@@ -114,7 +114,7 @@ export default function TicketCustomization() {
         htmlToImage.toPng(node).then((dataUrl) => {
             const link = document.createElement('a');
             link.href = dataUrl;
-            link.download = 'ticket.png';
+            link.download = `${name.replace(/ /g, "-")}_spill-ticket.png`;
             link.click();
         });
     }
@@ -346,8 +346,8 @@ export default function TicketCustomization() {
 
                 {/* Event Info */}
                 <div className="z-[700] text-xs flex justify-between pointer-events-none">
-                    <div className="text-transparent realstic-marker-highlight">december 6, 2025</div>
-                    <div>spill.purduehackers.com</div>
+                    <div className="text-transparent">december 6, 2025</div>
+                    <div className="bg-chocolate/12 rounded-full px-2 py-1">spill.purduehackers.com</div>
                 </div>
 
                 {/* Ticket */ }

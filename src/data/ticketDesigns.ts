@@ -13,15 +13,15 @@ export const ticketDesigns = {
             },
             {
                 filename: 'matcha.png',
-                name: 'matcha',
+                name: 'sencha',
             },
-            {
+            /*{
                 filename: 'jasmine.png',
                 name: 'jasmine',
-            },
+            },*/
             {
                 filename: 'sencha.png',
-                name: 'sencha',
+                name: 'jasmine',
             }
         ],
         brown: [
