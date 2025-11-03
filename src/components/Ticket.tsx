@@ -43,8 +43,8 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                     crossOrigin="anonymous"/>
                 
                 {/* Side text */}
-                <div className="w-[31%] h-[40%] md:h-[60%] max-h-[161px] absolute -left-7 top-1/2 -translate-y-1/2 rotate-90 origin-center flex items-center justify-center pointer-events-none">
-                    <div className={`w-[84%] h-[40%] sm:h-[55%] text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col justify-between gap-0 sm:gap-2`}>
+                <div className="w-[31%] h-[50%] md:h-[60%] max-h-[161px] absolute -left-7 top-1/2 -translate-y-1/2 rotate-90 origin-center flex items-center justify-center pointer-events-none">
+                    <div className={`w-[84%] h-[65%] sm:h-[70%] text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col justify-between gap-1 sm:gap-2`}>
                         <div className="text-[7px] sm:text-[9px] font-mono flex justify-between origin-center rotate-180">
                             <div>
                                 {name.concat(' ').padEnd(12, '*')}
@@ -54,7 +54,7 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                             </div>
                         </div>
                         <div className="flex items-center justify-between gap-0">
-                            <div className="scale-y-120 h-2/3 font-barcode text-4xl leading-none">
+                            <div className="scale-y-120 h-3/4 font-barcode text-4xl leading-none">
                                 purdueha
                             </div>
                             <div className="-rotate-90 translate-x-2 font-serif text-[20px]">
