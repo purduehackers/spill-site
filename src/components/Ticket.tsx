@@ -59,7 +59,7 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                             <div className="scale-y-120 font-barcode text-4xl leading-none">
                                 purdueha
                             </div>
-                            <div className="-rotate-90 translate-x-2 font-serif text-[20px]">
+                            <div className="-rotate-90 translate-x-2 -translate-y-2 font-serif text-base sm:text-[24px]">
                                 PH
                             </div>
                         </div>
