@@ -307,7 +307,7 @@ export default function TicketCustomization() {
             {/* Ticket Customization Preview Canvas */}
             <div id="ticket-customization-canvas"
 				ref={canvasContainerRef}
-				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[calc(var(--preview-size-large)_+_70px)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
+				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[calc(var(--preview-size-large)_+_120px)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
                     overflow-hidden select-none flex flex-col gap-4 justify-between bg-${'paper'} border-2 border-sage/20 rounded-lg p-4`}
                 onMouseMove={e => {
                     if (!drawingActive || drawingPaused) {
@@ -371,7 +371,7 @@ export default function TicketCustomization() {
                 {/* Graph Paper */}
                 <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
                     {/* Mostly blank paper */}
-                    <img className="sepia-20 saturate-0 rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
+                    <img className="rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
                         src="/img/graphpaper.png" 
                         alt="graph paper" 
                         crossOrigin="anonymous" />
@@ -381,7 +381,7 @@ export default function TicketCustomization() {
                         alt="graph paper" 
                         crossOrigin="anonymous" />
                     {/* Frog paper */}
-                    <img className="sepia-20 saturate-0 -rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
+                    <img className="-rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
                         src="/img/graphpaper.png" 
                         alt="graph paper" 
                         crossOrigin="anonymous" />
@@ -397,7 +397,7 @@ export default function TicketCustomization() {
                         crossOrigin="anonymous"
                     />
                     {/* Tag */}
-                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-1/3 -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'} 
+                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'} 
                                 w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
                         src="/img/tea-bag-tag-spill.png"
                         alt="tea bag tag"
