@@ -42,7 +42,7 @@ export default function Select({
         >
             <SelectPrimitive.Trigger
                 id={id}
-                className={`inline-flex items-center justify-between px-2 py-1.5 text-sm font-bold bg-coffee text-white border-2 border-coffee-light rounded-md focus:outline-none focus:ring-2 focus:ring-coffee disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
+                className={`inline-flex items-center justify-between px-2 py-1 text-xs font-bold bg-coffee text-white border-2 border-coffee-light rounded-md focus:outline-none focus:ring-2 focus:ring-coffee disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
                 aria-label={ariaLabel}
             >
                 <SelectPrimitive.Value placeholder={placeholder}>
@@ -69,7 +69,7 @@ export default function Select({
                                 key={option.value}
                                 value={option.value}
                                 disabled={option.disabled}
-                                className="relative flex items-center px-2 py-1.5 text-sm font-bold text-coffee rounded-sm cursor-pointer select-none outline-none hover:bg-coffee-light/20 focus:bg-coffee-light/20 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
+                                className="relative flex items-center px-2 py-1 text-sm font-bold text-coffee rounded-sm cursor-pointer select-none outline-none hover:bg-coffee-light/20 focus:bg-coffee-light/20 data-[disabled]:opacity-50 data-[disabled]:pointer-events-none"
                             >
                                 <SelectPrimitive.ItemText>{option.label}</SelectPrimitive.ItemText>
                                 <SelectPrimitive.ItemIndicator className="w-6 inline-flex items-center justify-center">

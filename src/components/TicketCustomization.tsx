@@ -186,8 +186,8 @@ export default function TicketCustomization() {
                     </div>
 
                     {/* Ticket Design */}
-                    <div className="flex flex-row md:flex-col gap-4 md:gap-4">
-                        <div className="flex gap-4">
+                    <div className="flex flex-col gap-4 md:gap-4">
+                        <div className="flex flex-wrap gap-4">
                             {/* Orientation */}
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold lowercase" htmlFor="ticket-orientation">Orientation</label>
@@ -217,25 +217,26 @@ export default function TicketCustomization() {
                                     ariaLabel="Ticket type"
                                 />
                             </div>
+
+                            {/* Design */}
+                            <div className="flex flex-col gap-2">
+                                <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
+                                    Design
+                                </label>
+                                <Select className="w-30"
+                                    id="ticket-design"
+                                    value={ticketDesign.split('/').pop() || ''}
+                                    onValueChange={handleTicketDesignChange}
+                                    options={ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[ticketColor as 'green' | 'brown']?.map((design) => ({
+                                        value: design.filename,
+                                        label: design.name
+                                    })) || []}
+                                    ariaLabel="Ticket design"
+                                />
+                            </div>
                         </div>
 
-                        {/* Design */}
-                        <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
-                                Design
-                            </label>
-                            <Select
-                                id="ticket-design"
-                                value={ticketDesign.split('/').pop() || ''}
-                                onValueChange={handleTicketDesignChange}
-                                options={ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[ticketColor as 'green' | 'brown']?.map((design) => ({
-                                    value: design.filename,
-                                    label: design.name
-                                })) || []}
-                                ariaLabel="Ticket design"
-                            />
-                        </div>
-
+                        {/* Color selector */}
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Tea Tags</label>
                             <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 

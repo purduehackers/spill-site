@@ -204,7 +204,7 @@ export default function PaintCanvas({
             drawCanvas.removeEventListener('touchend', handleUp);
             resizeObserver.disconnect();
         };
-    }, [active, containerRef, strokeColor, brushSize, brushDensity, brushOpacity]);
+    }, [active, containerRef, brushSize, brushDensity, brushOpacity]);
 
     useEffect(() => {
         const drawCanvas = drawCanvasRef.current;
