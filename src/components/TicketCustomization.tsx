@@ -187,7 +187,7 @@ export default function TicketCustomization() {
 
                     {/* Ticket Design */}
                     <div className="flex flex-col gap-4 md:gap-4">
-                        <div className="flex flex-wrap gap-4">
+                        <div className="flex flex-wrap gap-2 md:gap-4">
                             {/* Orientation */}
                             <div className="flex flex-col gap-2">
                                 <label className="text-xs font-bold lowercase" htmlFor="ticket-orientation">Orientation</label>
@@ -239,7 +239,7 @@ export default function TicketCustomization() {
                         {/* Color selector */}
                         <div className="flex flex-col gap-2">
                             <label className="text-xs font-bold lowercase" htmlFor="ticket-color">Tea Tags</label>
-                            <ColorSelector colors={['paper', 'moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
+                            <ColorSelector colors={['moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
                                 handleColorChange={handleBackgroundColorChange} />
                         </div>
                     </div>
@@ -256,7 +256,7 @@ export default function TicketCustomization() {
                         id="ticket-canvas-draw-toggle"
                         title="Draw"
                     >
-                        <span>draw</span>
+                        <span>{drawingActive ? 'clear' : 'draw'}</span>
                         <svg
                             fill="currentColor"
                             width="18"
@@ -330,7 +330,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Sticky Note Text Overlay */}
-                <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg cursor-grab active:cursor-grabbing">
+                <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
                     <img className="hue-rotate-10 absolute top-0 left-0 w-full h-full object-contain select-none"
                         src="/img/sticky-notes.png" 
                         alt="sticky note" 
@@ -394,13 +394,13 @@ export default function TicketCustomization() {
 
                 {/* Spills */}
                 <div className="absolute inset-0 top-0 right-0">
-                    <div className="z-2 absolute -top-8 sm:-top-18 left-[55%] w-fit h-fit cursor-grab active:cursor-grabbing">
-                        <img className="handle w-42 sm:w-48 md:w-64 h-full object-cover select-none"
+                    <div className="z-2 absolute -top-8 sm:-top-18 left-[55%] w-fit h-fit">
+                        <img className="handle w-1/2 sm:w-48 md:w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
                             alt="Spill"
                             crossOrigin="anonymous"/>
                     </div>
-                    <div className="z-2 absolute top-24 -left-42 w-fit h-fit cursor-grab active:cursor-grabbing">
+                    <div className="z-2 absolute top-24 -left-42 w-fit h-fit">
                         <img className="handle w-64 h-full object-cover select-none"
                             src={`/img/coffee/89.png`} 
                             alt="Spill"
@@ -415,7 +415,7 @@ export default function TicketCustomization() {
                     } as React.CSSProperties}
                 >
                     <div className="flex flex-row gap-2">
-                        <Draggable className="relative top-0 left-0 w-fit h-fit cursor-grab active:cursor-grabbing">
+                        <Draggable className="relative top-0 left-0 w-fit h-fit">
                             <div className="handle tea-tag w-[var(--tea-tag-size)] h-[var(--tea-tag-size)] shadow-lg">
                                 <div className="w-full h-full flex flex-col items-center justify-center">
 

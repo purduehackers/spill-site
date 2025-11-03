@@ -25,7 +25,9 @@ export default function PaintCanvas({
 }: PaintCanvasProps) {
     const drawCanvasRef = useRef<HTMLCanvasElement>(null);
     const strokesRef = useRef<Array<StrokeType>>([]);
+    const strokeColorRef = useRef<string>(strokeColor);
 
+    // Initialize canvas and setup event listeners
     useEffect(() => {
         const drawCanvas = drawCanvasRef.current;
         const canvasContainer = containerRef.current;
@@ -89,7 +91,7 @@ export default function PaintCanvas({
         function drawBrushStamp(x: number, y: number, pressure: number = 1) {
             if (!drawCtx) return;
             
-            const rgb = colorToRgb(strokeColor);
+            const rgb = colorToRgb(strokeColorRef.current);
             if (!rgb) return;
             
             const size = brushSize * pressure;
@@ -206,11 +208,17 @@ export default function PaintCanvas({
         };
     }, [active, containerRef, brushSize, brushDensity, brushOpacity]);
 
+    // Update pointer events when active prop changes
     useEffect(() => {
         const drawCanvas = drawCanvasRef.current;
         if (!drawCanvas) return;
         drawCanvas.style.pointerEvents = active ? 'auto' : 'none';
     }, [active]);
+
+    // Update strokeColorRef when prop changes
+    useEffect(() => {
+        strokeColorRef.current = strokeColor;
+    }, [strokeColor]);
 
     return (
         <canvas 
