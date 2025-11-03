@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 interface PaintCanvasProps {
     containerRef: React.RefObject<HTMLDivElement | null>;
     active: boolean;
+    paused?: boolean;
     className?: string;
     strokeColor?: string;
     brushSize?: number;
@@ -17,6 +18,7 @@ type StrokeType = {
 export default function PaintCanvas({ 
     containerRef, 
     active,
+    paused = false,
     className = '',
     strokeColor = '#4B3732',
     brushSize = 3,
@@ -26,6 +28,8 @@ export default function PaintCanvas({
     const drawCanvasRef = useRef<HTMLCanvasElement>(null);
     const strokesRef = useRef<Array<StrokeType>>([]);
     const strokeColorRef = useRef<string>(strokeColor);
+    const activeRef = useRef<boolean>(active);
+    const pausedRef = useRef<boolean>(paused);
 
     // Initialize canvas and setup event listeners
     useEffect(() => {
@@ -137,7 +141,7 @@ export default function PaintCanvas({
 
         function handleDown(e: MouseEvent | TouchEvent) {
             e.preventDefault();
-            if (!active || !drawCtx) return;
+            if (!activeRef.current || pausedRef.current || !drawCtx) return;
             drawing = true;
             const { x, y } = getPos(e);
             strokesRef.current.push({ points: [{ x, y }] });
@@ -146,7 +150,7 @@ export default function PaintCanvas({
 
         function handleMove(e: MouseEvent | TouchEvent) {
             e.preventDefault();
-            if (!drawing || !active || !drawCtx) return;
+            if (!drawing || !activeRef.current || pausedRef.current || !drawCtx) return;
             const { x, y } = getPos(e);
             const strokes = strokesRef.current;
             const current = strokes[strokes.length - 1];
@@ -181,7 +185,7 @@ export default function PaintCanvas({
 
         resizeCanvas();
         
-        drawCanvas.style.pointerEvents = active ? 'auto' : 'none';
+        drawCanvas.style.pointerEvents = (activeRef.current && !pausedRef.current) ? 'auto' : 'none';
         drawCanvas.addEventListener('mousedown', handleDown);
         drawCanvas.addEventListener('mousemove', handleMove);
         drawCanvas.addEventListener('mouseup', handleUp);
@@ -208,22 +212,32 @@ export default function PaintCanvas({
         };
     }, [active, containerRef, brushSize, brushDensity, brushOpacity]);
 
-    // Update pointer events when active prop changes
+    // Update pointer events when active or paused props change
     useEffect(() => {
         const drawCanvas = drawCanvasRef.current;
         if (!drawCanvas) return;
-        drawCanvas.style.pointerEvents = active ? 'auto' : 'none';
-    }, [active]);
+        drawCanvas.style.pointerEvents = (active && !paused) ? 'auto' : 'none';
+    }, [active, paused]);
 
     // Update strokeColorRef when prop changes
     useEffect(() => {
         strokeColorRef.current = strokeColor;
     }, [strokeColor]);
 
+    // Update activeRef when prop changes
+    useEffect(() => {
+        activeRef.current = active;
+    }, [active]);
+
+    // Update pausedRef when prop changes
+    useEffect(() => {
+        pausedRef.current = paused;
+    }, [paused]);
+
     return (
         <canvas 
             ref={drawCanvasRef}
-            className={`absolute top-0 left-0 w-full h-full ${active ? 'cursor-crosshair' : 'pointer-events-none'} ${className}`}
+            className={`absolute top-0 left-0 w-full h-full ${(active && !paused) ? 'cursor-crosshair' : 'pointer-events-none'} ${className}`}
             aria-hidden="true"
         />
     );
