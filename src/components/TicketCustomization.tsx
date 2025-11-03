@@ -417,7 +417,7 @@ export default function TicketCustomization() {
 
                 {/* Spills */}
                 <div className="absolute inset-0 top-0 right-0">
-                    <div className="z-2 absolute -top-8 sm:-top-18 left-[55%] w-fit h-fit">
+                    <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
                         <img className="handle w-64 h-auto object-contain select-none"
                             src={`/img/coffee/85.png`} 
                             alt="Spill"
