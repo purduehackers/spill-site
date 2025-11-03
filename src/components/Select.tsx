@@ -55,7 +55,7 @@ export default function Select({
 
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className="overflow-hidden bg-paper border-2 border-coffee-light rounded-md shadow-lg z-50"
+                    className="w-full overflow-hidden bg-paper border-2 border-coffee-light rounded-md shadow-lg z-50"
                     position="popper"
                     sideOffset={4}
                 >

@@ -402,8 +402,9 @@ export default function TicketCustomization() {
                     />
                     {/* Tag */}
                     <img
-                        className="z-5 -rotate-10 absolute top-1/2 left-1/3 w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg"
-                        src="/img/tea-bag-tag.png"
+                        className={`z-5 absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-1/3 -rotate-10' : 'top-[40%] right-[10%] -rotate-140 origin-center'} 
+                                w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
+                        src="/img/tea-bag-tag-spill.png"
                         alt="tea bag tag"
                         crossOrigin="anonymous"
                     />
