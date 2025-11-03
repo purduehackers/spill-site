@@ -45,7 +45,8 @@ export default function Select({
                 className={`inline-flex items-center justify-between px-2 py-1 text-xs font-bold bg-coffee text-white border-2 border-coffee-light rounded-md focus:outline-none focus:ring-2 focus:ring-coffee disabled:opacity-50 disabled:cursor-not-allowed ${className}`}
                 aria-label={ariaLabel}
             >
-                <SelectPrimitive.Value placeholder={placeholder}>
+                <SelectPrimitive.Value className="w-full text-nowrap"
+                        placeholder={placeholder}>
                     {options.find((opt) => opt.value === value)?.label || placeholder}
                 </SelectPrimitive.Value>
                 <SelectPrimitive.Icon className="ml-2">

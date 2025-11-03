@@ -25,8 +25,21 @@ export default function TicketCustomization() {
     const [drawingPaused, setDrawingPaused] = useState<boolean>(true);
     const canvasContainerRef = useRef<HTMLDivElement>(null);
 
+    const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
+
     // Load name, number, and message from localStorage
     useEffect(() => {
+        // Detect touch-capable devices (covers most mobile/tablet browsers)
+        if (typeof window !== 'undefined') {
+            const touchDetected =
+                (navigator as any)?.maxTouchPoints > 0 ||
+                // @ts-ignore - Safari/iOS support
+                ('ontouchstart' in window) ||
+                window.matchMedia('(pointer: coarse)').matches ||
+                window.matchMedia('(hover: none)').matches;
+            setIsTouchDevice(Boolean(touchDetected));
+        }
+
         const name = localStorage.getItem('ticket-name') || '';
         if (name.length > 12) {
             setName(name.slice(0, 12));
@@ -265,11 +278,13 @@ export default function TicketCustomization() {
                     </div>
                 </div>
                 <div className="flex flex-row gap-2">
-                    <button className="form-button w-full"
-                        onClick={downloadTicket}
-                    >
-                        download
-                    </button>
+                    {!isTouchDevice && (
+                        <button className="form-button w-full"
+                            onClick={downloadTicket}
+                        >
+                            download
+                        </button>
+                    )}
                     {/*<button className="form-button"
                         onClick={shareTicket}
                     >
