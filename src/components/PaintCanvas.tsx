@@ -215,15 +215,7 @@ export default function PaintCanvas({
     return (
         <canvas 
             ref={drawCanvasRef}
-            className={className}
-            style={{ 
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                pointerEvents: active ? 'auto' : 'none'
-            }}
+            className={`absolute top-0 left-0 w-full h-full ${active ? 'cursor-crosshair' : 'pointer-events-none'} ${className}`}
             aria-hidden="true"
         />
     );
