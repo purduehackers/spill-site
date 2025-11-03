@@ -315,10 +315,18 @@ export default function TicketCustomization() {
 				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
                     overflow-hidden select-none flex flex-col gap-4 justify-between bg-${'paper'} border-2 border-sage/20 rounded-lg p-4`}
                 onMouseMove={e => {
-                    setMousePos({ x: e.clientX, y: e.clientY }); 
+                    if (!drawingActive || drawingPaused) {
+                        setMousePos({ x: e.clientX, y: e.clientY });
+                    } else {
+                        setMousePos(null);
+                    }
                 }}
                 onMouseEnter={e => {
-                    setMousePos({ x: e.clientX, y: e.clientY }); 
+                    if (!drawingActive || drawingPaused) {
+                        setMousePos({ x: e.clientX, y: e.clientY });
+                    } else {
+                        setMousePos(null);
+                    }
                 }}
                 onMouseLeave={() => {
                     setMousePos(null);
@@ -366,7 +374,7 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Graph Paper */}
-                <div className="z-1 absolute inset-0 top-0 left-5">
+                <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
                     {/* Mostly blank paper */}
                     <img className="hue-rotate-0 rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
                         src="/img/graphpaper.png" 
@@ -416,7 +424,7 @@ export default function TicketCustomization() {
                     crossOrigin="anonymous" />
 
                 {/* Spills */}
-                <div className="absolute inset-0 top-0 right-0">
+                <div className="absolute inset-0 top-0 right-0 pointer-events-none">
                     <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
                         <img className="handle w-64 h-auto object-contain select-none"
                             src={`/img/coffee/85.png`} 

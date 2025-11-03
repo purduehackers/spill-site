@@ -44,7 +44,7 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                 
                 {/* Side text */}
                 <div className="w-[31%] h-[40%] md:h-[60%] max-h-[161px] absolute -left-8 sm:-left-9 top-1/2 -translate-y-1/2 rotate-90 origin-center flex items-center justify-center pointer-events-none">
-                    <div className={`w-[84%] h-fit text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col gap-1 sm:gap-4`}>
+                    <div className={`w-[84%] h-fit text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col gap-2 sm:gap-4`}>
                         {/* Name and number */}
                         <div className="text-[7px] sm:text-[9px] font-mono flex justify-between origin-center rotate-180">
                             <div>
