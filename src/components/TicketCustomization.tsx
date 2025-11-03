@@ -210,7 +210,7 @@ export default function TicketCustomization() {
                                     <label className="text-xs font-bold lowercase" htmlFor="ticket-design">
                                         Design
                                     </label>
-                                    <Select className="w-30 min-w-fit"
+                                    <Select className="w-fit min-w-30"
                                         id="ticket-design"
                                         value={ticketDesign.split('/').pop() || ''}
                                         onValueChange={handleTicketDesignChange}
