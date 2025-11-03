@@ -271,7 +271,7 @@ export default function TicketCustomization() {
             <div id="ticket-customization-canvas"
 				ref={canvasContainerRef}
 				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[var(--preview-size-large)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
-                    overflow-hidden select-none flex flex-col gap-4 justify-between bg-${backgroundColor} border-2 border-sage/20 rounded-lg p-4`}
+                    overflow-hidden select-none flex flex-col gap-4 justify-between bg-${'paper'} border-2 border-sage/20 rounded-lg p-4`}
                 onMouseMove={e => {
                     setMousePos({ x: e.clientX, y: e.clientY }); 
                 }}
@@ -285,6 +285,7 @@ export default function TicketCustomization() {
 				{/* Drawing canvas overlay */}
 				<div className={`z-[614] absolute inset-0 w-full h-full ${drawingActive ? '' : 'pointer-events-none'}`}>
 					<PaintCanvas 
+                        strokeColor={backgroundColor}
 						containerRef={canvasContainerRef}
 						active={drawingActive}
 						className="absolute inset-0 w-full h-full"

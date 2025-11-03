@@ -34,7 +34,7 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
                 style={{
                     '--ticket-width-large': '496px',
                     '--ticket-height-large': '200px',
-                    transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.06}deg)`
+                    transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.02}deg)`
                 } as React.CSSProperties}
             >
                 <img className="w-full md:w-[var(--ticket-width-large)] h-fit object-contain drop-shadow-lg text-fern text-light-brown"
@@ -69,11 +69,11 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
 
     return (
         <div id="ticket-container"
-            className="relative z-10 scale-95 rotate-0 translate-y-3 w-[var(--ticket-width-large)] h-fit"
+            className="relative z-10 scale-95 rotate-20 translate-y-3 w-[var(--ticket-width-large)] h-fit"
             style={{
                 '--ticket-width-large': '230px',
                 '--ticket-height-large': '496px',
-                transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.06}deg)`
+                transform: `perspective(3000px) rotateX(${relativeMousePos.y * 0.06}deg) rotateY(${-relativeMousePos.x * 0.06}deg) rotateZ(${-relativeMousePos.x * 0.02}deg)`
             } as React.CSSProperties}
         >
             <img className="w-full h-auto object-contain drop-shadow-lg block text-fern text-light-brown"

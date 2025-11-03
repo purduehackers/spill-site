@@ -10,6 +10,10 @@ interface PaintCanvasProps {
     brushOpacity?: number;
 }
 
+type StrokeType = {
+    points: Array<{ x: number; y: number }>;
+}
+
 export default function PaintCanvas({ 
     containerRef, 
     active,
@@ -20,7 +24,7 @@ export default function PaintCanvas({
     brushOpacity = 1
 }: PaintCanvasProps) {
     const drawCanvasRef = useRef<HTMLCanvasElement>(null);
-    const strokesRef = useRef<Array<{ points: Array<{ x: number; y: number }> }>>([]);
+    const strokesRef = useRef<Array<StrokeType>>([]);
 
     useEffect(() => {
         const drawCanvas = drawCanvasRef.current;
@@ -58,7 +62,22 @@ export default function PaintCanvas({
             return { x, y };
         }
 
-        function hexToRgb(hex: string): { r: number; g: number; b: number } | null {
+        // Map color names to hex values
+        const colorNameToHex: Record<string, string> = {
+            'paper': '#e0dbd3',
+            'moss': '#a0a041',
+            'coffee-light': '#896258',
+            'sage': '#a0aaa0',
+            'matcha': '#6b8034',
+            'cream': '#ecdbbf',
+            'chocolate': '#744726',
+        };
+
+        function colorToRgb(color: string): { r: number; g: number; b: number } | null {
+            // First check if it's a color name and convert to hex
+            const hex = colorNameToHex[color] || color;
+            
+            // Then parse as hex
             const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
             return result ? {
                 r: parseInt(result[1], 16),
@@ -70,7 +89,7 @@ export default function PaintCanvas({
         function drawBrushStamp(x: number, y: number, pressure: number = 1) {
             if (!drawCtx) return;
             
-            const rgb = hexToRgb(strokeColor);
+            const rgb = colorToRgb(strokeColor);
             if (!rgb) return;
             
             const size = brushSize * pressure;
@@ -115,6 +134,7 @@ export default function PaintCanvas({
         }
 
         function handleDown(e: MouseEvent | TouchEvent) {
+            e.preventDefault();
             if (!active || !drawCtx) return;
             drawing = true;
             const { x, y } = getPos(e);
@@ -123,6 +143,7 @@ export default function PaintCanvas({
         }
 
         function handleMove(e: MouseEvent | TouchEvent) {
+            e.preventDefault();
             if (!drawing || !active || !drawCtx) return;
             const { x, y } = getPos(e);
             const strokes = strokesRef.current;
@@ -163,8 +184,8 @@ export default function PaintCanvas({
         drawCanvas.addEventListener('mousemove', handleMove);
         drawCanvas.addEventListener('mouseup', handleUp);
         drawCanvas.addEventListener('mouseleave', handleLeave);
-        drawCanvas.addEventListener('touchstart', handleDown, { passive: true });
-        drawCanvas.addEventListener('touchmove', handleMove, { passive: true });
+        drawCanvas.addEventListener('touchstart', handleDown, { passive: false });
+        drawCanvas.addEventListener('touchmove', handleMove, { passive: false });
         drawCanvas.addEventListener('touchend', handleUp, { passive: true });
 
         const resizeObserver = new ResizeObserver(() => {
