@@ -27,9 +27,8 @@ export default function TicketCustomization() {
 
     const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
-    // Load name, number, and message from localStorage
     useEffect(() => {
-        // Detect touch-capable devices (covers most mobile/tablet browsers)
+        // Detect touch-capable devices 
         if (typeof window !== 'undefined') {
             const touchDetected =
                 (navigator as any)?.maxTouchPoints > 0 ||
@@ -40,6 +39,7 @@ export default function TicketCustomization() {
             setIsTouchDevice(Boolean(touchDetected));
         }
 
+        // Load name, number, and message from localStorage
         const name = localStorage.getItem('ticket-name') || '';
         if (name.length > 12) {
             setName(name.slice(0, 12));
@@ -49,6 +49,12 @@ export default function TicketCustomization() {
         setNumber(localStorage.getItem('ticket-number') || 'HAK');
         setMessage(localStorage.getItem('ticket-message') || '');
     }, []);
+    useEffect(() => {
+        if (isTouchDevice) {
+            // Ensure both orientation and ticket graphic update together on touch devices
+            handleTicketOrientationChange('portrait');
+        }
+    }, [isTouchDevice]);
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('ticket-name', name);
@@ -351,7 +357,7 @@ export default function TicketCustomization() {
 
                 {/* Sticky Note Text Overlay */}
                 <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
-                    <img className="hue-rotate-10 absolute top-0 left-0 w-full h-full object-contain select-none"
+                    <img className="-hue-rotate-10 saturate-30 absolute top-0 left-0 w-full h-full object-contain select-none"
                         src="/img/sticky-notes.png" 
                         alt="sticky note" 
                         crossOrigin="anonymous" />
@@ -390,7 +396,7 @@ export default function TicketCustomization() {
                         crossOrigin="anonymous"
                     />
                     {/* Tag */}
-                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-1/3 -rotate-10' : 'top-[40%] right-[10%] -rotate-140 origin-center'} 
+                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-1/3 -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'} 
                                 w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
                         src="/img/tea-bag-tag-spill.png"
                         alt="tea bag tag"
