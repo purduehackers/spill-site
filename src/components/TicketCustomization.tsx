@@ -371,7 +371,7 @@ export default function TicketCustomization() {
                 {/* Graph Paper */}
                 <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
                     {/* Mostly blank paper */}
-                    <img className="hue-rotate-0 rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
+                    <img className="sepia-20 saturate-0 rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
                         src="/img/graphpaper.png" 
                         alt="graph paper" 
                         crossOrigin="anonymous" />
@@ -380,7 +380,8 @@ export default function TicketCustomization() {
                         src="/img/graphpaper.png" 
                         alt="graph paper" 
                         crossOrigin="anonymous" />
-                    <img className="-rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
+                    {/* Frog paper */}
+                    <img className="sepia-20 saturate-0 -rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
                         src="/img/graphpaper.png" 
                         alt="graph paper" 
                         crossOrigin="anonymous" />
