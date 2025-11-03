@@ -360,7 +360,23 @@ export default function TicketCustomization() {
                 </div>
 
                 {/* Tea Bag */}
-                <img className="z-5 rotate-50 absolute top-0 -left-25 w-80 h-full object-contain select-none drop-shadow-lg"
+                <div className="z-5 absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
+                    {/* Bag */}
+                    <img
+                        className="z-5 rotate-140 absolute top-32 left-0 w-32 max-w-[90vw] h-auto object-contain select-none drop-shadow-lg"
+                        src="/img/tea-bag-bag.png"
+                        alt="tea bag bag"
+                        crossOrigin="anonymous"
+                    />
+                    {/* Tag */}
+                    <img
+                        className="z-5 -rotate-10 absolute top-1/2 left-1/3 w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg"
+                        src="/img/tea-bag-tag.png"
+                        alt="tea bag tag"
+                        crossOrigin="anonymous"
+                    />
+                </div>
+                <img className="hidden z-5 rotate-50 absolute top-0 -left-25 w-80 h-full object-contain select-none drop-shadow-lg"
                     src="/img/tea-bag-green.png" 
                     alt="blank paper" 
                     crossOrigin="anonymous" />
@@ -377,8 +393,8 @@ export default function TicketCustomization() {
 
                 {/* Spills */}
                 <div className="absolute inset-0 top-0 right-0">
-                    <div className="z-2 absolute -top-18 left-[55%] w-fit h-fit cursor-grab active:cursor-grabbing">
-                        <img className="handle w-64 h-full object-cover select-none"
+                    <div className="z-2 absolute -top-8 sm:-top-18 left-[55%] w-fit h-fit cursor-grab active:cursor-grabbing">
+                        <img className="handle w-42 sm:w-48 md:w-64 h-full object-cover select-none"
                             src={`/img/coffee/85.png`} 
                             alt="Spill"
                             crossOrigin="anonymous"/>
