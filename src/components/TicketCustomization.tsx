@@ -112,8 +112,44 @@ export default function TicketCustomization() {
         if (!node) return null;
 
         try {
+            // Capture the original canvas
             const dataUrl = await htmlToImage.toPng(node);
-            const blob = await (await fetch(dataUrl)).blob();
+            
+            // Create a new canvas with Twitter's 2:1 aspect ratio (1200x600)
+            const img = new Image();
+            img.src = dataUrl;
+            await new Promise((resolve) => { img.onload = resolve; });
+            
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            if (!ctx) throw new Error('Could not get canvas context');
+            
+            // Set canvas to Twitter's preferred dimensions
+            canvas.width = 1200;
+            canvas.height = 600;
+            
+            // Fill with paper color background
+            ctx.fillStyle = '#f5f1e8';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Calculate dimensions to fit the square image centered
+            const scale = Math.min(canvas.height / img.height, canvas.height / img.height);
+            const scaledWidth = img.width * scale;
+            const scaledHeight = img.height * scale;
+            const x = (canvas.width - scaledWidth) / 2;
+            const y = (canvas.height - scaledHeight) / 2;
+            
+            // Draw the image centered
+            ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
+            
+            // Convert to blob
+            const blob = await new Promise<Blob>((resolve, reject) => {
+                canvas.toBlob((blob) => {
+                    if (blob) resolve(blob);
+                    else reject(new Error('Failed to create blob'));
+                }, 'image/png');
+            });
+            
             const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
 
             const formData = new FormData();
