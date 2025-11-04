@@ -28,7 +28,7 @@ export default function TicketCustomization() {
     const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
     useEffect(() => {
-        // Detect touch-capable devices 
+        // Detect touch-capable devices
         if (typeof window !== 'undefined') {
             const touchDetected =
                 (navigator as any)?.maxTouchPoints > 0 ||
@@ -84,7 +84,7 @@ export default function TicketCustomization() {
         // Convert ticket color (tea/coffee) to path color (green/brown)
         const pathColor = color === 'tea' ? 'green' : 'brown';
         setTicketColor(pathColor);
-        
+
         // Update ticket design to first available design for the new color
         const designs = ticketDesigns[ticketOrientation as keyof typeof ticketDesigns]?.[pathColor];
         if (designs && designs.length > 0) {
@@ -107,10 +107,41 @@ export default function TicketCustomization() {
         }
     }
 
-    const downloadTicket = () => {
+    const uploadTicket = async () => {
+        const node = document.getElementById('ticket-customization-canvas');
+        if (!node) return null;
+
+        try {
+            const dataUrl = await htmlToImage.toPng(node);
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
+
+            const formData = new FormData();
+            formData.append('image', file);
+
+            const response = await fetch('/api/upload-ticket', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Upload failed');
+            }
+
+            const data = await response.json();
+            return { url: data.url, id: data.id };
+        } catch (error) {
+            console.error('Error uploading ticket:', error);
+            return null;
+        }
+    }
+
+    const downloadTicket = async () => {
         const node = document.getElementById('ticket-customization-canvas');
         if (!node) return;
-        
+
+        await uploadTicket();
+
         htmlToImage.toPng(node).then((dataUrl) => {
             const link = document.createElement('a');
             link.href = dataUrl;
@@ -119,8 +150,30 @@ export default function TicketCustomization() {
         });
     }
 
-    const shareTicket = () => {
-        
+    const shareTicket = async () => {
+        const node = document.getElementById('ticket-customization-canvas');
+        if (!node) return;
+
+        try {
+            const result = await uploadTicket();
+
+            const dataUrl = await htmlToImage.toPng(node);
+            const blob = await (await fetch(dataUrl)).blob();
+            const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
+
+            if (navigator.share && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    files: [file],
+                    title: 'My Spill 2025 Ticket',
+                    text: result ? `Come join me at spill ≋, a creative-technical showcase produced by @purduehackers, on December 6th, 2025!\n\nhttps://spill.purduehackers.com/tickets/${result.id}` : 'Come join me at spill ≋, a creative-technical showcase produced by @purduehackers, on December 6th, 2025!'
+                });
+            } else {
+                alert('Sharing is not supported on this device. Try the download button instead!');
+            }
+        } catch (error) {
+            console.error('Error sharing:', error);
+            alert('Unable to share. Try the download button instead!');
+        }
     }
 
     const resetTicket = () => {
@@ -130,7 +183,7 @@ export default function TicketCustomization() {
     }
 
     return (
-        <div className="w-full h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center"  
+        <div className="w-full h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center"
             style={{
                 '--preview-size-small': '80px',
                 '--preview-size-medium': '500px',
@@ -151,7 +204,7 @@ export default function TicketCustomization() {
                     <div className="flex flex-col gap-6">
                         {/* Name and Message */}
                         <div className="flex flex-col gap-2">
-                            <label className="text-xs font-bold lowercase" 
+                            <label className="text-xs font-bold lowercase"
                                     htmlFor="name">
                                 Name
                             </label>
@@ -163,7 +216,7 @@ export default function TicketCustomization() {
                                 value={name}
                                 onChange={(e) => handleNameChange(e.target.value)}
                             />
-                            <label className="text-xs font-bold lowercase" 
+                            <label className="text-xs font-bold lowercase"
                                     htmlFor="message">
                                 Message
                             </label>
@@ -183,7 +236,7 @@ export default function TicketCustomization() {
                                     {/* Orientation */}
                                     <div className="flex flex-col gap-2">
                                         <label className="text-xs font-bold lowercase" htmlFor="ticket-orientation">Orientation</label>
-                                        <ToggleGroup 
+                                        <ToggleGroup
                                             value={ticketOrientation}
                                             onValueChange={handleTicketOrientationChange}
                                             options={[
@@ -198,7 +251,7 @@ export default function TicketCustomization() {
                                     {/* Color */}
                                     <div className="flex flex-col gap-2">
                                         <label className="text-xs font-bold lowercase" htmlFor="ticket-type">Flavor</label>
-                                        <ToggleGroup 
+                                        <ToggleGroup
                                             value={ticketColor === 'green' ? 'tea' : 'coffee'}
                                             onValueChange={handleTicketColorChange}
                                             options={[
@@ -233,7 +286,7 @@ export default function TicketCustomization() {
                             <div className="flex flex-row flex-wrap items-end justify-between gap-2">
                                 <div className="flex flex-col gap-2">
                                     <label className="text-xs font-bold lowercase" htmlFor="ticket-color">pencil</label>
-                                    <ColorSelector colors={['moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']} 
+                                    <ColorSelector colors={['moss', 'coffee-light', 'sage', 'matcha', 'cream', 'chocolate']}
                                         handleColorChange={handleBackgroundColorChange} />
                                 </div>
 
@@ -283,31 +336,48 @@ export default function TicketCustomization() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-row gap-2">
-                    {!isTouchDevice && (
-                        <button className="form-button w-full"
+                <div className="flex flex-col gap-3">
+                    <div className="flex gap-3">
+                        <button
+                            onClick={async () => {
+                                const result = await uploadTicket();
+                                const tweetText = result
+                                    ? `Come join me at spill ≋, a creative-technical showcase produced by @purduehackers, on December 6th, 2025!\n\nhttps://spill.purduehackers.com/tickets/${result.id}`
+                                    : 'Come join me at spill ≋, a creative-technical showcase produced by @purduehackers, on December 6th, 2025!';
+                                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`, '_blank');
+                            }}
+                            className="flex-1 flex items-center justify-center gap-2 bg-paper text-coffee px-4 py-2 rounded-lg border-2 border-coffee hover:bg-sage transition-colors">
+                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+                            </svg>
+                            tweet
+                        </button>
+
+                        <button
                             onClick={downloadTicket}
-                        >
+                            className="flex-1 flex items-center justify-center gap-2 bg-paper text-coffee px-4 py-2 rounded-lg border-2 border-coffee hover:bg-sage transition-colors">
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                            </svg>
                             download
                         </button>
-                    )}
-                    {/*<button className="form-button"
+                    </div>
+
+                    <button
                         onClick={shareTicket}
-                    >
+                        className="w-full flex items-center justify-center gap-2 bg-matcha text-paper px-4 py-2 rounded-lg hover:bg-sage transition-colors">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                        </svg>
                         share
                     </button>
-                    <button className="form-button"
-                        onClick={resetTicket}
-                    >
-                        reset
-                    </button>*/}
                 </div>
             </div>
 
             {/* Ticket Customization Preview Canvas */}
             <div id="ticket-customization-canvas"
 				ref={canvasContainerRef}
-				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[calc(var(--preview-size-large)_+_120px)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)] 
+				className={`z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[calc(var(--preview-size-large)_+_120px)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)]
                     overflow-hidden select-none flex flex-col gap-4 justify-between bg-${'paper'} border-2 border-sage/20 rounded-lg p-4`}
                 onMouseMove={e => {
                     if (!drawingActive || drawingPaused) {
@@ -329,7 +399,7 @@ export default function TicketCustomization() {
             >
 				{/* Drawing canvas overlay */}
 				<div className={`z-[610] absolute inset-0 w-full h-full ${drawingActive ? '' : 'pointer-events-none'}`}>
-					<PaintCanvas 
+					<PaintCanvas
                         strokeColor={backgroundColor}
 						containerRef={canvasContainerRef}
 						active={drawingActive}
@@ -358,8 +428,8 @@ export default function TicketCustomization() {
                 {/* Sticky Note Text Overlay */}
                 <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
                     <img className="-hue-rotate-10 saturate-30 absolute top-0 left-0 w-full h-full object-contain select-none"
-                        src="/img/sticky-notes.png" 
-                        alt="sticky note" 
+                        src="/img/sticky-notes.png"
+                        alt="sticky note"
                         crossOrigin="anonymous" />
                     <div className="w-full h-full -rotate-15 flex items-center justify-center">
                         <div className="relative left-4 w-33 p-1 line-clamp-5 text-base text-coffee/80 font-nycd font-bold">
@@ -372,18 +442,18 @@ export default function TicketCustomization() {
                 <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
                     {/* Mostly blank paper */}
                     <img className="rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
-                        src="/img/graphpaper.png" 
-                        alt="graph paper" 
+                        src="/img/graphpaper.png"
+                        alt="graph paper"
                         crossOrigin="anonymous" />
                     {/* Hackers logo paper */}
                     <img className="hidden rotate-205 absolute top-1/2 -left-1/2 w-full h-full object-contain select-none"
-                        src="/img/graphpaper.png" 
-                        alt="graph paper" 
+                        src="/img/graphpaper.png"
+                        alt="graph paper"
                         crossOrigin="anonymous" />
                     {/* Frog paper */}
                     <img className="-rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
-                        src="/img/graphpaper.png" 
-                        alt="graph paper" 
+                        src="/img/graphpaper.png"
+                        alt="graph paper"
                         crossOrigin="anonymous" />
                 </div>
 
@@ -397,7 +467,7 @@ export default function TicketCustomization() {
                         crossOrigin="anonymous"
                     />
                     {/* Tag */}
-                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'} 
+                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'}
                                 w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
                         src="/img/tea-bag-tag-spill.png"
                         alt="tea bag tag"
@@ -405,31 +475,31 @@ export default function TicketCustomization() {
                     />
                 </div>
                 <img className="hidden z-5 rotate-50 absolute top-0 -left-25 w-80 h-full object-contain select-none drop-shadow-lg"
-                    src="/img/tea-bag-green.png" 
-                    alt="blank paper" 
+                    src="/img/tea-bag-green.png"
+                    alt="blank paper"
                     crossOrigin="anonymous" />
                 <img className="hidden z-5 rotate-200 absolute top-0 -left-48 w-120 h-full object-contain select-none drop-shadow-lg"
-                    src="/img/tea-bag.png" 
-                    alt="blank paper" 
+                    src="/img/tea-bag.png"
+                    alt="blank paper"
                     crossOrigin="anonymous" />
 
                 {/* Coffee Cup */}
-                <img src="/img/coffee-cup-1.jpg" 
-                    alt="Ticket" 
-                    className="hidden scale-215 absolute top-30 -left-20 w-200 h-full object-cover" 
+                <img src="/img/coffee-cup-1.jpg"
+                    alt="Ticket"
+                    className="hidden scale-215 absolute top-30 -left-20 w-200 h-full object-cover"
                     crossOrigin="anonymous" />
 
                 {/* Spills */}
                 <div className="absolute inset-0 top-0 right-0 pointer-events-none">
                     <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
                         <img className="handle w-64 h-auto object-contain select-none"
-                            src={`/img/coffee/85.png`} 
+                            src={`/img/coffee/85.png`}
                             alt="Spill"
                             crossOrigin="anonymous"/>
                     </div>
                     <div className="z-2 absolute top-24 -left-42 w-fit h-fit">
                         <img className="handle w-64 h-auto object-contain select-none"
-                            src={`/img/coffee/89.png`} 
+                            src={`/img/coffee/89.png`}
                             alt="Spill"
                             crossOrigin="anonymous" />
                     </div>

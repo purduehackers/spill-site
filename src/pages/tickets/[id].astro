@@ -1,0 +1,39 @@
+---
+export const prerender = false;
+
+const { id } = Astro.params;
+const userAgent = Astro.request.headers.get('user-agent') || '';
+
+const isBot = /bot|crawler|spider|crawling|facebookexternalhit|twitterbot/i.test(userAgent);
+
+const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
+
+if (!isBot) {
+    return Astro.redirect('/tickets');
+}
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Check out my Spill 2025 Ticket!</title>
+    <meta name="description" content="I created my custom ticket for Spill 2025 - an upcoming exhibition of student-made creative technical projects." />
+    
+    <meta property="og:title" content="Check out my Spill 2025 Ticket!" />
+    <meta property="og:description" content="I created my custom ticket for Spill 2025 - an upcoming exhibition of student-made creative technical projects." />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:type" content="website" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Check out my Spill 2025 Ticket!" />
+    <meta name="twitter:description" content="I created my custom ticket for Spill 2025 - an upcoming exhibition of student-made creative technical projects." />
+    <meta name="twitter:image" content={imageUrl} />
+  </head>
+  <body>
+    <h1>Check out my Spill 2025 Ticket!</h1>
+    <img src={imageUrl} alt="Spill 2025 Ticket" />
+  </body>
+</html>

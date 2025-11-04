@@ -21,26 +21,26 @@ import { ClientRouter } from 'astro:transitions';
   </head>
   <body>
     {/* header */}
-    <div class="absolute top-0 left-0 w-screen h-14 px-4 flex items-center justify-between">
-      <a class="text-lg font-bold"
-          href="/">
-        ←
-      </a>
+    <div class="absolute top-0 left-0 flex h-14 w-screen items-center justify-between px-4">
+      <a class="text-lg font-bold" href="/"> ← </a>
 
-      <div class="bg-coffee text-paper px-2 py-1 rounded-full text-sm">
-          ~/ticket customizer
-      </div>
+      <div class="bg-coffee text-paper rounded-full px-2 py-1 text-sm">~/ticket customizer</div>
 
       <!-- purdue hackers logo -->
-      <a href="https://www.purduehackers.com" 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          title="purdue hackers"
-          class="purdue-hackers-link">
-        <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
-          <path fill="currentColor" d="M0 32h16v16H0V32ZM16 16h16v16H16V16ZM16 0h16v16H16V0ZM32 32h16v16H32V32ZM32 16h16v16H32V16Z"/>
+      <a
+        href="https://www.purduehackers.com"
+        target="_blank"
+        rel="noopener noreferrer"
+        title="purdue hackers"
+        class="purdue-hackers-link"
+      >
+        <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none">
+          <path
+            fill="currentColor"
+            d="M0 32h16v16H0V32ZM16 16h16v16H16V16ZM16 0h16v16H16V0ZM32 32h16v16H32V32ZM32 16h16v16H32V16Z"
+          ></path>
         </svg>
-      </a> 
+      </a>
     </div>
 
     <!-- <div class="sticky-note">
@@ -53,7 +53,7 @@ import { ClientRouter } from 'astro:transitions';
 
     <!-- Grain texture overlay for UI -->
     <!-- Goes underneath ticket customization canvas but above everything else -->
-    <div class="grain-overlay z-200 pointer-events-none"></div> 
+    <div class="grain-overlay pointer-events-none z-200"></div>
 
     <!-- SVG Filter for ink bleed effect -->
     <svg
@@ -225,7 +225,6 @@ import { ClientRouter } from 'astro:transitions';
             (feDisp as Element).setAttribute('scale', displacementScale.toString());
           }
         }
-
       });
     </script>
 
