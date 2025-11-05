@@ -13,7 +13,7 @@ export default function ColorSelector({ colors, handleColorChange }: ColorSelect
             onValueChange={handleColorChange}
             defaultValue={colors[0]}
         >
-            <div className="w-0 h-0 bg-matcha bg-coffee-light bg-paper bg-moss bg-cream bg-chocolate bg-sage/50"></div>
+            <div className="w-0 h-0 bg-matcha bg-coffee-light bg-paper bg-moss bg-cream bg-chocolate bg-sage"></div>
             {colors.map((color) => (
                 <RadioGroup.Item
                     key={color}

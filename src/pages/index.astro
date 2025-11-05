@@ -208,6 +208,9 @@ import Layout from '@/layouts/Layout.astro';
                     <div class="text-center">
                       <p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
                       <p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
+                      <button class="bg-coffee text-white py-3 px-6 rounded-lg hover:bg-matcha focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-body text-base font-medium transition-colors" id="customize-ticket-btn">
+                        Customize my ticket
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -221,7 +224,6 @@ import Layout from '@/layouts/Layout.astro';
               // Redirect to ticket page after 2 seconds
               setTimeout(() => {
                 window.location.href = '/tickets';
-                //closeForm();
               }, 2000);
             } else {
               if (errorDiv) {
