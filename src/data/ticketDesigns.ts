@@ -8,33 +8,33 @@ export const ticketDesigns = {
     landscape: {
         green: [
             {
-                filename: 'matcha-latte.png',
+                filename: 'matcha-latte.webp',
                 name: 'matcha latte',
             },
             {
-                filename: 'matcha.png',
+                filename: 'matcha.webp',
                 name: 'sencha',
             },
             /*{
-                filename: 'jasmine.png',
+                filename: 'jasmine.webp',
                 name: 'jasmine',
             },*/
             {
-                filename: 'sencha.png',
+                filename: 'sencha.webp',
                 name: 'jasmine',
             }
         ],
         brown: [
             {
-                filename: 'latte.png',
+                filename: 'latte.webp',
                 name: 'caffè latte',
             },
             {
-                filename: 'mocha.png',
+                filename: 'mocha.webp',
                 name: 'mocha',
             },
             {
-                filename: 'cappuccino.png',
+                filename: 'cappuccino.webp',
                 name: 'cappuccino',
             }
         ]
@@ -42,13 +42,13 @@ export const ticketDesigns = {
     portrait: {
         green: [
             {
-                filename: 'matcha.png',
+                filename: 'matcha.webp',
                 name: 'matcha',
             }
         ],
         brown: [
             {
-                filename: 'espresso.png',
+                filename: 'espresso.webp',
                 name: 'espresso',
             }
         ]

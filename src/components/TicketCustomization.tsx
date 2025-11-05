@@ -165,7 +165,11 @@ export default function TicketCustomization() {
                 }
 
                 // Use static image for mobile
-                ticketDataUrlRef.current = ticketDesign;
+                // For "name.webp" -> "name-static.png"
+                ticketDataUrlRef.current = ticketDesign.replace(/([^/]+)\.(webp|png)$/i, (match, filename, ext) => {
+                    return filename.replace(/(\.[^/.]+)?$/, '-static.png');
+                });
+                
                 
                 // Use toCanvas first to ensure proper rendering
                 /*const canvas = await htmlToImage.toCanvas(ticketContainerRef.current, {
@@ -488,14 +492,6 @@ export default function TicketCustomization() {
                             <ShareIcon className="w-5 h-5" />
                         )}
                         share
-                    </button>
-
-                    {/* Test button for downloading ticket design */}
-                    <button
-                        onClick={downloadTicketDesign}
-                        className="w-full flex items-center justify-center gap-2 bg-sage text-paper px-4 py-2 rounded-lg border-2 border-coffee-light">
-                        <DownloadIcon className="w-5 h-5" />
-                        download ticket
                     </button>
                 </div>
             </div>
