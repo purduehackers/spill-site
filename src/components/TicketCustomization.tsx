@@ -578,15 +578,51 @@ export default function TicketCustomization() {
 
             {/* Ticket */ }
             <div ref={mobileTicketContainerRef} 
-                className="z-[615] absolute inset-0 w-124 h-124 aspect-square flex items-center justify-center pointer-events-none
-                            overflow-hidden bg-paper border-2 border-sage/20 rounded-lg p-4">
+                className="w-124 h-124 aspect-square flex items-center justify-center
+                            bg-paper border-2 border-sage/20 rounded-lg p-4">
                 {/* Grain overlay for preview canvas */}
                 <div
                     aria-hidden
                     className="z-1000 pointer-events-none absolute inset-0 mix-blend-overlay opacity-100"
                     style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
                 />
-                <Ticket name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
+                 <div
+            id="ticket-container"
+            className="relative z-10 scale-95 rotate-20 translate-y-3"
+            style={{
+                '--ticket-width-large': '230px',
+                '--ticket-height-large': '496px',
+            } as React.CSSProperties}
+        >
+            <div className="w-[var(--ticket-width-large)] h-fit">
+                <img className="w-full h-auto object-contain drop-shadow-lg block text-fern text-light-brown"
+                    src={ticketDesign} 
+                    alt="Ticket" 
+                    crossOrigin="anonymous" />
+                
+                {/* Bottom text */}
+                <div className="absolute bottom-0 left-0 right-0 w-full h-[20%] min-h-[80px] flex items-center justify-center pointer-events-none">
+                    <div className={`w-[70%] max-w-[161px] h-[55%] text-${ticketColor === 'green' ? 'fern' : 'light-brown'} uppercase flex flex-col justify-between`}>
+                        <div className="text-[12px] font-mono flex justify-between whitespace-nowrap">
+                            <div>
+                                {name.concat(' ').padEnd(12, '*')}
+                            </div>
+                            <div>
+                                // {number.padStart(3, '0')}
+                            </div>
+                        </div>
+                        <div className="flex items-center justify-between gap-0">
+                            <div className="scale-y-120 h-2/3 font-barcode text-5xl leading-none">
+                                purdueha
+                            </div>
+                            <div className="-rotate-90 translate-x-2 font-serif text-[26px]">
+                                PH
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
             </div>
         </div>
     );
