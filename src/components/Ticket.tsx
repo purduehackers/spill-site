@@ -82,12 +82,6 @@ const Ticket = forwardRef<HTMLDivElement, TicketProps>(({ name, number, ticketDe
             } as React.CSSProperties}
         >
             <div ref={ref} className="w-[var(--ticket-width-large)] h-fit">
-                {/* Grain overlay for preview canvas */}
-                <div
-                        aria-hidden
-                        className="z-1000 pointer-events-none absolute inset-0 mix-blend-overlay opacity-100"
-                        style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
-                    />
                 <img className="w-full h-auto object-contain drop-shadow-lg block text-fern text-light-brown"
                     src={ticketDesign} 
                     alt="Ticket" 
