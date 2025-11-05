@@ -163,22 +163,13 @@ export default function TicketCustomization() {
                 if (!ticketContainerRef.current) {
                     throw new Error('Ticket container not found');
                 }
-
-                // Wait for images to load
-                const images = ticketContainerRef.current.querySelectorAll('img');
-                await Promise.all(Array.from(images).map(img => {
-                    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
-                    return new Promise((resolve) => {
-                        img.onload = resolve;
-                        img.onerror = resolve; // Continue even if image fails
-                        setTimeout(resolve, 3000); // Timeout after 3 seconds
-                    });
-                }));
-
-                ticketDataUrlRef.current = await htmlToImage.toPng(ticketContainerRef.current, {
+                
+                // Use toCanvas first to ensure proper rendering
+                const canvas = await htmlToImage.toCanvas(ticketContainerRef.current, {
                     quality: 1.0,
                     pixelRatio: 2,
                 });
+                ticketDataUrlRef.current = canvas.toDataURL('image/png');
             } else {
                 // Upload entire preview for desktop
                 if (!canvasContainerRef.current) {
@@ -227,22 +218,12 @@ export default function TicketCustomization() {
                 throw new Error('Ticket container not found');
             }
 
-            // Wait for images to load
-            const images = ticketContainerRef.current.querySelectorAll('img');
-            await Promise.all(Array.from(images).map(img => {
-                if (img.complete && img.naturalWidth > 0) return Promise.resolve();
-                return new Promise((resolve) => {
-                    img.onload = resolve;
-                    img.onerror = resolve; // Continue even if image fails
-                    setTimeout(resolve, 3000); // Timeout after 3 seconds
-                });
-            }));
-
-            // Generate PNG using html-to-image
-            const dataUrl = await htmlToImage.toPng(ticketContainerRef.current, {
+            // Use toCanvas first to ensure proper rendering
+            const canvas = await htmlToImage.toCanvas(ticketContainerRef.current, {
                 quality: 1.0,
                 pixelRatio: 2,
             });
+            const dataUrl = canvas.toDataURL('image/png');
 
             const link = document.createElement('a');
             link.href = dataUrl;
