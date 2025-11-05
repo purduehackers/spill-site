@@ -172,7 +172,6 @@ export default function TicketCustomization() {
             const dataUrl = await htmlToImage.toPng(ticketContainerRef.current, {
                 quality: 1.0,
                 pixelRatio: 2,
-                backgroundColor: '#e0dbd3',
             });
 
             const link = document.createElement('a');
