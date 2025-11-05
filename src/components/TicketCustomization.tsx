@@ -157,16 +157,27 @@ export default function TicketCustomization() {
                 return ticketUploadResultRef.current;
             }
 
-            if (!canvasContainerRef.current) {
-                throw new Error('Canvas container not found');
-            }
-
             // Generate PNG using html-to-image
-            ticketDataUrlRef.current = await htmlToImage.toPng(canvasContainerRef.current, {
-                quality: 1.0,
-                pixelRatio: 2,
-                backgroundColor: '#e0dbd3',
-            });
+            if (isMobileDevice) {
+                // Upload actual ticket for mobile 
+                if (!ticketContainerRef.current) {
+                    throw new Error('Ticket container not found');
+                }
+                ticketDataUrlRef.current = await htmlToImage.toPng(ticketContainerRef.current, {
+                    quality: 1.0,
+                    pixelRatio: 2,
+                });
+            } else {
+                // Upload entire preview for desktop
+                if (!canvasContainerRef.current) {
+                    throw new Error('Canvas container not found');
+                }
+                ticketDataUrlRef.current = await htmlToImage.toPng(canvasContainerRef.current, {
+                    quality: 1.0,
+                    pixelRatio: 2,
+                    backgroundColor: '#e0dbd3',
+                });
+            }
 
             // Convert data URL to blob
             const response = await fetch(ticketDataUrlRef.current);
