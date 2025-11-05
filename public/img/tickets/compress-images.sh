@@ -3,9 +3,9 @@
 # Example: ./scripts/compress-images.sh ./public/img false
 # Example: ./scripts/compress-images.sh ./public/projects/scout true
 
-# Param 1: Input directory (default: ../public/img)
+# Param 1: Input directory (default: ./)
 # Param 2: Delete originals (default: false)
-INPUT_DIR="${1:-../public/img}"
+INPUT_DIR="${1:-./}"
 DELETE_ORIGINALS="${2:-false}"
 
 # Check if input directory exists

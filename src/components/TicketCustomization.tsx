@@ -18,7 +18,7 @@ export default function TicketCustomization() {
     const [message, setMessage] = useState<string>('');
 
     const [ticketOrientation, setTicketOrientation] = useState<string>('landscape');
-    const [ticketDesign, setTicketDesign] = useState<string>('/img/tickets/landscape/green/matcha-latte.png');
+    const [ticketDesign, setTicketDesign] = useState<string>('/img/tickets/landscape/green/matcha-latte.webp');
     const [ticketColor, setTicketColor] = useState<string>('green');
     const [backgroundColor, setBackgroundColor] = useState<string>('moss');
 
@@ -511,7 +511,7 @@ export default function TicketCustomization() {
                     {/* Sticky Note Text Overlay */}
                     <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
                         <img className="-hue-rotate-10 saturate-30 absolute top-0 left-0 w-full h-full object-contain select-none"
-                            src="/img/sticky-notes.png"
+                            src="/img/sticky-notes.webp"
                             alt="sticky note"
                             crossOrigin="anonymous" />
                         <div className="w-full h-full -rotate-15 flex items-center justify-center">
@@ -525,17 +525,17 @@ export default function TicketCustomization() {
                     <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
                         {/* Mostly blank paper */}
                         <img className="rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
-                            src="/img/graphpaper.png"
+                            src="/img/graphpaper.webp"
                             alt="graph paper"
                             crossOrigin="anonymous" />
                         {/* Hackers logo paper */}
                         <img className="hidden rotate-205 absolute top-1/2 -left-1/2 w-full h-full object-contain select-none"
-                            src="/img/graphpaper.png"
+                            src="/img/graphpaper.webp"
                             alt="graph paper"
                             crossOrigin="anonymous" />
                         {/* Frog paper */}
                         <img className="-rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
-                            src="/img/graphpaper.png"
+                            src="/img/graphpaper.webp"
                             alt="graph paper"
                             crossOrigin="anonymous" />
                     </div>
@@ -545,24 +545,24 @@ export default function TicketCustomization() {
                         {/* Bag */}
                         <img
                             className="z-5 rotate-140 absolute top-32 left-0 w-32 max-w-[90vw] h-auto object-contain select-none drop-shadow-lg"
-                            src="/img/tea-bag-bag.png"
+                            src="/img/tea-bag-bag.webp"
                             alt="tea bag bag"
                             crossOrigin="anonymous"
                         />
                         {/* Tag */}
                         <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'}
                                     w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
-                            src="/img/tea-bag-tag-spill.png"
+                            src="/img/tea-bag-tag-spill.webp"
                             alt="tea bag tag"
                             crossOrigin="anonymous"
                         />
                     </div>
                     <img className="hidden z-5 rotate-50 absolute top-0 -left-25 w-80 h-full object-contain select-none drop-shadow-lg"
-                        src="/img/tea-bag-green.png"
+                        src="/img/tea-bag-green.webp"
                         alt="blank paper"
                         crossOrigin="anonymous" />
                     <img className="hidden z-5 rotate-200 absolute top-0 -left-48 w-120 h-full object-contain select-none drop-shadow-lg"
-                        src="/img/tea-bag.png"
+                        src="/img/tea-bag.webp"
                         alt="blank paper"
                         crossOrigin="anonymous" />
 
@@ -576,13 +576,13 @@ export default function TicketCustomization() {
                     <div className="absolute inset-0 top-0 right-0 pointer-events-none">
                         <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
                             <img className="handle w-64 h-auto object-contain select-none"
-                                src={`/img/coffee/85.png`}
+                                src={`/img/coffee/85.webp`}
                                 alt="Spill"
                                 crossOrigin="anonymous"/>
                         </div>
                         <div className="z-2 absolute top-24 -left-42 w-fit h-fit">
                             <img className="handle w-64 h-auto object-contain select-none"
-                                src={`/img/coffee/89.png`}
+                                src={`/img/coffee/89.webp`}
                                 alt="Spill"
                                 crossOrigin="anonymous" />
                         </div>
