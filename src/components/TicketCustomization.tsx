@@ -163,6 +163,18 @@ export default function TicketCustomization() {
                 if (!ticketContainerRef.current) {
                     throw new Error('Ticket container not found');
                 }
+
+                // Wait for images to load
+                const images = ticketContainerRef.current.querySelectorAll('img');
+                await Promise.all(Array.from(images).map(img => {
+                    if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                    return new Promise((resolve) => {
+                        img.onload = resolve;
+                        img.onerror = resolve; // Continue even if image fails
+                        setTimeout(resolve, 3000); // Timeout after 3 seconds
+                    });
+                }));
+
                 ticketDataUrlRef.current = await htmlToImage.toPng(ticketContainerRef.current, {
                     quality: 1.0,
                     pixelRatio: 2,
@@ -214,6 +226,17 @@ export default function TicketCustomization() {
             if (!ticketContainerRef.current) {
                 throw new Error('Ticket container not found');
             }
+
+            // Wait for images to load
+            const images = ticketContainerRef.current.querySelectorAll('img');
+            await Promise.all(Array.from(images).map(img => {
+                if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                return new Promise((resolve) => {
+                    img.onload = resolve;
+                    img.onerror = resolve; // Continue even if image fails
+                    setTimeout(resolve, 3000); // Timeout after 3 seconds
+                });
+            }));
 
             // Generate PNG using html-to-image
             const dataUrl = await htmlToImage.toPng(ticketContainerRef.current, {
@@ -541,7 +564,7 @@ export default function TicketCustomization() {
 
                     {/* Ticket */ }
                     <div className="z-[615] absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
-                    <Ticket ref={ticketContainerRef} name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
+                        <Ticket ref={ticketContainerRef} name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
                     </div>
 
                     {/* Sticky Note Text Overlay */}
