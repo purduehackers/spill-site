@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, forwardRef } from 'react';
 
 interface TicketProps {
     name: string;
@@ -8,7 +8,7 @@ interface TicketProps {
     mousePos: { x: number; y: number } | null;
 }
 
-export default function Ticket({ name, number, ticketDesign, ticketColor, mousePos }: TicketProps) {
+const Ticket = forwardRef<HTMLDivElement, TicketProps>(({ name, number, ticketDesign, ticketColor, mousePos }, ref) => {
     const [relativeMousePos, setRelativeMousePos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
 
     useEffect(() => {
@@ -29,7 +29,8 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
     
     if (!isPortrait) {
         return (
-            <div id="ticket-container" 
+            <div ref={ref}
+                id="ticket-container" 
                 className="relative z-10 scale-115 rotate-20 -translate-y-20 w-fit h-fit mx-auto"
                 style={{
                     '--ticket-width-large': '496px',
@@ -70,7 +71,8 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
     }
 
     return (
-        <div id="ticket-container"
+        <div ref={ref}
+            id="ticket-container"
             className="relative z-10 scale-95 rotate-20 translate-y-3 w-[var(--ticket-width-large)] h-fit"
             style={{
                 '--ticket-width-large': '230px',
@@ -106,4 +108,8 @@ export default function Ticket({ name, number, ticketDesign, ticketColor, mouseP
             </div>
         </div>
     );
-}
+});
+
+Ticket.displayName = 'Ticket';
+
+export default Ticket;

@@ -89,88 +89,117 @@ import Layout from '@/layouts/Layout.astro';
   </main>
 
   <!-- rsvp -->
-  <div id="rsvp-modal-root"></div>
+  <div
+    id="rsvp-modal"
+    class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4 hidden"
+  >
+    <div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
+      <button
+        id="close-form"
+        class="absolute top-0 right-0 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+        aria-label="Close form"
+      >
+        ×
+      </button>
+
+      <!-- Form state -->
+      <div class="modal-state modal-form block">
+        <form id="rsvp-form" class="space-y-4">
+          <div class="flex flex-col gap-2">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
+                placeholder="your.email@example.com"
+              />
+            </div>
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
+                placeholder="wack hacker"
+              />
+            </div>
+          </div>
+          <div id="error-message" class="text-red-600 text-sm hidden"></div>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full bg-coffee text-white py-3 px-6 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
+          >
+            RSVP
+          </button>
+        </form>
+      </div>
+
+      <!-- Success state -->
+      <div class="modal-state modal-success hidden">
+        <div class="flex flex-col items-center">
+          <p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
+          <p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
+           <div class="mt-4 w-fit flex flex-col items-center gap-2">
+            <button
+              class="bg-coffee text-white py-2 px-4 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
+              id="customize-ticket-btn"
+            >
+            ‧₊˚. Customize my ticket ・ﾟ✧ 
+            </button>
+             <span id="redirect-countdown" class="w-full text-xs text-center">redirecting in (3)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </Layout>
 
 <script>
-  let isFormOpen = false;
-  const modalRoot = document.getElementById('rsvp-modal-root');
+  const modalEl = document.getElementById('rsvp-modal');
   const rsvpButton = document.getElementById('rsvp-button');
 
-  if (!modalRoot || !rsvpButton) {
+  if (!modalEl || !rsvpButton) {
     console.error('Required elements not found');
   } else {
+    const formState = modalEl.querySelector('.modal-form') as HTMLElement | null;
+    const successState = modalEl.querySelector('.modal-success') as HTMLElement | null;
+    const closeBtn = modalEl.querySelector('#close-form');
+    const rsvpForm = modalEl.querySelector('#rsvp-form');
+    const customizeBtn = modalEl.querySelector('#customize-ticket-btn');
+    const countdownEl = modalEl.querySelector('#redirect-countdown') as HTMLElement | null;
+    let countdownInterval: number | null = null;
+
     function openForm() {
-      isFormOpen = true;
-      renderForm();
+      if (!modalEl || !formState || !successState) return;
+      modalEl.classList.remove('hidden');
+      formState.classList.remove('hidden');
+      formState.classList.add('block');
+      successState.classList.add('hidden');
+      successState.classList.remove('block');
     }
 
     function closeForm() {
-      isFormOpen = false;
-      renderForm();
-    }
-
-    function renderForm() {
-      if (modalRoot) {
-        modalRoot.innerHTML = '';
-        if (isFormOpen) {
-          modalRoot.innerHTML = `
-            <div class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4">
-              <div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
-                <button id="close-form" class="absolute top-4 right-4 text-gray-500 hover:text-gray-700 text-2xl font-bold" aria-label="Close form">
-                  ×
-                </button>
-                <form id="rsvp-form" class="space-y-4">
-                  <div class="flex flex-col gap-2">
-                    <div>
-                      <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
-                        Email *
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        required
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
-                        placeholder="your.email@example.com"
-                      />
-                    </div>
-                    <div>
-                      <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
-                        Name
-                      </label>
-                      <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
-                        placeholder="wack hacker"
-                      />
-                    </div>
-                  </div>
-                  <div id="error-message" class="text-red-600 text-sm hidden"></div>
-                  <button
-                    type="submit"
-                    id="submit-btn"
-                    class="w-full bg-coffee text-white py-3 px-6 rounded-lg hover:bg-matcha focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-body text-base font-medium transition-colors"
-                  >
-                    RSVP
-                  </button>
-                </form>
-              </div>
-            </div>
-          `;
-
-          document.getElementById('close-form')?.addEventListener('click', closeForm);
-          document.getElementById('rsvp-form')?.addEventListener('submit', handleFormSubmit);
-        }
+      if (!modalEl) return;
+      modalEl.classList.add('hidden');
+      if (countdownInterval !== null) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
       }
     }
 
     async function handleFormSubmit(e: Event) {
       e.preventDefault();
-      const submitBtn = document.getElementById('submit-btn');
-      const errorDiv = document.getElementById('error-message');
+      const submitBtn = modalEl?.querySelector('#submit-btn');
+      const errorDiv = modalEl?.querySelector('#error-message') as HTMLElement | null;
       
       if (!e.target) {
         console.error('Form target not found');
@@ -200,22 +229,34 @@ import Layout from '@/layouts/Layout.astro';
             const result = await response.json();
 
             if (result.success) {
-              // Show success message
-              if (modalRoot) {
-                modalRoot.innerHTML = `
-                <div class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4">
-                  <div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
-                    <div class="text-center">
-                      <p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
-                      <p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
-                      <button class="bg-coffee text-white py-3 px-6 rounded-lg hover:bg-matcha focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 font-body text-base font-medium transition-colors" id="customize-ticket-btn">
-                        Customize my ticket
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              `;
+              // Show success state
+              if (formState && successState) {
+                formState.classList.add('hidden');
+                formState.classList.remove('block');
+                successState.classList.remove('hidden');
+                successState.classList.add('block');
+
+                // Remove close btn
+                closeBtn?.classList.add('hidden');
               }
+                // Start countdown updates
+                let numSeconds = 5;
+                if (countdownEl) {
+                  countdownEl.textContent = `redirecting in (${numSeconds})`;
+                }
+                if (countdownInterval !== null) {
+                  clearInterval(countdownInterval);
+                }
+                countdownInterval = window.setInterval(() => {
+                  numSeconds -= 1;
+                  if (countdownEl) {
+                    countdownEl.textContent = `redirecting in (${numSeconds})`;
+                  }
+                  if (numSeconds <= 0 && countdownInterval !== null) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                  }
+                }, 1000);
 
               // Set name and ticket number in local storage
               localStorage.setItem('ticket-name', formData.get('name') as string);
@@ -224,7 +265,7 @@ import Layout from '@/layouts/Layout.astro';
               // Redirect to ticket page after 2 seconds
               setTimeout(() => {
                 window.location.href = '/tickets';
-              }, 2000);
+              }, numSeconds * 1000);
             } else {
               if (errorDiv) {
                 errorDiv.textContent = result.error || 'Something went wrong';
@@ -244,6 +285,10 @@ import Layout from '@/layouts/Layout.astro';
       }
     }
 
+    // Event listeners
     rsvpButton?.addEventListener('click', openForm);
+    closeBtn?.addEventListener('click', closeForm);
+    rsvpForm?.addEventListener('submit', handleFormSubmit);
+    customizeBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
   }
 </script>

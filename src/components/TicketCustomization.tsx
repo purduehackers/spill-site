@@ -25,6 +25,7 @@ export default function TicketCustomization() {
     const [drawingActive, setDrawingActive] = useState<boolean>(false);
     const [drawingPaused, setDrawingPaused] = useState<boolean>(true);
     const canvasContainerRef = useRef<HTMLDivElement>(null);
+    const ticketContainerRef = useRef<HTMLDivElement>(null);
 
     const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
 
@@ -122,142 +123,38 @@ export default function TicketCustomization() {
         }
     }
 
-    // Helper function to convert image URL to base64
-    const imageToBase64 = async (url: string): Promise<string> => {
-        try {
-            const response = await fetch(url);
-            const blob = await response.blob();
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onloadend = () => resolve(reader.result as string);
-                reader.onerror = reject;
-                reader.readAsDataURL(blob);
-            });
-        } catch (error) {
-            console.error('Error converting image to base64:', error);
-            return '';
-        }
-    };
-
-    // Helper function to convert SVG to PNG
-    const svgToPng = async (svgString: string, width: number, height: number): Promise<Blob> => {
-            const img = new Image();
-        const svgBlob = new Blob([svgString], { type: 'image/svg+xml' });
-        const url = URL.createObjectURL(svgBlob);
-            
-        return new Promise((resolve, reject) => {
-            img.onload = () => {
-            const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-            const ctx = canvas.getContext('2d');
-                if (!ctx) {
-                    reject(new Error('Could not get canvas context'));
-                    return;
-                }
-                ctx.drawImage(img, 0, 0, width, height);
-                canvas.toBlob((blob) => {
-                    URL.revokeObjectURL(url);
-                    if (blob) resolve(blob);
-                    else reject(new Error('Failed to create blob'));
-                }, 'image/png');
-            };
-            img.onerror = () => {
-                URL.revokeObjectURL(url);
-                reject(new Error('Failed to load SVG'));
-            };
-            img.src = url;
-        });
-    };
-
-    const generateTicketWithSatori = async (width: number = 600, height: number = 600) => {
-        try {
-            // Convert all images to base64
-            const [
-                ticketDesignBase64,
-                stickyNoteBase64,
-                graphPaperBase64,
-                teaBagBagBase64,
-                teaBagTagBase64,
-                spill1Base64,
-                spill2Base64,
-            ] = await Promise.all([
-                imageToBase64(ticketDesign),
-                imageToBase64('/img/sticky-notes.png'),
-                imageToBase64('/img/graphpaper.png'),
-                imageToBase64('/img/tea-bag-bag.png'),
-                imageToBase64('/img/tea-bag-tag-spill.png'),
-                imageToBase64('/img/coffee/85.png'),
-                imageToBase64('/img/coffee/89.png'),
-            ]);
-
-            // Get drawing canvas if active
-            let drawingBase64 = '';
-            if (drawingActive && canvasContainerRef.current) {
-                const canvas = canvasContainerRef.current.querySelector('canvas');
-                if (canvas) {
-                    drawingBase64 = canvas.toDataURL('image/png');
-                }
-            }
-
-            // Call Satori API
-            const response = await fetch('/api/generate-ticket', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    name,
-                    number,
-                    message,
-                    ticketDesign: ticketDesignBase64,
-                    ticketOrientation,
-                    ticketColor,
-                    stickyNoteImage: stickyNoteBase64,
-                    graphPaperImage: graphPaperBase64,
-                    teaBagBagImage: teaBagBagBase64,
-                    teaBagTagImage: teaBagTagBase64,
-                    spill1Image: spill1Base64,
-                    spill2Image: spill2Base64,
-                    drawingImage: drawingBase64 || undefined,
-                    width,
-                    height,
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to generate ticket');
-            }
-
-            const svgString = await response.text();
-            return svgString;
-        } catch (error) {
-            console.error('Error generating ticket with Satori:', error);
-            throw error;
-        }
-    };
 
     const uploadTicket = async () => {
         try {
-            // Generate ticket with Satori (600x600 for square)
-            const svgString = await generateTicketWithSatori(600, 600);
-            
-            // Convert to PNG for Twitter (1200x600)
-            const pngBlob = await svgToPng(svgString, 1200, 600);
-            
-            const file = new File([pngBlob], 'spill-ticket.png', { type: 'image/png' });
+            if (!canvasContainerRef.current) {
+                throw new Error('Canvas container not found');
+            }
+
+            // Generate PNG using html-to-image
+            const dataUrl = await htmlToImage.toPng(canvasContainerRef.current, {
+                quality: 1.0,
+                pixelRatio: 2,
+                backgroundColor: '#e0dbd3',
+            });
+
+            // Convert data URL to blob
+            const response = await fetch(dataUrl);
+            const blob = await response.blob();
+            const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
 
             const formData = new FormData();
             formData.append('image', file);
 
-            const response = await fetch('/api/upload-ticket', {
+            const uploadResponse = await fetch('/api/upload-ticket', {
                 method: 'POST',
                 body: formData,
             });
 
-            if (!response.ok) {
+            if (!uploadResponse.ok) {
                 throw new Error('Upload failed');
             }
 
-            const data = await response.json();
+            const data = await uploadResponse.json();
             return { url: data.url, id: data.id };
         } catch (error) {
             console.error('Error uploading ticket:', error);
@@ -267,20 +164,21 @@ export default function TicketCustomization() {
 
     const downloadTicketDesign = async () => {
         try {
-            // Fetch the ticket design image
-            const response = await fetch(ticketDesign);
-            const blob = await response.blob();
-            const url = URL.createObjectURL(blob);
-            
-            // Get filename from path
-            const filename = ticketDesign.split('/').pop() || 'ticket-design.png';
-            
+            if (!ticketContainerRef.current) {
+                throw new Error('Ticket container not found');
+            }
+
+            // Generate PNG using html-to-image
+            const dataUrl = await htmlToImage.toPng(ticketContainerRef.current, {
+                quality: 1.0,
+                pixelRatio: 2,
+                backgroundColor: '#e0dbd3',
+            });
+
             const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
+            link.href = dataUrl;
+            link.download = `${name.replace(/ /g, "-")}_ticket-design.png`;
             link.click();
-            
-            URL.revokeObjectURL(url);
         } catch (error) {
             console.error('Error downloading ticket design:', error);
             alert('Failed to download ticket design');
@@ -290,20 +188,27 @@ export default function TicketCustomization() {
     const downloadTicket = async () => {
         setIsLoadingDownload(true);
         try {
-            // Generate ticket and convert to PNG for download
-            const svgString = await generateTicketWithSatori(600, 600);
-            const pngBlob = await svgToPng(svgString, 600, 600);
-            const url = URL.createObjectURL(pngBlob);
-            
+            if (!canvasContainerRef.current) {
+                throw new Error('Canvas container not found');
+            }
+
+            // Generate PNG using html-to-image
+            const dataUrl = await htmlToImage.toPng(canvasContainerRef.current, {
+                quality: 1.0,
+                pixelRatio: 2,
+                backgroundColor: '#e0dbd3',
+            });
+
             const link = document.createElement('a');
-            link.href = url;
+            link.href = dataUrl;
             link.download = `${name.replace(/ /g, "-")}_spill-ticket.png`;
             link.click();
             
-            URL.revokeObjectURL(url);
-            
             // Also upload for sharing
             await uploadTicket();
+        } catch (error) {
+            console.error('Error downloading ticket:', error);
+            alert('Failed to download ticket');
         } finally {
             setIsLoadingDownload(false);
         }
@@ -312,12 +217,23 @@ export default function TicketCustomization() {
     const shareTicket = async () => {
         setIsLoadingShare(true);
         try {
+            if (!canvasContainerRef.current) {
+                throw new Error('Canvas container not found');
+            }
+
             const result = await uploadTicket();
 
-            // Generate ticket and convert to PNG for sharing
-            const svgString = await generateTicketWithSatori(600, 600);
-            const pngBlob = await svgToPng(svgString, 600, 600);
-            const file = new File([pngBlob], 'spill-ticket.png', { type: 'image/png' });
+            // Generate PNG using html-to-image
+            const dataUrl = await htmlToImage.toPng(canvasContainerRef.current, {
+                quality: 1.0,
+                pixelRatio: 2,
+                backgroundColor: '#e0dbd3',
+            });
+
+            // Convert data URL to blob and then to File
+            const response = await fetch(dataUrl);
+            const blob = await response.blob();
+            const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
 
             if (navigator.share && navigator.canShare({ files: [file] })) {
                 await navigator.share({
@@ -590,7 +506,7 @@ export default function TicketCustomization() {
 
                     {/* Ticket */ }
                     <div className="z-[615] absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
-                        <Ticket name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
+                        <Ticket ref={ticketContainerRef} name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
                     </div>
 
                     {/* Sticky Note Text Overlay */}
