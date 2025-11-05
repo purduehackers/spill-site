@@ -26,8 +26,11 @@ export default function TicketCustomization() {
     const [drawingPaused, setDrawingPaused] = useState<boolean>(true);
     const canvasContainerRef = useRef<HTMLDivElement>(null);
     const ticketContainerRef = useRef<HTMLDivElement>(null);
+    const ticketDataUrlRef = useRef<string | null>(null);
+    const ticketUploadResultRef = useRef<{ url: string; id: string } | null>(null);
 
     const [isTouchDevice, setIsTouchDevice] = useState<boolean>(false);
+    const [isMobileDevice, setIsMobileDevice] = useState<boolean>(false);
 
     const [isLoadingPage, setIsLoadingPage] = useState<boolean>(true);
     const [isLoadingTweet, setIsLoadingTweet] = useState<boolean>(false);
@@ -38,6 +41,7 @@ export default function TicketCustomization() {
     useEffect(() => {
         // Detect touch devices
         let touchDetected = false;
+        let mobileDetected = false;
         if (typeof window !== 'undefined') {
             touchDetected =
                 (navigator as any)?.maxTouchPoints > 0 ||
@@ -46,6 +50,10 @@ export default function TicketCustomization() {
                 window.matchMedia('(pointer: coarse)').matches ||
                 window.matchMedia('(hover: none)').matches;
             setIsTouchDevice(Boolean(touchDetected));
+
+            // Detect mobile devices based on screen width (typically < 768px for mobile)
+            mobileDetected = window.innerWidth < 768 || window.matchMedia('(max-width: 767px)').matches;
+            setIsMobileDevice(mobileDetected);
         }
 
         // Load name, number, and message from localStorage
@@ -58,19 +66,31 @@ export default function TicketCustomization() {
         setNumber(localStorage.getItem('ticket-number') || 'HAK');
         setMessage(localStorage.getItem('ticket-message') || '');
         
-        // Done loading if not touch device
-        if (!touchDetected) {
+        // Done loading if not mobile device
+        if (!mobileDetected) {
             setIsLoadingPage(false);
         }
     }, []);
     useEffect(() => {
-        if (isTouchDevice) {
+        if (isMobileDevice) {
             // Ensure both orientation and ticket graphic update together on touch devices
             handleTicketOrientationChange('portrait');
         }
         
         setIsLoadingPage(false);
-    }, [isTouchDevice]);
+    }, [isMobileDevice]);
+
+    useEffect(() => {
+        const handleResize = () => {
+            if (typeof window !== 'undefined') {
+                const isMobile = window.innerWidth < 768 || window.matchMedia('(max-width: 767px)').matches;
+                setIsMobileDevice(isMobile);
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
     useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('ticket-name', name);
@@ -123,22 +143,33 @@ export default function TicketCustomization() {
         }
     }
 
+    // Clear cached ticket image when ticket properties change
+    useEffect(() => {
+        ticketDataUrlRef.current = null;
+        ticketUploadResultRef.current = null;
+    }, [name, number, message, ticketDesign, ticketOrientation, ticketColor, drawingActive]);
+
 
     const uploadTicket = async () => {
         try {
+            // If already uploaded, return cached result
+            if (ticketUploadResultRef.current && ticketDataUrlRef.current) {
+                return ticketUploadResultRef.current;
+            }
+
             if (!canvasContainerRef.current) {
                 throw new Error('Canvas container not found');
             }
 
             // Generate PNG using html-to-image
-            const dataUrl = await htmlToImage.toPng(canvasContainerRef.current, {
+            ticketDataUrlRef.current = await htmlToImage.toPng(canvasContainerRef.current, {
                 quality: 1.0,
                 pixelRatio: 2,
                 backgroundColor: '#e0dbd3',
             });
 
             // Convert data URL to blob
-            const response = await fetch(dataUrl);
+            const response = await fetch(ticketDataUrlRef.current);
             const blob = await response.blob();
             const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
 
@@ -155,7 +186,12 @@ export default function TicketCustomization() {
             }
 
             const data = await uploadResponse.json();
-            return { url: data.url, id: data.id };
+            const result = { url: data.url, id: data.id };
+            
+            // Cache the upload result
+            ticketUploadResultRef.current = result;
+            
+            return result;
         } catch (error) {
             console.error('Error uploading ticket:', error);
             return null;
@@ -187,24 +223,18 @@ export default function TicketCustomization() {
     const downloadTicket = async () => {
         setIsLoadingDownload(true);
         try {
-            if (!canvasContainerRef.current) {
-                throw new Error('Canvas container not found');
+            // Generate and upload ticket (which stores dataUrl in ref)
+        await uploadTicket();
+
+            // Use the stored dataUrl for download
+            if (!ticketDataUrlRef.current) {
+                throw new Error('Ticket image not generated');
             }
 
-            // Generate PNG using html-to-image
-            const dataUrl = await htmlToImage.toPng(canvasContainerRef.current, {
-                quality: 1.0,
-                pixelRatio: 2,
-                backgroundColor: '#e0dbd3',
-            });
-
             const link = document.createElement('a');
-            link.href = dataUrl;
+            link.href = ticketDataUrlRef.current;
             link.download = `${name.replace(/ /g, "-")}_spill-ticket.png`;
             link.click();
-            
-            // Also upload for sharing
-            await uploadTicket();
         } catch (error) {
             console.error('Error downloading ticket:', error);
             alert('Failed to download ticket');
@@ -216,21 +246,16 @@ export default function TicketCustomization() {
     const shareTicket = async () => {
         setIsLoadingShare(true);
         try {
-            if (!canvasContainerRef.current) {
-                throw new Error('Canvas container not found');
-            }
-
+            // Generate and upload ticket (which stores dataUrl in ref)
             const result = await uploadTicket();
 
-            // Generate PNG using html-to-image
-            const dataUrl = await htmlToImage.toPng(canvasContainerRef.current, {
-                quality: 1.0,
-                pixelRatio: 2,
-                backgroundColor: '#e0dbd3',
-            });
+            // Use the stored dataUrl for sharing
+            if (!ticketDataUrlRef.current) {
+                throw new Error('Ticket image not generated');
+            }
 
             // Convert data URL to blob and then to File
-            const response = await fetch(dataUrl);
+            const response = await fetch(ticketDataUrlRef.current);
             const blob = await response.blob();
             const file = new File([blob], 'spill-ticket.png', { type: 'image/png' });
 
@@ -458,122 +483,122 @@ export default function TicketCustomization() {
             </div>
 
             {/* Ticket Customization Preview Canvas */}
-            <div id="ticket-customization-canvas"
-                ref={canvasContainerRef}
-                className="z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[calc(var(--preview-size-large)_+_120px)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)]
-                            overflow-hidden select-none flex flex-col gap-4 justify-between bg-paper border-2 border-sage/20 rounded-lg p-4"
-                onMouseMove={e => {
-                    if (!drawingActive || drawingPaused) {
-                        setMousePos({ x: e.clientX, y: e.clientY });
-                    } else {
+                <div id="ticket-customization-canvas"
+                    ref={canvasContainerRef}
+                    className="z-500 relative w-full md:w-[var(--preview-size-medium)] lg:w-[calc(var(--preview-size-large)_+_120px)] h-140 sm:h-140 md:h-[var(--preview-size-medium)] lg:h-[var(--preview-size-large)]
+                                overflow-hidden select-none flex flex-col gap-4 justify-between bg-paper border-2 border-sage/20 rounded-lg p-4"
+                    onMouseMove={e => {
+                        if (!drawingActive || drawingPaused) {
+                            setMousePos({ x: e.clientX, y: e.clientY });
+                        } else {
+                            setMousePos(null);
+                        }
+                    }}
+                    onMouseEnter={e => {
+                        if (!drawingActive || drawingPaused) {
+                            setMousePos({ x: e.clientX, y: e.clientY });
+                        } else {
+                            setMousePos(null);
+                        }
+                    }}
+                    onMouseLeave={() => {
                         setMousePos(null);
-                    }
-                }}
-                onMouseEnter={e => {
-                    if (!drawingActive || drawingPaused) {
-                        setMousePos({ x: e.clientX, y: e.clientY });
-                    } else {
-                        setMousePos(null);
-                    }
-                }}
-                onMouseLeave={() => {
-                    setMousePos(null);
-                }}
-            >
-                {/* Drawing canvas overlay */}
-                <div className={`z-[610] absolute inset-0 w-full h-full ${drawingActive ? '' : 'pointer-events-none'}`}>
-                    <PaintCanvas
-                        strokeColor={backgroundColor}
-                        containerRef={canvasContainerRef}
-                        active={drawingActive}
-                        paused={drawingPaused}
-                        className="absolute inset-0 w-full h-full"
+                    }}
+                >
+                    {/* Drawing canvas overlay */}
+                    <div className={`z-[610] absolute inset-0 w-full h-full ${drawingActive ? '' : 'pointer-events-none'}`}>
+                        <PaintCanvas
+                            strokeColor={backgroundColor}
+                            containerRef={canvasContainerRef}
+                            active={drawingActive}
+                            paused={drawingPaused}
+                            className="absolute inset-0 w-full h-full"
+                        />
+                    </div>
+                    {/* Grain overlay for preview canvas */}
+                    <div
+                        aria-hidden
+                        className="z-1000 pointer-events-none absolute inset-0 mix-blend-overlay opacity-100"
+                        style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
                     />
-                </div>
-                {/* Grain overlay for preview canvas */}
-                <div
-                    aria-hidden
-                    className="z-1000 pointer-events-none absolute inset-0 mix-blend-overlay opacity-100"
-                    style={{ backgroundImage: 'var(--grain-texture)', backgroundRepeat: 'repeat' }}
-                />
 
-                {/* Event Info */}
-                <div className="z-[700] text-xs flex justify-between pointer-events-none">
-                    <div className="text-transparent">december 6, 2025</div>
-                    <div className="bg-chocolate/12 rounded-full px-2 py-1">spill.purduehackers.com</div>
-                </div>
+                    {/* Event Info */}
+                    <div className="z-[700] text-xs flex justify-between pointer-events-none">
+                        <div className="text-transparent">december 6, 2025</div>
+                        <div className="bg-chocolate/12 rounded-full px-2 py-1">spill.purduehackers.com</div>
+                    </div>
 
-                {/* Ticket */ }
-                <div className="z-[615] absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
+                    {/* Ticket */ }
+                    <div className="z-[615] absolute inset-0 w-full h-full flex items-center justify-center pointer-events-none">
                     <Ticket ref={ticketContainerRef} name={name} number={number} ticketDesign={ticketDesign} ticketColor={ticketColor} mousePos={mousePos} />
-                </div>
+                    </div>
 
-                {/* Sticky Note Text Overlay */}
-                <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
-                    <img className="-hue-rotate-10 saturate-30 absolute top-0 left-0 w-full h-full object-contain select-none"
-                        src="/img/sticky-notes.png"
-                        alt="sticky note"
-                        crossOrigin="anonymous" />
-                    <div className="w-full h-full -rotate-15 flex items-center justify-center">
-                        <div className="relative left-4 w-33 p-1 line-clamp-5 text-base text-coffee/80 font-nycd font-bold">
-                            {message}
+                    {/* Sticky Note Text Overlay */}
+                    <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
+                        <img className="-hue-rotate-10 saturate-30 absolute top-0 left-0 w-full h-full object-contain select-none"
+                            src="/img/sticky-notes.png"
+                            alt="sticky note"
+                            crossOrigin="anonymous" />
+                        <div className="w-full h-full -rotate-15 flex items-center justify-center">
+                            <div className="relative left-4 w-33 p-1 line-clamp-5 text-base text-coffee/80 font-nycd font-bold">
+                                {message}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Graph Paper */}
+                    <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
+                        {/* Mostly blank paper */}
+                        <img className="rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
+                            src="/img/graphpaper.png"
+                            alt="graph paper"
+                            crossOrigin="anonymous" />
+                        {/* Hackers logo paper */}
+                        <img className="hidden rotate-205 absolute top-1/2 -left-1/2 w-full h-full object-contain select-none"
+                            src="/img/graphpaper.png"
+                            alt="graph paper"
+                            crossOrigin="anonymous" />
+                        {/* Frog paper */}
+                        <img className="-rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
+                            src="/img/graphpaper.png"
+                            alt="graph paper"
+                            crossOrigin="anonymous" />
+                    </div>
+
+                    {/* Tea Bag */}
+                    <div className="z-[612] absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
+                        {/* Bag */}
+                        <img
+                            className="z-5 rotate-140 absolute top-32 left-0 w-32 max-w-[90vw] h-auto object-contain select-none drop-shadow-lg"
+                            src="/img/tea-bag-bag.png"
+                            alt="tea bag bag"
+                            crossOrigin="anonymous"
+                        />
+                        {/* Tag */}
+                        <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'}
+                                    w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
+                            src="/img/tea-bag-tag-spill.png"
+                            alt="tea bag tag"
+                            crossOrigin="anonymous"
+                        />
+                    </div>
+
+                    {/* Spills */}
+                    <div className="absolute inset-0 top-0 right-0 pointer-events-none">
+                        <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
+                            <img className="handle w-64 h-auto object-contain select-none"
+                                src={`/img/coffee/85.png`}
+                                alt="Spill"
+                                crossOrigin="anonymous"/>
+                        </div>
+                        <div className="z-2 absolute top-24 -left-42 w-fit h-fit">
+                            <img className="handle w-64 h-auto object-contain select-none"
+                                src={`/img/coffee/89.png`}
+                                alt="Spill"
+                                crossOrigin="anonymous" />
                         </div>
                     </div>
                 </div>
-
-                {/* Graph Paper */}
-                <div className="z-1 absolute inset-0 top-0 left-5 pointer-events-none">
-                    {/* Mostly blank paper */}
-                    <img className="rotate-40 absolute top-1/2 -left-[60%] w-full h-full object-contain select-none"
-                        src="/img/graphpaper.png"
-                        alt="graph paper"
-                        crossOrigin="anonymous" />
-                    {/* Hackers logo paper */}
-                    <img className="hidden rotate-205 absolute top-1/2 -left-1/2 w-full h-full object-contain select-none"
-                        src="/img/graphpaper.png"
-                        alt="graph paper"
-                        crossOrigin="anonymous" />
-                    {/* Frog paper */}
-                    <img className="-rotate-15 absolute top-1/2 -left-[65%] w-full h-full object-contain select-none"
-                        src="/img/graphpaper.png"
-                        alt="graph paper"
-                        crossOrigin="anonymous" />
-                </div>
-
-                {/* Tea Bag */}
-                <div className="z-[612] absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
-                    {/* Bag */}
-                    <img
-                        className="z-5 rotate-140 absolute top-32 left-0 w-32 max-w-[90vw] h-auto object-contain select-none drop-shadow-lg"
-                        src="/img/tea-bag-bag.png"
-                        alt="tea bag bag"
-                        crossOrigin="anonymous"
-                    />
-                    {/* Tag */}
-                    <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'}
-                                w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
-                        src="/img/tea-bag-tag-spill.png"
-                        alt="tea bag tag"
-                        crossOrigin="anonymous"
-                    />
-                </div>
-
-                {/* Spills */}
-                <div className="absolute inset-0 top-0 right-0 pointer-events-none">
-                    <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
-                        <img className="handle w-64 h-auto object-contain select-none"
-                            src={`/img/coffee/85.png`}
-                            alt="Spill"
-                            crossOrigin="anonymous"/>
-                    </div>
-                    <div className="z-2 absolute top-24 -left-42 w-fit h-fit">
-                        <img className="handle w-64 h-auto object-contain select-none"
-                            src={`/img/coffee/89.png`}
-                            alt="Spill"
-                            crossOrigin="anonymous" />
-                    </div>
-                </div>
-            </div>
         </div>
     );
 }
