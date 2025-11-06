@@ -547,7 +547,7 @@ export default function TicketCustomization() {
                     </div>
 
                     {/* Sticky Note Text Overlay */}
-                    <div className="z-5 w-64 h-64 absolute inset-0 top-[60%] left-[50%] drop-shadow-lg">
+                    <div className="z-5 w-64 h-64 absolute inset-0 top-[65%] left-[50%] drop-shadow-lg">
                         <img className="-hue-rotate-10 saturate-30 absolute top-0 left-0 w-full h-full object-contain select-none"
                             src="/img/sticky-notes.webp"
                             alt="sticky note"
@@ -582,13 +582,13 @@ export default function TicketCustomization() {
                     <div className="z-[612] absolute top-0 left-0 w-full h-full flex items-center justify-center pointer-events-none">
                         {/* Bag */}
                         <img
-                            className="z-5 rotate-140 absolute top-32 left-0 w-32 max-w-[90vw] h-auto object-contain select-none drop-shadow-lg"
+                            className={`z-5 absolute origin-center ${ticketOrientation === 'landscape' ? 'rotate-140 -top-16 left-36' : 'rotate-50 top-32 left-0'} w-32 max-w-[90vw] h-auto object-contain select-none drop-shadow-lg`}
                             src="/img/tea-bag-bag.webp"
                             alt="tea bag bag"
                             crossOrigin="anonymous"
                         />
                         {/* Tag */}
-                        <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-1/2 left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'}
+                        <img className={`absolute ${ticketOrientation === 'landscape' ? 'top-[55%] left-[28%] -rotate-10' : 'top-[40%] right-[6%] -rotate-140 origin-center'}
                                     w-28 max-w-[50vw] h-auto object-contain select-none drop-shadow-lg`}
                             src="/img/tea-bag-tag-spill.webp"
                             alt="tea bag tag"

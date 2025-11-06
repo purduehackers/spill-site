@@ -30,7 +30,7 @@ const Ticket = forwardRef<HTMLDivElement, TicketProps>(({ name, number, ticketDe
     if (!isPortrait) {
         return (
             <div id="ticket-container" 
-                className="relative z-10 scale-115 rotate-20 -translate-y-20 w-fit h-fit mx-auto"
+                className="relative z-10 scale-115 rotate-20 -translate-y-5 w-fit h-fit mx-auto"
                 style={{
                     '--ticket-width-large': '496px',
                     '--ticket-height-large': '200px',
