@@ -1,4 +1,6 @@
 ---
+import TicketPageLayout from '@/layouts/TicketPageLayout.astro';
+
 export const prerender = false;
 
 const { id } = Astro.params;
@@ -7,20 +9,13 @@ const userAgent = Astro.request.headers.get('user-agent') || '';
 const isBot = /bot|crawler|spider|crawling|facebookexternalhit|twitterbot/i.test(userAgent);
 
 const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
-
-if (!isBot) {
-    return Astro.redirect('/tickets');
-}
 ---
 
-<!doctype html>
-<html lang="en">
+<TicketPageLayout
+  title="join me at spill 2025 ≋"
+  description="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again"
+>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>join me at spill 2025 ≋</title>
-    <meta name="description" content="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again" />
-    
     <meta property="og:title" content="join me at spill 2025 ≋" />
     <meta property="og:description" content="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again" />
     <meta property="og:image" content={imageUrl} />
@@ -32,8 +27,255 @@ if (!isBot) {
     <meta name="twitter:description" content="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again" />
     <meta name="twitter:image" content={imageUrl} />
   </head>
-  <body>
-    <h1>join me at spill 2025 ≋</h1>
-    <img src={imageUrl} alt="Spill 2025 Ticket" />
-  </body>
-</html>
+
+  <main class="min-h-screen flex flex-col items-center justify-start px-4 py-16">
+    <div class="flex flex-col items-center gap-8 max-w-2xl w-full">
+
+      <div class="flex flex-col items-center gap-4">
+        <!-- Text -->
+        <div class="sm:text-base md:text-lg text-center font-bold">
+          spill ≋ be there. 
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap flex-row justify-center gap-4 w-auto">
+          <button
+            id="rsvp-button"
+            class="bg-matcha text-white py-1.5 px-4 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
+          >
+            RSVP
+          </button>
+          <button
+            id="make-your-own-btn"
+            class="bg-coffee hover:bg-matcha text-white py-1.5 px-4 rounded-lg font-body text-base font-medium transition-colors"
+          >
+            make your own
+          </button>
+          <button
+            id="learn-more-btn"
+            class="bg-paper border-2 border-coffee text-coffee py-1.5 px-4 rounded-lg hover:bg-coffee hover:text-white font-body text-base font-medium transition-colors"
+          >
+            learn more
+          </button>
+        </div>
+      </div>
+
+      <!-- Ticket Image -->
+      <div class="w-full flex justify-center">
+        <img 
+          src={imageUrl} 
+          alt="Spill 2025 Ticket" 
+          class="max-w-full sm:max-w-[90vw] md:max-w-[700px] max-h-[70vh] sm:max-h-[75vh] md:max-h-[72vh] w-auto h-auto object-contain rounded-lg shadow-lg"
+        />
+      </div>
+    </div>
+  </main>
+
+  <!-- RSVP Modal -->
+  <div
+    id="rsvp-modal"
+    class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4 hidden"
+  >
+    <div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
+      <button
+        id="close-form"
+        class="absolute top-0 right-0 text-gray-500 hover:text-gray-700 text-2xl font-bold"
+        aria-label="Close form"
+      >
+        ×
+      </button>
+
+      <!-- Form state -->
+      <div class="modal-state modal-form block">
+        <form id="rsvp-form" class="space-y-4">
+          <div class="flex flex-col gap-2">
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+                Email *
+              </label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                required
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
+                placeholder="your.email@example.com"
+              />
+            </div>
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+                Name
+              </label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
+                placeholder="wack hacker"
+              />
+            </div>
+          </div>
+          <div id="error-message" class="text-red-600 text-sm hidden"></div>
+          <button
+            type="submit"
+            id="submit-btn"
+            class="w-full bg-coffee text-white py-3 px-6 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
+          >
+            RSVP
+          </button>
+        </form>
+      </div>
+
+      <!-- Success state -->
+      <div class="modal-state modal-success hidden">
+        <div class="flex flex-col items-center">
+          <p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
+          <p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
+           <div class="mt-4 w-fit flex flex-col items-center gap-2">
+            <button
+              class="bg-coffee text-white py-2 px-4 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
+              id="customize-ticket-btn"
+            >
+            ‧₊˚. Customize my ticket ・ﾟ✧ 
+            </button>
+             <span id="redirect-countdown" class="w-full text-xs text-center">redirecting in (3)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</TicketPageLayout>
+
+<script>
+  const modalEl = document.getElementById('rsvp-modal');
+  const rsvpButton = document.getElementById('rsvp-button');
+  const makeYourOwnBtn = document.getElementById('make-your-own-btn');
+  const learnMoreBtn = document.getElementById('learn-more-btn');
+
+  if (!modalEl || !rsvpButton) {
+    console.error('Required elements not found');
+  } else {
+    const formState = modalEl.querySelector('.modal-form') as HTMLElement | null;
+    const successState = modalEl.querySelector('.modal-success') as HTMLElement | null;
+    const closeBtn = modalEl.querySelector('#close-form');
+    const rsvpForm = modalEl.querySelector('#rsvp-form');
+    const customizeBtn = modalEl.querySelector('#customize-ticket-btn');
+    const countdownEl = modalEl.querySelector('#redirect-countdown') as HTMLElement | null;
+    let countdownInterval: number | null = null;
+
+    function openForm() {
+      if (!modalEl || !formState || !successState) return;
+      modalEl.classList.remove('hidden');
+      formState.classList.remove('hidden');
+      formState.classList.add('block');
+      successState.classList.add('hidden');
+      successState.classList.remove('block');
+    }
+
+    function closeForm() {
+      if (!modalEl) return;
+      modalEl.classList.add('hidden');
+      if (countdownInterval !== null) {
+        clearInterval(countdownInterval);
+        countdownInterval = null;
+      }
+    }
+
+    async function handleFormSubmit(e: Event) {
+      e.preventDefault();
+      const submitBtn = modalEl?.querySelector('#submit-btn');
+      const errorDiv = modalEl?.querySelector('#error-message') as HTMLElement | null;
+      
+      if (!e.target) {
+        console.error('Form target not found');
+      } else {
+      
+        const formData = new FormData(e.target as HTMLFormElement);
+
+        if (!submitBtn) {
+          console.error('Submit button not found');
+        } else {
+          submitBtn.textContent = 'submitting...';
+          (submitBtn as HTMLButtonElement).disabled = true;
+          errorDiv?.classList.add('hidden');
+
+          try {
+            const response = await fetch('/api/rsvp', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                email: formData.get('email'),
+                //name: formData.get('name')
+              })
+            });
+
+            const result = await response.json();
+
+            if (result.success) {
+              // Show success state
+              if (formState && successState) {
+                formState.classList.add('hidden');
+                formState.classList.remove('block');
+                successState.classList.remove('hidden');
+                successState.classList.add('block');
+
+                // Remove close btn
+                closeBtn?.classList.add('hidden');
+              }
+                // Start countdown updates
+                let numSeconds = 5;
+                if (countdownEl) {
+                  countdownEl.textContent = `redirecting in (${numSeconds})`;
+                }
+                if (countdownInterval !== null) {
+                  clearInterval(countdownInterval);
+                }
+                countdownInterval = window.setInterval(() => {
+                  numSeconds -= 1;
+                  if (countdownEl) {
+                    countdownEl.textContent = `redirecting in (${numSeconds})`;
+                  }
+                  if (numSeconds <= 0 && countdownInterval !== null) {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                  }
+                }, 1000);
+
+              // Set name and ticket number in local storage
+              localStorage.setItem('ticket-name', formData.get('name') as string);
+              localStorage.setItem('ticket-number', result.recordCount.toString());
+
+              // Redirect to ticket page after countdown
+              setTimeout(() => {
+                window.location.href = '/tickets';
+              }, numSeconds * 1000);
+            } else {
+              if (errorDiv) {
+                errorDiv.textContent = result.error || 'Something went wrong';
+                errorDiv.classList.remove('hidden');
+              }
+            }
+          } catch (error) {
+            if (errorDiv) {
+              errorDiv.textContent = 'Network error. Please try again.';
+              errorDiv.classList.remove('hidden');
+            }
+          } finally {
+            submitBtn.textContent = 'RSVP';
+            (submitBtn as HTMLButtonElement).disabled = false;
+          }
+        }
+      }
+    }
+
+    // Event listeners
+    rsvpButton?.addEventListener('click', openForm);
+    closeBtn?.addEventListener('click', closeForm);
+    rsvpForm?.addEventListener('submit', handleFormSubmit);
+    customizeBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
+    makeYourOwnBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
+    learnMoreBtn?.addEventListener('click', () => (window.location.href = '/'));
+  }
+</script>

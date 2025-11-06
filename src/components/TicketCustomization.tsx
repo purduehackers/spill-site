@@ -167,7 +167,7 @@ export default function TicketCustomization() {
                 // Use static image for mobile
                 // For "name.webp" -> "name-static.png"
                 ticketDataUrlRef.current = ticketDesign.replace(/([^/]+)\.(webp|png)$/i, (match, filename, ext) => {
-                    return filename.replace(/(\.[^/.]+)?$/, '-static.webp');
+                    return filename.replace(/(\.[^/.]+)?$/, '-static.png');
                 });
                 
                 
