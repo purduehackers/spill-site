@@ -167,7 +167,7 @@ export default function TicketCustomization() {
                 // Use static image for mobile
                 // For "name.webp" -> "name-static.png"
                 ticketDataUrlRef.current = ticketDesign.replace(/([^/]+)\.(webp|png)$/i, (match, filename, ext) => {
-                    return filename.replace(/(\.[^/.]+)?$/, '-static.png');
+                    return filename.replace(/(\.[^/.]+)?$/, '-static.webp');
                 });
                 
                 
@@ -292,7 +292,6 @@ export default function TicketCustomization() {
             }
         } catch (error) {
             console.error('Error sharing:', error);
-            alert('Unable to share. Try the download button instead!');
         } finally {
             setIsLoadingShare(false);
         }
