@@ -318,7 +318,7 @@ export default function TicketCustomization() {
             }
         } catch (error) {
             console.error('Error copying link:', error);
-            alert('Failed to copy link');
+            alert('Failed to copy link. Try again later!');
         } finally {
             setTimeout(() => setIsCopyingLink(false), 1200);
         }

@@ -49,13 +49,17 @@ const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
             id="make-your-own-btn"
             class="flex-1 button-medium border-none bg-coffee text-white"
           >
-            make your own
+            <a href="/tickets">
+              make your own
+            </a>
           </button>
           <button
             id="learn-more-btn"
             class="flex-1 button-medium bg-paper border-2 border-coffee text-coffee"
           >
-            learn more
+            <a href="/">
+              learn more
+            </a>
           </button>
         </div>
       </div>
@@ -149,8 +153,6 @@ const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
 <script>
   const modalEl = document.getElementById('rsvp-modal');
   const rsvpButton = document.getElementById('rsvp-button');
-  const makeYourOwnBtn = document.getElementById('make-your-own-btn');
-  const learnMoreBtn = document.getElementById('learn-more-btn');
 
   if (!modalEl || !rsvpButton) {
     console.error('Required elements not found');
@@ -275,7 +277,5 @@ const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
     closeBtn?.addEventListener('click', closeForm);
     rsvpForm?.addEventListener('submit', handleFormSubmit);
     customizeBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
-    makeYourOwnBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
-    learnMoreBtn?.addEventListener('click', () => (window.location.href = '/'));
   }
 </script>
