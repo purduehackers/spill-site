@@ -154,7 +154,7 @@
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
-    mix-blend-mode: multiply; /*gives the look thats its on da paper */
+     /*gives the look thats its on da paper */
   }
 
   /* Drawing UI */
@@ -190,7 +190,12 @@
   body.drawing-active {
     cursor: crosshair;
   }
-
+  .hi {
+    width: 500px;
+    height: auto;
+    position: relative;
+    top:5%;
+  }
   /* Grain texture overlay */
   .grain-overlay {
     position: fixed;
@@ -235,7 +240,7 @@
     text-transform: uppercase;
     letter-spacing: 0.05rem;
   }
-
+  
   .tea-tag-oct {
     --corner-size: 18%;
     clip-path: polygon(
