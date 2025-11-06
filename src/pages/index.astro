@@ -1,5 +1,6 @@
 ---
-import Layout from '@/layouts/Layout.astro';
+import Layout from '@/layouts/Layout.astro'; 
+import Logo from "public/logo.svg";
 ---
 
 <Layout
@@ -9,12 +10,13 @@ import Layout from '@/layouts/Layout.astro';
   <main class="min-h-screen md:h-screen flex flex-col px-4 sm:px-6 md:flex-row md:ps-20">
     <!-- Left side (big heading) -->
     <section class="z-1 flex-shrink-0 text-left">
-      <h1
+      <!-- <h1
         class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]"
         style="filter: url(#goof);"
       >
         spill
-      </h1>
+      </h1> -->
+      <Logo style="filter:url(#goof) brightness(45%); opacity: 90%" class="hi goo"/>
       <div class="flex max-w-xl flex-col gap-y-4">
         <p class="font-body mt-2 pt-8 text-base sm:mt-4 sm:text-xl">
           an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
