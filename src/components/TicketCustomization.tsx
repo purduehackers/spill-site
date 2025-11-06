@@ -7,7 +7,7 @@ import ToggleGroup from './ToggleGroup';
 import Select from './Select';
 import PaintCanvas from './PaintCanvas';
 import Spinner from './Spinner';
-import { SpinnerIcon, PencilIcon, TwitterIcon, DownloadIcon, ShareIcon } from './Icons';
+import { SpinnerIcon, PencilIcon, TwitterIcon, DownloadIcon, ShareIcon, CopyIcon } from './Icons';
 import { ticketDesigns } from '@/data/ticketDesigns';
 
 export default function TicketCustomization() {
@@ -36,6 +36,7 @@ export default function TicketCustomization() {
     const [isLoadingTweet, setIsLoadingTweet] = useState<boolean>(false);
     const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
     const [isLoadingShare, setIsLoadingShare] = useState<boolean>(false);
+    const [isCopyingLink, setIsCopyingLink] = useState<boolean>(false);
     
 
     useEffect(() => {
@@ -297,6 +298,32 @@ export default function TicketCustomization() {
         }
     }
 
+    const copyShareLink = async () => {
+        try {
+            setIsCopyingLink(true);
+            const result = await uploadTicket();
+            if (!result || !result.id) {
+                throw new Error('Ticket not ready');
+            }
+            const url = (typeof window !== 'undefined' ? window.location.origin : 'https://spill.purduehackers.com') + `/tickets/${result.id}`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(url);
+            } else {
+                const textarea = document.createElement('textarea');
+                textarea.value = url;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+            }
+        } catch (error) {
+            console.error('Error copying link:', error);
+            alert('Failed to copy link');
+        } finally {
+            setTimeout(() => setIsCopyingLink(false), 1200);
+        }
+    }
+
     if (isLoadingPage) {
         return (
             <div className="w-full h-fit mx-auto flex flex-col md:flex-row gap-4 justify-center">
@@ -447,9 +474,9 @@ export default function TicketCustomization() {
                         </div>
                     </div>
                 </div>
-                <div className="flex flex-col gap-3">
-                    <div className="flex gap-3">
-                        <button className="flex-1 flex items-center justify-center gap-2 bg-paper text-coffee px-4 py-2 rounded-lg border-2 border-coffee"
+                <div className="flex flex-col gap-2">
+                    <div className="flex flex-wrap gap-0.5">
+                        <button className="flex-1 button-medium px-2 bg-paper text-coffee"
                             onClick={async () => {
                                 setIsLoadingTweet(true);
                                 try {
@@ -472,13 +499,26 @@ export default function TicketCustomization() {
 
                         <button
                             onClick={downloadTicket}
-                            className="flex-1 flex items-center justify-center gap-2 bg-paper text-coffee px-4 py-2 rounded-lg border-2 border-coffee">
+                            className="flex-1 button-medium px-2 bg-paper text-coffee">
                             {isLoadingDownload ? (
                                 <Spinner className="w-5 h-5" icon={<SpinnerIcon className="w-5 h-5" />} />
                             ) : (
                                 <DownloadIcon className="w-5 h-5" />
                             )}
                             download
+                        </button>
+
+                    
+                        <button
+                            onClick={copyShareLink}
+                            disabled={isCopyingLink}
+                            className="flex-1 button-medium px-2 bg-paper text-coffee disabled:opacity-70">
+                            {isCopyingLink ? (
+                                <Spinner className="w-5 h-5" icon={<SpinnerIcon className="w-5 h-5" />} />
+                            ) : (
+                                <CopyIcon className="w-5 h-5" />
+                            )}
+                            {isCopyingLink ? 'copying...' : 'copy link'}
                         </button>
                     </div>
 

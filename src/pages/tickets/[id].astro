@@ -33,27 +33,27 @@ const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
 
       <div class="flex flex-col items-center gap-4">
         <!-- Text -->
-        <div class="sm:text-base md:text-lg text-center font-bold">
+        <div class="text-base md:text-lg text-center font-bold">
           you're invited. spill ≋ your guts out.
         </div>
 
         <!-- Buttons -->
-        <div class="flex flex-wrap flex-row justify-center gap-4 w-auto">
+        <div class="flex flex-wrap flex-row justify-center gap-2 w-auto">
           <button
             id="rsvp-button"
-            class="bg-matcha text-white py-1.5 px-4 rounded-lg font-body text-base font-medium transition-colors"
+            class="flex-1 button-medium border-none bg-matcha text-white"
           >
             RSVP
           </button>
           <button
             id="make-your-own-btn"
-            class="bg-coffee text-white py-1.5 px-4 rounded-lg font-body text-base font-medium transition-colors"
+            class="flex-1 button-medium border-none bg-coffee text-white"
           >
             make your own
           </button>
           <button
             id="learn-more-btn"
-            class="bg-paper border-2 border-coffee text-coffee py-1.5 px-4 rounded-lg font-body text-base font-medium transition-colors"
+            class="flex-1 button-medium bg-paper border-2 border-coffee text-coffee"
           >
             learn more
           </button>
