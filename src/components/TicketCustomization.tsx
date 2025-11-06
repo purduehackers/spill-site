@@ -253,20 +253,10 @@ export default function TicketCustomization() {
                 throw new Error('Ticket image not generated');
             }
 
-            // Convert data URL to blob for better mobile support
-            const response = await fetch(ticketDataUrlRef.current);
-            const blob = await response.blob();
-            const blobUrl = URL.createObjectURL(blob);
-
             const link = document.createElement('a');
-            link.href = blobUrl;
+            link.href = ticketDataUrlRef.current;
             link.download = `${name.replace(/ /g, "-")}_spill-ticket.png`;
-            // Add to DOM temporarily for better mobile support
-            document.body.appendChild(link);
             link.click();
-            // Clean up
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
         } catch (error) {
             console.error('Error downloading ticket:', error);
             alert('Failed to download ticket');
