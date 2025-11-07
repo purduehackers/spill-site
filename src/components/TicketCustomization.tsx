@@ -298,6 +298,44 @@ export default function TicketCustomization() {
         }
     }
 
+    const copyTextToClipboard = async (text: string) => {
+        if (typeof navigator === 'undefined') {
+            throw new Error('Clipboard not available');
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            try {
+                await navigator.clipboard.writeText(text);
+                return;
+            } catch (error) {
+                console.warn('Clipboard API writeText failed, falling back to execCommand.', error);
+            }
+        }
+
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.setAttribute('readonly', 'true');
+        textarea.style.position = 'absolute';
+        textarea.style.left = '-9999px';
+        textarea.style.opacity = '0';
+
+        document.body.appendChild(textarea);
+
+        try {
+            textarea.select();
+            textarea.setSelectionRange(0, text.length);
+
+            const successful = document.execCommand('copy');
+            window.getSelection()?.removeAllRanges();
+
+            if (!successful) {
+                throw new Error('Fallback copy command failed');
+            }
+        } finally {
+            document.body.removeChild(textarea);
+        }
+    };
+
     const copyShareLink = async () => {
         try {
             setIsCopyingLink(true);
@@ -306,16 +344,7 @@ export default function TicketCustomization() {
                 throw new Error('Ticket not ready');
             }
             const url = (typeof window !== 'undefined' ? window.location.origin : 'https://spill.purduehackers.com') + `/tickets/${result.id}`;
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                await navigator.clipboard.writeText(url);
-            } else {
-                const textarea = document.createElement('textarea');
-                textarea.value = url;
-                document.body.appendChild(textarea);
-                textarea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textarea);
-            }
+            await copyTextToClipboard(url);
         } catch (error) {
             console.error('Error copying link:', error);
             alert('Failed to copy link. Try again later!');
