@@ -22,7 +22,7 @@ import { ClientRouter } from 'astro:transitions';
   <body>
     {/* header */}
     <div class="absolute top-0 left-0 flex h-14 w-screen items-center justify-between px-4">
-      <a class="text-lg font-bold" href="/"> ← </a>
+      <button id="back-button" type="button" class="text-lg font-bold bg-transparent border-0"> ← </button>
 
       <div class="bg-coffee text-paper rounded-full px-2 py-1 text-sm">~/tickets</div>
 
@@ -93,6 +93,11 @@ import { ClientRouter } from 'astro:transitions';
     <script>
       // Wait for DOM to be ready
       document.addEventListener('DOMContentLoaded', function () {
+        const backButton = document.getElementById('back-button');
+        backButton?.addEventListener('click', () => {
+          window.location.href = '/';
+        });
+
         // Create canvas-based paper texture
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
