@@ -363,13 +363,25 @@ import { ClientRouter } from 'astro:transitions';
           resizeCanvas();
         });
 
-        // u can also press "p" for pencil to toggle drawing-!
+        // keyboard shortcuts (ignore when typing in inputs/textareas/selects/contenteditable)
+        function isEditableTarget(target: EventTarget | null): boolean {
+          const el = target as HTMLElement | null;
+          if (!el) return false;
+          const tag = el.tagName;
+          if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return true;
+          if (el.isContentEditable) return true;
+          return false;
+        }
+
+        // press "p" for pencil toggle
         document.addEventListener('keydown', (e) => {
+          if (isEditableTarget(e.target)) return;
           if (e.key && e.key.toLowerCase() === 'p') toggleDrawing();
         });
 
         // press "c" for clear
         document.addEventListener('keydown', (e) => {
+          if (isEditableTarget(e.target)) return;
           if (e.key && e.key.toLowerCase() === 'c') clearDrawing();
         });
 

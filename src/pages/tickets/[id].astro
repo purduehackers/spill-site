@@ -1,96 +1,79 @@
 ---
-import Layout from '@/layouts/Layout.astro'; 
-import Logo from "public/logo.svg";
+import TicketPageLayout from '@/layouts/TicketPageLayout.astro';
+
+export const prerender = false;
+
+const { id } = Astro.params;
+const userAgent = Astro.request.headers.get('user-agent') || '';
+
+const isBot = /bot|crawler|spider|crawling|facebookexternalhit|twitterbot/i.test(userAgent);
+
+const imageUrl = `${import.meta.env.PUBLIC_ENDPOINT}/tickets/${id}.png`;
 ---
 
-<Layout
-  title="spill"
-  description="an upcoming exhibition of student-made creative technical projects."
+<TicketPageLayout
+  title="join me at spill 2025 ≋"
+  description="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again"
 >
-  <main class="min-h-screen md:h-screen flex flex-col px-4 sm:px-6 md:flex-row md:ps-20">
-    <!-- Left side (big heading) -->
-    <section class="z-1 flex-shrink-0 text-left">
-      <!-- <h1
-        class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]"
-        style="filter: url(#goof);"
-      >
-        spill
-      </h1> -->
-      <Logo style="filter:url(#goof) brightness(45%); opacity: 90%" class="hi goo"/>
-      <div class="flex max-w-xl flex-col gap-y-4">
-        <p class="font-body mt-2 pt-8 text-base sm:mt-4 sm:text-xl">
-          an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
-          technical projects, run by <a
-            href="https://www.purduehackers.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="purdue-hackers-link"
-          >
-            <span class="realistic-marker-highlight hover:text-decoration-underline"
-              >purdue hackers</span
-            ></a
-          >.
-        </p>
-        <p class="font-body leading-relaxed text-xl sm:text-2xl">
-          <span class="realistic-marker-highlight">december 6, 2025 • 7-10pm</span>
-          <br />
-          <a href="https://www.google.com/maps/place/Vienna+Espresso+Bar+%26+Bakery/@40.4240332,-86.9101418,16z/data=!3m1!4b1!4m15!1m8!3m7!1s0x8812e2aecf78386f:0x83449d81b828d42b!2sVienna+Espresso+Bar+%26+Bakery!8m2!3d40.4240332!4d-86.9075669!10e1!16s%2Fg%2F1thl1g87!3m5!1s0x8812e2aecf78386f:0x83449d81b828d42b!8m2!3d40.4240332!4d-86.9075669!16s%2Fg%2F1thl1g87?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="purdue-hackers-link flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 640 640" 
-                  class="w-5 h-5 -translate-y-0.25 inline-block align-middle fill-current">
-                <path d="M352 348.4C416.1 333.9 464 276.5 464 208C464 128.5 399.5 64 320 64C240.5 64 176 128.5 176 208C176 276.5 223.9 333.9 288 348.4L288 544C288 561.7 302.3 576 320 576C337.7 576 352 561.7 352 544L352 348.4zM328 160C297.1 160 272 185.1 272 216C272 229.3 261.3 240 248 240C234.7 240 224 229.3 224 216C224 158.6 270.6 112 328 112C341.3 112 352 122.7 352 136C352 149.3 341.3 160 328 160z"/>
-              </svg>
-              vienna coffee house
-          </a>
-        </p>
-      </div>
-    </section>
+  <head>
+    <meta property="og:title" content="join me at spill 2025 ≋" />
+    <meta property="og:description" content="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again" />
+    <meta property="og:image" content={imageUrl} />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:type" content="website" />
+    
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="join me at spill 2025 ≋" />
+    <meta name="twitter:description" content="a one way ticket to a three hour creative-technical student showcase. only here for three hours and then never again" />
+    <meta name="twitter:image" content={imageUrl} />
+  </head>
 
-    <!-- Right side (paragraphs) -->
-    <div
-      class="flex flex-col md:flex-col space-y-6 mt-4 sm:mt-8 md:mt-[10vh] md:ml-20 md:max-w-2xl md:space-y-8"
-    >
-      <section class="bg-sage/20 md:bg-transparent p-2 md:p-0 rounded-lg z-1 text-left text-sm md:text-base">
-        <p class="font-body leading-relaxed md:pt-12 sm:text-lg md:pt-[32vh]">
-          projects aren't sterile or perfect—they're made by <span
-            class="realistic-marker-highlight"
+  <main class="min-h-screen flex flex-col items-center justify-start px-4 py-16">
+    <div class="flex flex-col items-center gap-8 max-w-2xl w-full">
+
+      <div class="flex flex-col items-center gap-4">
+        <!-- Text -->
+        <div class="text-base md:text-lg text-center font-bold">
+          you're invited. spill ≋ your guts out.
+        </div>
+
+        <!-- Buttons -->
+        <div class="flex flex-wrap flex-row justify-center gap-2 w-auto">
+          <button
+            id="rsvp-button"
+            class="flex-1 button-medium border-none bg-matcha text-white"
           >
-            people, late nights,
-          </span>
-          <span class="sketch-highlight">spilled coffee</span>, and lots of <span
-            class="realistic-marker-highlight">trial & error</span
-          >.
-        </p>
-        <br />
-        <p class="font-body leading-relaxed sm:text-lg">
-          enter a warm coffee shop on a cold night, grab a free drink, and experience interactive
-          installations, digital experiments, and visual stories created by purdue students.
-        </p>
-      </section>
-      <!-- RSVP Button! -->
-      <div class="mt-4 mb-32 flex justify-center">
-        <button id="rsvp-button" class="rsvp-button group">
-          <img
-            src="/img/rsvp1.png"
-            alt="RSVP"
-            class="rsvp-image group-hover:opacity-0"
-            draggable="false"
-          />
-          <img
-            src="/img/rsvp2.png"
-            alt="RSVP"
-            class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
-            draggable="false"
-          />
-        </button>
+            RSVP
+          </button>
+          <button
+            id="make-your-own-btn"
+            type="button"
+            class="flex-1 button-medium border-none bg-coffee text-white"
+          >
+            make your own
+          </button>
+          <button
+            id="learn-more-btn"
+            type="button"
+            class="flex-1 button-medium bg-paper border-2 border-coffee text-coffee"
+          >
+            learn more
+          </button>
+        </div>
+      </div>
+
+      <!-- Ticket Image -->
+      <div class="w-full flex justify-center">
+        <img 
+          src={imageUrl} 
+          alt="Spill 2025 Ticket" 
+          class="max-w-full sm:max-w-[90vw] md:max-w-[700px] max-h-[70vh] sm:max-h-[75vh] md:max-h-[72vh] w-auto h-auto object-contain rounded-lg shadow-lg"
+        />
       </div>
     </div>
   </main>
 
-  <!-- rsvp -->
+  <!-- RSVP Modal -->
   <div
     id="rsvp-modal"
     class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4 hidden"
@@ -122,7 +105,7 @@ import Logo from "public/logo.svg";
               />
             </div>
             <div>
-              <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
+              <label for="name" class="block text-sm font-medium text-gray-700 mb-2 font-body">
                 Name
               </label>
               <input
@@ -163,11 +146,13 @@ import Logo from "public/logo.svg";
       </div>
     </div>
   </div>
-</Layout>
+</TicketPageLayout>
 
 <script>
   const modalEl = document.getElementById('rsvp-modal');
   const rsvpButton = document.getElementById('rsvp-button');
+  const makeYourOwnButton = document.getElementById('make-your-own-btn');
+  const learnMoreButton = document.getElementById('learn-more-btn');
 
   if (!modalEl || !rsvpButton) {
     console.error('Required elements not found');
@@ -264,7 +249,7 @@ import Logo from "public/logo.svg";
               localStorage.setItem('ticket-name', formData.get('name') as string);
               localStorage.setItem('ticket-number', result.recordCount.toString());
 
-              // Redirect to ticket page after 2 seconds
+              // Redirect to ticket page after countdown
               setTimeout(() => {
                 window.location.href = '/tickets';
               }, numSeconds * 1000);
@@ -292,5 +277,7 @@ import Logo from "public/logo.svg";
     closeBtn?.addEventListener('click', closeForm);
     rsvpForm?.addEventListener('submit', handleFormSubmit);
     customizeBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
+    makeYourOwnButton?.addEventListener('click', () => window.location.href = '/tickets');
+    learnMoreButton?.addEventListener('click', () => window.location.href = '/');
   }
 </script>

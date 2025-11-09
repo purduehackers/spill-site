@@ -127,7 +127,10 @@
   }
 
   button {
-    @apply px-4 py-2 rounded-md cursor-pointer;
+    @apply px-4 py-2 rounded-md cursor-pointer text-nowrap whitespace-nowrap;
+  }
+  .button-medium {
+    @apply flex items-center justify-center gap-2 px-4 py-2 rounded-lg border-2 border-coffee;
   }
   .form-button {
     @apply bg-matcha text-paper;
