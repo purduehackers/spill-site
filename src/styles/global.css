@@ -360,7 +360,7 @@
 .rsvp-image {
   display: block;
   height: auto;
-  max-width: 250px;
+  max-width: 220px;
   width: auto;
   filter: drop-shadow(5px 5px 5px rgb(0, 0, 0, 0.366));
 }
@@ -390,22 +390,6 @@
 }
 
 /* graph paper */
-.graph-paper-decoration {
-  position: absolute;
-  top: -40%;
-  right: -20%;
-  z-index: 1;
-  pointer-events: none;
-  display: none;
-  filter: drop-shadow(5px 5px 5px rgb(0, 0, 0, 0.366));
-}
-
-@media (min-width: 768px) {
-  .graph-paper-decoration {
-    display: block;
-  }
-}
-
 .graph-paper-image {
   width: 600px;
   height: 600px;
@@ -457,45 +441,45 @@
 }
 
 .coffee-stain-1 {
-  top: -15%;
-  left: -12%;
+  top: -15vh;
+  left: -12vw;
   transform: rotate(90deg);
   display: block; /* show on mobile */
 }
 
 .coffee-stain-2 {
-  top: -50%;
-  right: 12%;
+  top: -50vh;
+  right: 12vw;
   transform: rotate(8deg);
 }
 
 .coffee-stain-3 {
-  top: 70%;
-  left: 15%;
+  top: 70vh;
+  left: 15vw;
   transform: rotate(15deg);
 }
 /*  this is the two rings one */
 .coffee-stain-4 {
-  top: 55%;
-  left: 75%;
+  top: 55vh;
+  left: 75vw;
   transform: rotate(-8deg);
   display: block;
 }
 
 @media (max-width: 767px) {
   .coffee-stain-1 {
-    left: -70%;
-    top: -19%;
+    left: -70vw;
+    top: -19vh;
   }
   .coffee-stain-4 {
-    left: 35%;
-    top: 60%;
+    left: 35vw;
+    top: 60vh;
   }
 }
 
 .coffee-stain-5 {
-  top: 70%;
-  right: 60%;
+  top: 70vh;
+  right: 60vw;
   transform: rotate(-5deg);
 }
 

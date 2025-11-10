@@ -7,88 +7,96 @@ import Logo from "public/logo.svg";
   title="spill"
   description="an upcoming exhibition of student-made creative technical projects."
 >
-  <main class="min-h-screen md:h-screen flex flex-col px-4 sm:px-6 md:flex-row md:ps-20">
-    <!-- Left side (big heading) -->
-    <section class="z-1 flex-shrink-0 text-left">
-      <!-- <h1
-        class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]"
-        style="filter: url(#goof);"
-      >
-        spill
-      </h1> -->
-      <Logo style="filter:url(#goof) brightness(45%); opacity: 90%" class="hi goo"/>
-      <div class="flex max-w-xl flex-col gap-y-4">
-        <p class="font-body mt-2 pt-8 text-base sm:mt-4 sm:text-xl">
-          an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
-          technical projects, run by <a
-            href="https://www.purduehackers.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="purdue-hackers-link"
-          >
-            <span class="realistic-marker-highlight hover:text-decoration-underline"
-              >purdue hackers</span
-            ></a
-          >.
-        </p>
-        <p class="font-body leading-relaxed text-xl sm:text-2xl">
-          <span class="realistic-marker-highlight">december 6, 2025 • 7-10pm</span>
-          <br />
-          <a href="https://www.google.com/maps/place/Vienna+Espresso+Bar+%26+Bakery/@40.4240332,-86.9101418,16z/data=!3m1!4b1!4m15!1m8!3m7!1s0x8812e2aecf78386f:0x83449d81b828d42b!2sVienna+Espresso+Bar+%26+Bakery!8m2!3d40.4240332!4d-86.9075669!10e1!16s%2Fg%2F1thl1g87!3m5!1s0x8812e2aecf78386f:0x83449d81b828d42b!8m2!3d40.4240332!4d-86.9075669!16s%2Fg%2F1thl1g87?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                class="purdue-hackers-link flex items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" 
-                  viewBox="0 0 640 640" 
-                  class="w-5 h-5 -translate-y-0.25 inline-block align-middle fill-current">
-                <path d="M352 348.4C416.1 333.9 464 276.5 464 208C464 128.5 399.5 64 320 64C240.5 64 176 128.5 176 208C176 276.5 223.9 333.9 288 348.4L288 544C288 561.7 302.3 576 320 576C337.7 576 352 561.7 352 544L352 348.4zM328 160C297.1 160 272 185.1 272 216C272 229.3 261.3 240 248 240C234.7 240 224 229.3 224 216C224 158.6 270.6 112 328 112C341.3 112 352 122.7 352 136C352 149.3 341.3 160 328 160z"/>
-              </svg>
-              vienna coffee house
-          </a>
-        </p>
-      </div>
-    </section>
-
-    <!-- Right side (paragraphs) -->
-    <div
-      class="flex flex-col md:flex-col space-y-6 mt-4 sm:mt-8 md:mt-[10vh] md:ml-20 md:max-w-2xl md:space-y-8"
-    >
-      <section class="bg-sage/20 md:bg-transparent p-2 md:p-0 rounded-lg z-1 text-left text-sm md:text-base">
-        <p class="font-body leading-relaxed md:pt-12 sm:text-lg md:pt-[32vh]">
-          projects aren't sterile or perfect—they're made by <span
-            class="realistic-marker-highlight"
-          >
-            people, late nights,
-          </span>
-          <span class="sketch-highlight">spilled coffee</span>, and lots of <span
-            class="realistic-marker-highlight">trial & error</span
-          >.
-        </p>
-        <br />
-        <p class="font-body leading-relaxed sm:text-lg">
-          enter a warm coffee shop on a cold night, grab a free drink, and experience interactive
-          installations, digital experiments, and visual stories created by purdue students.
-        </p>
+  <main class="w-full min-h-screen flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 md:ps-20">
+    <div class="w-full flex flex-col md:flex-row justify-between items-end gap-12">
+      <!-- Left side (big heading) -->
+      <section class="z-1 w-full md:w-1/2 md:h-[500px] flex items-center justify-center">
+        <!-- <h1
+          class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]"
+          style="filter: url(#goof);"
+        >
+          spill
+        </h1> -->
+        <div class="md:fixed md:top-0 md:left-0 md:w-1/2 h-full flex items-center justify-center">
+          <Logo style="filter:url(#goof) brightness(45%); opacity: 90%" class="hi goo"/>
+        </div>
+        
       </section>
-      <!-- RSVP Button! -->
-      <div class="mt-4 mb-32 flex justify-center">
-        <button id="rsvp-button" class="rsvp-button group">
-          <img
-            src="/img/rsvp1.png"
-            alt="RSVP"
-            class="rsvp-image group-hover:opacity-0"
-            draggable="false"
-          />
-          <img
-            src="/img/rsvp2.png"
-            alt="RSVP"
-            class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
-            draggable="false"
-          />
-        </button>
+
+      <!-- Right side (text) -->
+      <div class="flex w-full md:w-1/2 flex-col gap-y-4">
+        <div class="flex flex-col gap-y-4">
+          <p class="font-body mt-2 pt-8 text-base sm:mt-4 sm:text-xl">
+            an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
+            technical projects, run by <a
+              href="https://www.purduehackers.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="purdue-hackers-link"
+            >
+              <span class="sketch-highlight hover:text-decoration-underline"
+                >purdue hackers</span
+              ></a
+            >.
+          </p>
+          <p class="font-body leading-relaxed text-xl sm:text-xl">
+            <span class="realistic-marker-highlight">december 6, 2025 • 7-10pm</span>
+            <br />
+            <a href="https://www.google.com/maps/place/Vienna+Espresso+Bar+%26+Bakery/@40.4240332,-86.9101418,16z/data=!3m1!4b1!4m15!1m8!3m7!1s0x8812e2aecf78386f:0x83449d81b828d42b!2sVienna+Espresso+Bar+%26+Bakery!8m2!3d40.4240332!4d-86.9075669!10e1!16s%2Fg%2F1thl1g87!3m5!1s0x8812e2aecf78386f:0x83449d81b828d42b!8m2!3d40.4240332!4d-86.9075669!16s%2Fg%2F1thl1g87?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  class="purdue-hackers-link flex items-center gap-2">
+                <svg xmlns="http://www.w3.org/2000/svg" 
+                    viewBox="0 0 640 640" 
+                    class="w-5 h-5 -translate-y-0.25 inline-block align-middle fill-current">
+                  <path d="M352 348.4C416.1 333.9 464 276.5 464 208C464 128.5 399.5 64 320 64C240.5 64 176 128.5 176 208C176 276.5 223.9 333.9 288 348.4L288 544C288 561.7 302.3 576 320 576C337.7 576 352 561.7 352 544L352 348.4zM328 160C297.1 160 272 185.1 272 216C272 229.3 261.3 240 248 240C234.7 240 224 229.3 224 216C224 158.6 270.6 112 328 112C341.3 112 352 122.7 352 136C352 149.3 341.3 160 328 160z"/>
+                </svg>
+                vienna coffee house
+            </a>
+          </p>
+        </div>
+        <!-- RSVP Button! -->
+        <div class="m-auto md:m-0 mt-4 md:mt-5">
+          <button id="rsvp-button" class="rsvp-button group">
+            <img
+              src="/img/rsvp1.png"
+              alt="RSVP"
+              class="rsvp-image group-hover:opacity-0"
+              draggable="false"
+            />
+            <img
+              src="/img/rsvp2.png"
+              alt="RSVP"
+              class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
+              draggable="false"
+            />
+          </button>
+        </div>
       </div>
-    </div>
+    </div>  
   </main>
+
+  <div
+      class="w-full flex justify-end items-end space-y-6 mt-4 sm:mt-8 md:mt-[3vh]"
+  >
+    <section class="bg-sage/20 md:bg-transparent md:w-[50%] p-4 m-4 md:mb-12 rounded-lg z-1 text-left text-sm md:text-base">
+      <p class="font-body leading-relaxed md:pt-12 sm:text-lg md:pt-[32vh]">
+        projects aren't sterile or perfect—they're made by <span
+          class="realistic-marker-highlight"
+        >
+          people, late nights,
+        </span>
+        <span class="sketch-highlight">spilled coffee</span>, and lots of <span
+          class="realistic-marker-highlight">trial & error</span
+        >.
+      </p>
+      <br />
+      <p class="font-body leading-relaxed sm:text-lg">
+        enter a warm coffee shop on a cold night, grab a free drink, and experience interactive
+        installations, digital experiments, and visual stories created by purdue students.
+      </p>
+    </section>
+  </div>
 
   <!-- rsvp -->
   <div

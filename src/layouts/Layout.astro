@@ -10,7 +10,7 @@ import { ClientRouter } from 'astro:transitions';
 ---
 
 <!doctype html>
-<html lang="en" class="md:overflow-hidden">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -51,7 +51,7 @@ import { ClientRouter } from 'astro:transitions';
 			</svg>
 		</a> -->
 
-    <div class="graph-paper-decoration">
+    <div class="absolute top-[-25%] left-[73%] z-[1] w-[600px] h-auto m-auto inset-0 pointer-events-none hidden md:block" style="filter: drop-shadow(5px 5px 5px rgba(0,0,0,0.366));">
       <img
         src="/img/graphpaper.png"
         alt="silly graph paper"
@@ -76,12 +76,7 @@ import { ClientRouter } from 'astro:transitions';
     <div class="coffee-stain coffee-stain-5">
       <img src="/img/coffee/89.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
-    <!-- <div class="sticky-note">
-			<img src="/img/untidy-stack-yellow-sticky-post-notes-isolated-white.png" alt="sticky note" class="sticky-note-img" draggable="false"/>
-		</div> -->
-    <!-- <div class="paper-texture">
-			<img src="/img/paper.jpg" alt="paperrrr" class="paper-texture-img" draggable="false"/>
-		</div> -->
+    
     <slot />
 
     <!-- Grain texture overlay -->
@@ -155,7 +150,7 @@ import { ClientRouter } from 'astro:transitions';
         createTexture(256, '--grain-texture', '#a69f95');
 
         // Simple scroll lock implementation without GSAP
-        let isAtBottom = false;
+        /*let isAtBottom = false;
         let isScrolling = false;
 
         function checkScrollPosition() {
@@ -186,13 +181,13 @@ import { ClientRouter } from 'astro:transitions';
             });
             isScrolling = true;
           }
-        }
+        }*/
 
         // Add scroll listener
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        //window.addEventListener('scroll', handleScroll, { passive: true });
 
         // Initial check
-        checkScrollPosition();
+        //checkScrollPosition();
         const filterElement = document.querySelector('svg filter');
         if (!filterElement) return;
 
@@ -231,7 +226,7 @@ import { ClientRouter } from 'astro:transitions';
           const wheelEvent = event as WheelEvent;
           //wheelEvent.preventDefault();
 
-          scale += wheelEvent.deltaY * 0.01;
+          scale += wheelEvent.deltaY * 0.1;
 
           // we care about mobile
           if (isMobile) {
