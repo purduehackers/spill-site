@@ -17,6 +17,18 @@ import { ClientRouter } from 'astro:transitions';
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+
+    {/* OpenGraph metadata for social media link previews */}
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url} />
+    <meta property="og:image" content={new URL("/logo.webp", Astro.url)} />
+    <meta property="og:image:width" content="600" />
+    <meta property="og:image:height" content="609" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:type" content="website" />
+
     <ClientRouter />
   </head>
   <body>
@@ -76,7 +88,7 @@ import { ClientRouter } from 'astro:transitions';
     <div class="coffee-stain coffee-stain-5">
       <img src="/img/coffee/89.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
-    
+
     <slot />
 
     <!-- Grain texture overlay -->
