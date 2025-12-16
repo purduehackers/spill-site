@@ -20,6 +20,7 @@
     "@tailwindcss/vite": "^4.1.5",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
+    "@vercel/config": "^0.0.24",
     "airtable-ts": "^1.6.2",
     "astro": "^5.14.8",
     "gsap": "^3.13.0",
