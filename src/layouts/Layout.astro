@@ -7,6 +7,12 @@ interface Props {
 const { title, description } = Astro.props;
 import '@/styles/global.css';
 import { ClientRouter } from 'astro:transitions';
+import { Image } from 'astro:assets';
+import coffee10 from '@/assets/img/coffee/10.png';
+import coffee20 from '@/assets/img/coffee/20.png';
+import coffee35 from '@/assets/img/coffee/35.png';
+import coffee85 from '@/assets/img/coffee/85.png';
+import coffee89 from '@/assets/img/coffee/89.png';
 ---
 
 <!doctype html>
@@ -74,19 +80,19 @@ import { ClientRouter } from 'astro:transitions';
 
     <!-- coffee stains 0_0 -->
     <div class="coffee-stain coffee-stain-1">
-      <img src="/img/coffee/10.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
+      <Image src={coffee10} alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
     <div class="coffee-stain coffee-stain-2">
-      <img src="/img/coffee/20.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
+      <Image src={coffee20} alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
     <div class="coffee-stain coffee-stain-3">
-      <img src="/img/coffee/35.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
+      <Image src={coffee35} alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
     <div class="coffee-stain coffee-stain-4">
-      <img src="/img/coffee/85.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
+      <Image src={coffee85} alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
     <div class="coffee-stain coffee-stain-5">
-      <img src="/img/coffee/89.png" alt="Coffee stain" class="coffee-stain-img" draggable="false" />
+      <Image src={coffee89} alt="Coffee stain" class="coffee-stain-img" draggable="false" />
     </div>
 
     <slot />

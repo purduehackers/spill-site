@@ -9,6 +9,8 @@ import PaintCanvas from './PaintCanvas';
 import Spinner from './Spinner';
 import { SpinnerIcon, PencilIcon, TwitterIcon, DownloadIcon, ShareIcon, CopyIcon } from './Icons';
 import { ticketDesigns } from '@/data/ticketDesigns';
+import coffee85 from '@/assets/img/coffee/85.webp';
+import coffee89 from '@/assets/img/coffee/89.webp';
 
 export default function TicketCustomization() {
     const [mousePos, setMousePos] = useState<{ x: number; y: number } | null>(null);
@@ -37,7 +39,7 @@ export default function TicketCustomization() {
     const [isLoadingDownload, setIsLoadingDownload] = useState<boolean>(false);
     const [isLoadingShare, setIsLoadingShare] = useState<boolean>(false);
     const [isCopyingLink, setIsCopyingLink] = useState<boolean>(false);
-    
+
 
     useEffect(() => {
         // Detect touch devices
@@ -66,7 +68,7 @@ export default function TicketCustomization() {
         }
         setNumber(localStorage.getItem('ticket-number') || 'HAK');
         setMessage(localStorage.getItem('ticket-message') || '');
-        
+
         // Done loading if not mobile device
         if (!mobileDetected) {
             setIsLoadingPage(false);
@@ -77,7 +79,7 @@ export default function TicketCustomization() {
             // Ensure both orientation and ticket graphic update together on touch devices
             handleTicketOrientationChange('portrait');
         }
-        
+
         setIsLoadingPage(false);
     }, [isMobileDevice]);
 
@@ -160,7 +162,7 @@ export default function TicketCustomization() {
 
             // Generate PNG using html-to-image
             if (isMobileDevice) {
-                // Upload actual ticket for mobile 
+                // Upload actual ticket for mobile
                 if (!ticketContainerRef.current) {
                     throw new Error('Ticket container not found');
                 }
@@ -170,8 +172,8 @@ export default function TicketCustomization() {
                 ticketDataUrlRef.current = ticketDesign.replace(/([^/]+)\.(webp|png)$/i, (match, filename, ext) => {
                     return filename.replace(/(\.[^/.]+)?$/, '-static.webp');
                 });
-                
-                
+
+
                 // Use toCanvas first to ensure proper rendering
                 /*const canvas = await htmlToImage.toCanvas(ticketContainerRef.current, {
                     quality: 1.0,
@@ -209,10 +211,10 @@ export default function TicketCustomization() {
 
             const data = await uploadResponse.json();
             const result = { url: data.url, id: data.id };
-            
+
             // Cache the upload result
             ticketUploadResultRef.current = result;
-            
+
             return result;
         } catch (error) {
             console.error('Error uploading ticket:', error);
@@ -508,7 +510,7 @@ export default function TicketCustomization() {
                             download
                         </button>
 
-                    
+
                         {!isMobileDevice && (
                             <button
                                 onClick={copyShareLink}
@@ -642,13 +644,13 @@ export default function TicketCustomization() {
                     <div className="absolute inset-0 top-0 right-0 pointer-events-none">
                         <div className="z-2 absolute -top-18 sm:-top-18 left-0 sm:left-[55%] w-fit h-fit">
                             <img className="handle w-64 h-auto object-contain select-none"
-                                src={`/img/coffee/85.webp`}
+                                src={coffee85.src}
                                 alt="Spill"
                                 crossOrigin="anonymous"/>
                         </div>
                         <div className="z-2 absolute top-24 -left-42 w-fit h-fit">
                             <img className="handle w-64 h-auto object-contain select-none"
-                                src={`/img/coffee/89.webp`}
+                                src={coffee89.src}
                                 alt="Spill"
                                 crossOrigin="anonymous" />
                         </div>
