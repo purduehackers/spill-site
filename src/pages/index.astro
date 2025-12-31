@@ -1,8 +1,8 @@
 ---
 import Layout from '@/layouts/Layout.astro';
 import Logo from "public/logo.svg";
-import { Image } from 'astro:assets';
-import Gallery from '@/components/Gallery.astro';
+import { getImage } from 'astro:assets';
+import Gallery from '@/components/Gallery';
 
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
 const placeholderFiles = import.meta.glob<{ default: string }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, query: { lqip: true } });
@@ -10,28 +10,45 @@ const placeholderFiles = import.meta.glob<{ default: string }>('../assets/img/ev
 const brochureFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/brochure/*.png', { eager: true });
 const brochurePlaceholders = import.meta.glob<{ default: string }>('../assets/img/brochure/*.png', { eager: true, query: { lqip: true } });
 
-const brochureImages = [
+const widths = [240, 540, 720, 1024, 1600];
+
+async function processImage(meta: ImageMetadata, placeholder: string, alt: string, className?: string) {
+  const optimized = await getImage({ src: meta, widths, formats: ['webp'] });
+  return {
+    src: optimized.src,
+    srcSet: optimized.srcSet?.attribute,
+    width: meta.width,
+    height: meta.height,
+    placeholder,
+    alt,
+    className,
+  };
+}
+
+const brochureImages = await Promise.all([
   { path: '../assets/img/brochure/0.png', className: '' },
   { path: '../assets/img/brochure/1.png', className: 'md:mt-12' },
   { path: '../assets/img/brochure/2.png', className: 'md:mt-24' },
-].map(page => ({
-  original: brochureFiles[page.path].default,
-  placeholder: brochurePlaceholders[page.path].default,
-  className: page.className,
-  alt: "Event brochure page"
-}));
+].map(page => processImage(
+  brochureFiles[page.path].default,
+  brochurePlaceholders[page.path].default,
+  "Event brochure page",
+  page.className
+)));
 
-const eventImages = Object.entries(imageFiles)
-  .sort(([pathA], [pathB]) => {
-    const fileA = pathA.split('/').pop() || '';
-    const fileB = pathB.split('/').pop() || '';
-    return fileA.localeCompare(fileB, undefined, { numeric: true });
-  })
-  .map(([path, m]) => ({
-    original: m.default,
-    placeholder: placeholderFiles[path]?.default || '',
-    alt: "Event image"
-  }));
+const sortedEventPaths = Object.keys(imageFiles).sort((pathA, pathB) => {
+  const fileA = pathA.split('/').pop() || '';
+  const fileB = pathB.split('/').pop() || '';
+  return fileA.localeCompare(fileB, undefined, { numeric: true });
+});
+
+const eventImages = await Promise.all(
+  sortedEventPaths.map(path => processImage(
+    imageFiles[path].default,
+    placeholderFiles[path]?.default || '',
+    "Event image"
+  ))
+);
 ---
 
 <Layout
@@ -99,5 +116,5 @@ const eventImages = Object.entries(imageFiles)
     </div>
   </main>
 
-  <Gallery brochureImages={brochureImages} eventImages={eventImages} />
+  <Gallery brochureImages={brochureImages} eventImages={eventImages} client:load />
 </Layout>
