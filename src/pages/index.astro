@@ -2,6 +2,7 @@
 import Layout from '@/layouts/Layout.astro';
 import Logo from "public/logo.svg";
 import { Image } from 'astro:assets';
+import Gallery from '@/components/Gallery.astro';
 
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
 const placeholderFiles = import.meta.glob<{ default: string }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, query: { lqip: true } });
@@ -16,7 +17,8 @@ const brochureImages = [
 ].map(page => ({
   original: brochureFiles[page.path].default,
   placeholder: brochurePlaceholders[page.path].default,
-  className: page.className
+  className: page.className,
+  alt: "Event brochure page"
 }));
 
 const eventImages = Object.entries(imageFiles)
@@ -27,7 +29,8 @@ const eventImages = Object.entries(imageFiles)
   })
   .map(([path, m]) => ({
     original: m.default,
-    placeholder: placeholderFiles[path]?.default || ''
+    placeholder: placeholderFiles[path]?.default || '',
+    alt: "Event image"
   }));
 ---
 
@@ -96,97 +99,5 @@ const eventImages = Object.entries(imageFiles)
     </div>
   </main>
 
-  <section id="brochure-grid" class="w-full relative z-10 p-4 md:p-12 pb-0 md:pb-0">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-0 space-y-0 items-start">
-      {brochureImages.map(({ original, placeholder, className }) => (
-        <div class={`mb-0 w-full block relative overflow-hidden ${className}`}>
-          <div
-            class="absolute inset-0 bg-cover bg-center blur-lg scale-110"
-            style={`background-image: url('${placeholder}');`}
-          ></div>
-          <Image
-            src={original}
-            alt="Event brochure page"
-            widths={[240, 540, 720, 1024, 1600]}
-            sizes="(max-width: 768px) 100vw, 33vw"
-            class="relative z-10 w-full h-auto cursor-pointer lightbox-trigger transition-opacity duration-700 opacity-0"
-            onload="this.classList.remove('opacity-0')"
-          />
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <section id="image-grid" class="w-full relative z-10 py-4 md:py-12">
-    <div class="columns-2 md:columns-3 gap-0 space-y-0">
-      {eventImages.map(({ original, placeholder }, index) => (
-        <div class={`break-inside-avoid mb-0 w-full block relative overflow-hidden ${index < 14 ? '' : 'hidden'}`}>
-          <div
-            class="absolute inset-0 bg-cover bg-center blur-lg scale-110"
-            style={`background-image: url('${placeholder}');`}
-          ></div>
-          <Image
-            src={original}
-            alt="Event image"
-            widths={[240, 540, 720, 1024, 1600]}
-            sizes="(max-width: 768px) 50vw, 33vw"
-            class="relative z-10 w-full h-auto cursor-pointer lightbox-trigger transition-opacity duration-700 opacity-0"
-            onload="this.classList.remove('opacity-0')"
-          />
-        </div>
-      ))}
-    </div>
-    <div class="flex justify-center pt-12 pb-4">
-      <button id="view-all-photos" class="button-medium bg-matcha text-paper hover:bg-moss transition-colors">
-        View All Photos
-      </button>
-    </div>
-  </section>
-
-  <div id="lightbox" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4">
-    <button id="lightbox-close" class="absolute top-4 right-4 text-white text-4xl hover:text-gray-300">&times;</button>
-    <img id="lightbox-img" src="" alt="Fullscreen view" class="max-w-full max-h-full object-contain" />
-  </div>
-
-  <script>
-    const viewAllBtn = document.getElementById('view-all-photos');
-    viewAllBtn?.addEventListener('click', () => {
-      document.querySelectorAll('#image-grid .hidden').forEach(el => el.classList.remove('hidden'));
-      viewAllBtn.classList.add('hidden');
-    });
-
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
-    const triggers = document.querySelectorAll('.lightbox-trigger');
-    const closeBtn = document.getElementById('lightbox-close');
-
-    triggers.forEach(trigger => {
-      trigger.addEventListener('click', (e) => {
-        const src = (e.target as HTMLImageElement).getAttribute('src');
-        if (src && lightbox && lightboxImg) {
-          lightboxImg.src = src;
-          lightbox.classList.remove('hidden');
-          document.body.style.overflow = 'hidden';
-        }
-      });
-    });
-
-    const closeLightbox = () => {
-      if (lightbox) {
-        lightbox.classList.add('hidden');
-        document.body.style.overflow = '';
-        if (lightboxImg) lightboxImg.src = '';
-      }
-    };
-
-    closeBtn?.addEventListener('click', closeLightbox);
-
-    lightbox?.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') closeLightbox();
-    });
-  </script>
+  <Gallery brochureImages={brochureImages} eventImages={eventImages} />
 </Layout>

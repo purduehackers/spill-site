@@ -1,0 +1,182 @@
+---
+import { Image } from 'astro:assets';
+import Lightbox from './Lightbox.astro';
+import type { ImageMetadata } from 'astro';
+
+interface ImageItem {
+  original: ImageMetadata;
+  placeholder: string;
+  alt?: string;
+  className?: string;
+}
+
+interface Props {
+  brochureImages?: ImageItem[];
+  eventImages?: ImageItem[];
+}
+
+const { brochureImages = [], eventImages = [] } = Astro.props;
+
+const allImages = [...brochureImages, ...eventImages];
+---
+
+<section id="brochure-grid" class="w-full relative z-10 p-4 md:p-12 pb-0 md:pb-0">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-0 space-y-0 items-start">
+    {brochureImages.map((img, i) => (
+      <div class={`gallery-item mb-0 w-full block relative overflow-hidden ${img.className || ''}`} role="button" data-index={i}>
+        <div
+          class="absolute inset-0 bg-cover bg-center blur-lg scale-110"
+          style={`background-image: url('${img.placeholder}');`}
+        ></div>
+        <Image
+          src={img.original}
+          alt={img.alt || "Brochure page"}
+          widths={[240, 540, 720, 1024, 1600]}
+          sizes="(max-width: 768px) 100vw, 33vw"
+          class="relative z-10 w-full h-auto cursor-pointer transition-opacity duration-700 opacity-0"
+          onload="this.classList.remove('opacity-0')"
+        />
+      </div>
+    ))}
+  </div>
+</section>
+
+<section id="image-grid" class="w-full relative z-10 py-4 md:py-12">
+  <div class="columns-2 md:columns-3 gap-0 space-y-0">
+    {eventImages.map((img, i) => {
+      const globalIndex = i + brochureImages.length;
+      return (
+        <div 
+          class={`gallery-item break-inside-avoid mb-0 w-full block relative overflow-hidden ${i < 14 ? '' : 'hidden'}`}
+          role="button"
+          data-index={globalIndex}
+        >
+          <div
+            class="absolute inset-0 bg-cover bg-center blur-lg scale-110"
+            style={`background-image: url('${img.placeholder}');`}
+          ></div>
+          <Image
+            src={img.original}
+            alt={img.alt || "Event photo"}
+            widths={[240, 540, 720, 1024, 1600]}
+            sizes="(max-width: 768px) 50vw, 33vw"
+            class="relative z-10 w-full h-auto cursor-pointer transition-opacity duration-700 opacity-0"
+            onload="this.classList.remove('opacity-0')"
+          />
+        </div>
+      );
+    })}
+  </div>
+  
+  <div class="flex justify-center pt-12 pb-4">
+    <button id="view-all-photos" class="button-medium bg-matcha text-paper hover:bg-moss transition-colors">
+      View All Photos
+    </button>
+  </div>
+</section>
+
+<Lightbox />
+
+<script define:vars={{ allImages }}>
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  const lightboxPlaceholder = document.getElementById('lightbox-placeholder');
+  const closeBtn = document.getElementById('lightbox-close');
+  const prevBtn = document.getElementById('lightbox-prev');
+  const nextBtn = document.getElementById('lightbox-next');
+  
+  let currentIndex = -1;
+
+  const viewAllBtn = document.getElementById('view-all-photos');
+  viewAllBtn?.addEventListener('click', () => {
+    document.querySelectorAll('#image-grid .hidden').forEach(el => el.classList.remove('hidden'));
+    viewAllBtn.classList.add('hidden');
+  });
+
+  function openLightbox(index) {
+    if (index < 0 || index >= allImages.length) return;
+    
+    currentIndex = index;
+    updateImage();
+    
+    lightbox.classList.remove('hidden');
+    requestAnimationFrame(() => {
+        lightbox.classList.remove('opacity-0', 'pointer-events-none');
+    });
+    document.body.style.overflow = 'hidden';
+    updateButtons();
+  }
+
+  function closeLightbox() {
+    lightbox.classList.add('opacity-0', 'pointer-events-none');
+    
+    setTimeout(() => {
+        lightbox.classList.add('hidden');
+        document.body.style.overflow = '';
+        if (lightboxImg) lightboxImg.src = '';
+    }, 300);
+  }
+
+  function updateImage() {
+    const imgData = allImages[currentIndex];
+    
+    lightboxImg.style.opacity = '0';
+    lightboxPlaceholder.style.opacity = '1';
+    
+    lightboxPlaceholder.style.backgroundImage = `url('${imgData.placeholder}')`;
+    
+    lightboxImg.src = imgData.original.src;
+    lightboxImg.alt = imgData.alt || "Gallery image";
+
+    lightboxImg.onload = () => {
+        lightboxImg.style.opacity = '1';
+        lightboxPlaceholder.style.opacity = '0';
+    };
+  }
+
+  function updateButtons() {
+    if (currentIndex > 0) prevBtn.classList.remove('hidden');
+    else prevBtn.classList.add('hidden');
+
+    if (currentIndex < allImages.length - 1) nextBtn.classList.remove('hidden');
+    else nextBtn.classList.add('hidden');
+  }
+
+  function prevImage(e) {
+    e?.stopPropagation();
+    if (currentIndex > 0) {
+        openLightbox(currentIndex - 1);
+    }
+  }
+
+  function nextImage(e) {
+    e?.stopPropagation();
+    if (currentIndex < allImages.length - 1) {
+        openLightbox(currentIndex + 1);
+    }
+  }
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  prevBtn?.addEventListener('click', prevImage);
+  nextBtn?.addEventListener('click', nextImage);
+
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox || e.target.parentElement === lightbox) {
+         closeLightbox();
+    }
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox || lightbox.classList.contains('hidden')) return;
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') prevImage();
+    if (e.key === 'ArrowRight') nextImage();
+  });
+
+  document.querySelectorAll('.gallery-item').forEach(item => {
+    item.addEventListener('click', () => {
+      const index = parseInt(item.dataset.index || '0', 10);
+      openLightbox(index);
+    });
+  });
+</script>
