@@ -347,24 +347,7 @@
   padding: 0 0.25em;
 }
 
-.rsvp-button {
-  position: relative;
-  user-select: none;
-  rotate: 15deg;
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  display: inline-block;
-}
 
-.rsvp-image {
-  display: block;
-  height: auto;
-  max-width: 220px;
-  width: auto;
-  filter: drop-shadow(5px 5px 5px rgb(0, 0, 0, 0.366));
-}
 
 .drawing-active {
   overflow: hidden;

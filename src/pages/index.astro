@@ -1,34 +1,76 @@
 ---
-import Layout from '@/layouts/Layout.astro'; 
+import Layout from '@/layouts/Layout.astro';
 import Logo from "public/logo.svg";
+import { getImage } from 'astro:assets';
+import Gallery from '@/components/Gallery';
+
+const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
+const placeholderFiles = import.meta.glob<{ default: string }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, query: { lqip: true } });
+
+const brochureFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/brochure/*.png', { eager: true });
+const brochurePlaceholders = import.meta.glob<{ default: string }>('../assets/img/brochure/*.png', { eager: true, query: { lqip: true } });
+
+const widths = [240, 540, 720, 1024, 1600];
+
+async function processImage(meta: ImageMetadata, placeholder: string, alt: string, className?: string) {
+  const optimized = await getImage({ src: meta, widths, formats: ['webp'] });
+  return {
+    src: optimized.src,
+    srcSet: optimized.srcSet?.attribute,
+    width: meta.width,
+    height: meta.height,
+    placeholder,
+    alt,
+    className,
+  };
+}
+
+const brochureImages = await Promise.all([
+  { path: '../assets/img/brochure/0.png', className: '' },
+  { path: '../assets/img/brochure/1.png', className: 'md:mt-12' },
+  { path: '../assets/img/brochure/2.png', className: 'md:mt-24' },
+].map(page => processImage(
+  brochureFiles[page.path].default,
+  brochurePlaceholders[page.path].default,
+  "Event brochure page",
+  page.className
+)));
+
+const sortedEventPaths = Object.keys(imageFiles).sort((pathA, pathB) => {
+  const fileA = pathA.split('/').pop() || '';
+  const fileB = pathB.split('/').pop() || '';
+  return fileA.localeCompare(fileB, undefined, { numeric: true });
+});
+
+const eventImages = await Promise.all(
+  sortedEventPaths.map(path => processImage(
+    imageFiles[path].default,
+    placeholderFiles[path]?.default || '',
+    "Event image"
+  ))
+);
 ---
 
 <Layout
   title="spill"
-  description="an upcoming exhibition of student-made creative technical projects."
+  description="an exhibition of student-made creative technical projects."
 >
-  <main class="w-full min-h-screen flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 md:ps-20">
+  <main class="w-full min-h-[90vh] flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 md:ps-20">
     <div class="w-full mt-8 flex flex-col md:flex-row justify-between items-end gap-12">
       <!-- Left side (big heading) -->
       <section class="z-1 w-full md:w-1/2 md:h-[500px] flex items-center justify-center">
-        <!-- <h1
-          class="font-heading goo text-[25vh] leading-none font-bold sm:text-[30vh] md:text-[50vh]"
-          style="filter: url(#goof);"
-        >
-          spill
-        </h1> -->
         <div class="md:fixed md:top-0 md:left-0 md:w-1/2 h-full flex items-center justify-center">
           <Logo style="filter:url(#goof) brightness(45%); opacity: 90%" class="hi goo"/>
         </div>
-        
+
       </section>
 
       <!-- Right side (text) -->
       <div class="flex w-full md:w-1/2 flex-col gap-y-4">
         <div class="flex flex-col gap-y-4">
-          <p class="font-body md:pt-8 text-base mt-0 sm:mt-4 sm:text-xl">
-            an <span class="realistic-marker-highlight">upcoming showcase</span> of student-made creative
-            technical projects, run by <a
+          <p class="font-body text-base mt-0 sm:mt-4 sm:text-xl">
+            was a <span class="realistic-marker-highlight">showcase</span> of
+            student-made creative technical projects, run by <a
               href="https://www.purduehackers.com"
               target="_blank"
               rel="noopener noreferrer"
@@ -42,263 +84,37 @@ import Logo from "public/logo.svg";
           <p class="font-body leading-relaxed text-xl sm:text-xl">
             <span class="realistic-marker-highlight">december 6, 2025 • 7-10pm</span>
             <br />
-            <a href="https://www.google.com/maps/place/Vienna+Espresso+Bar+%26+Bakery/@40.4240332,-86.9101418,16z/data=!3m1!4b1!4m15!1m8!3m7!1s0x8812e2aecf78386f:0x83449d81b828d42b!2sVienna+Espresso+Bar+%26+Bakery!8m2!3d40.4240332!4d-86.9075669!10e1!16s%2Fg%2F1thl1g87!3m5!1s0x8812e2aecf78386f:0x83449d81b828d42b!8m2!3d40.4240332!4d-86.9075669!16s%2Fg%2F1thl1g87?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+            <a href="https://www.google.com/maps/place/Vienna+Espresso+Bar+%26+Bakery/@40.4240332,-86.9101418,16z/data=!3m1!4b1!4m15!1m8!3m7!1s0x8812e2aecf78386f:0x83449d81b828d42b!2sVienna+Espresso+Bar+%26+Bakery!8m2!3d40.4240332!4d-86.9075669!10e1!16s%2Fg%2F1thl1g87!3m5!1s0x8812e2aecf78386f:0x83449d81b828d42b!8m2!3d40.4240332!4d-86.9075669!16s%2Fg%2F1thl1g87?entry=ttu&g_ep=EgoyMDI1MTAyMi4wIKXMDSoASAFQAw%3D%3D"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   class="purdue-hackers-link flex items-center gap-2">
-                <svg xmlns="http://www.w3.org/2000/svg" 
-                    viewBox="0 0 640 640" 
+                <svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 640 640"
                     class="w-5 h-5 -translate-y-0.25 inline-block align-middle fill-current">
                   <path d="M352 348.4C416.1 333.9 464 276.5 464 208C464 128.5 399.5 64 320 64C240.5 64 176 128.5 176 208C176 276.5 223.9 333.9 288 348.4L288 544C288 561.7 302.3 576 320 576C337.7 576 352 561.7 352 544L352 348.4zM328 160C297.1 160 272 185.1 272 216C272 229.3 261.3 240 248 240C234.7 240 224 229.3 224 216C224 158.6 270.6 112 328 112C341.3 112 352 122.7 352 136C352 149.3 341.3 160 328 160z"/>
                 </svg>
                 vienna coffee house
             </a>
           </p>
-        </div>
-        <!-- RSVP Button! -->
-        <div class="m-auto md:m-0 mt-4 md:mt-5">
-          <button id="rsvp-button" class="rsvp-button group">
-            <img
-              src="/img/rsvp1.png"
-              alt="RSVP"
-              class="rsvp-image group-hover:opacity-0"
-              draggable="false"
-            />
-            <img
-              src="/img/rsvp2.png"
-              alt="RSVP"
-              class="rsvp-image absolute inset-0 opacity-0 group-hover:opacity-100"
-              draggable="false"
-            />
-          </button>
-        </div>
-      </div>
-    </div>  
-  </main>
-
-  <div
-      class="w-full flex justify-end items-end mt-4 sm:mt-8 md:mt-[3vh]"
-  >
-    <section class="bg-sage/20 md:bg-transparent md:w-[50%] p-4 m-4 mb-0 md:mb-12 rounded-lg z-1 text-left text-sm md:text-base">
-      <p class="font-body leading-relaxed md:pt-12 sm:text-lg md:pt-[32vh]">
-        projects aren't sterile or perfect—they're made by <span
-          class="realistic-marker-highlight"
-        >
-          people, late nights,
-        </span>
-        <span class="sketch-highlight">spilled coffee</span>, and lots of <span
-          class="realistic-marker-highlight">trial & error</span
-        >.
-      </p>
-      <br />
-      <p class="font-body leading-relaxed sm:text-lg">
-        enter a warm coffee shop on a cold night, grab a free drink, and experience interactive
-        installations, digital experiments, and visual stories created by purdue students.
-      </p>
-    </section>
-  </div>
-
-  <!-- rsvp -->
-  <div
-    id="rsvp-modal"
-    class="fixed inset-0 bg-coffee bg-opacity-50 flex items-center justify-center z-50 p-4 hidden"
-  >
-    <div class="bg-white rounded-lg p-8 max-w-md w-full relative shadow-2xl">
-      <button
-        id="close-form"
-        class="absolute top-0 right-0 text-gray-500 hover:text-gray-700 text-2xl font-bold"
-        aria-label="Close form"
-      >
-        ×
-      </button>
-
-      <!-- Form state -->
-      <div class="modal-state modal-form block">
-        <form id="rsvp-form" class="space-y-4">
-          <div class="flex flex-col gap-2">
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
-                Email *
-              </label>
-              <input
-                type="email"
-                id="email"
-                name="email"
-                required
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
-                placeholder="your.email@example.com"
-              />
-            </div>
-            <div>
-              <label for="email" class="block text-sm font-medium text-gray-700 mb-2 font-body">
-                Name
-              </label>
-              <input
-                type="text"
-                id="name"
-                name="name"
-                class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-transparent focus:border-coffee-light font-body text-base"
-                placeholder="wack hacker"
-              />
-            </div>
-          </div>
-          <div id="error-message" class="text-red-600 text-sm hidden"></div>
-          <button
-            type="submit"
-            id="submit-btn"
-            class="w-full bg-coffee text-white py-3 px-6 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
-          >
-            RSVP
-          </button>
-        </form>
-      </div>
-
-      <!-- Success state -->
-      <div class="modal-state modal-success hidden">
-        <div class="flex flex-col items-center">
-          <p class="text-lg text-gray-700">thanks for RSVPing for spill.</p>
-          <p class="text-sm text-gray-500 mt-2">hope to see you there!</p>
-           <div class="mt-4 w-fit flex flex-col items-center gap-2">
-            <button
-              class="bg-coffee text-white py-2 px-4 rounded-lg hover:bg-matcha font-body text-base font-medium transition-colors"
-              id="customize-ticket-btn"
+          <p class="font-body leading-relaxed sm:text-lg">
+            projects aren't sterile or perfect—they're made by <span
+              class="realistic-marker-highlight"
             >
-            ‧₊˚. Customize my ticket ・ﾟ✧ 
-            </button>
-             <span id="redirect-countdown" class="w-full text-xs text-center">redirecting in (3)</span>
-          </div>
+              people, late nights,
+            </span>
+            <span class="sketch-highlight">spilled coffee</span>, and lots of <span
+              class="realistic-marker-highlight">trial & error</span
+            >.
+          </p>
+          <br />
+          <p class="font-body leading-relaxed sm:text-lg">
+            200 people entered a warm coffee shop on a cold night, grabbed a free drink, and experienced interactive
+            installations, digital experiments, and visual stories created by purdue students.
+          </p>
         </div>
       </div>
     </div>
-  </div>
+  </main>
+
+  <Gallery brochureImages={brochureImages} eventImages={eventImages} client:load />
 </Layout>
-
-<script>
-  const modalEl = document.getElementById('rsvp-modal');
-  const rsvpButton = document.getElementById('rsvp-button');
-
-  if (!modalEl || !rsvpButton) {
-    console.error('Required elements not found');
-  } else {
-    const formState = modalEl.querySelector('.modal-form') as HTMLElement | null;
-    const successState = modalEl.querySelector('.modal-success') as HTMLElement | null;
-    const closeBtn = modalEl.querySelector('#close-form');
-    const rsvpForm = modalEl.querySelector('#rsvp-form');
-    const customizeBtn = modalEl.querySelector('#customize-ticket-btn');
-    const countdownEl = modalEl.querySelector('#redirect-countdown') as HTMLElement | null;
-    let countdownInterval: number | null = null;
-
-    function openForm() {
-      if (!modalEl || !formState || !successState) return;
-      modalEl.classList.remove('hidden');
-      formState.classList.remove('hidden');
-      formState.classList.add('block');
-      successState.classList.add('hidden');
-      successState.classList.remove('block');
-    }
-
-    function closeForm() {
-      if (!modalEl) return;
-      modalEl.classList.add('hidden');
-      if (countdownInterval !== null) {
-        clearInterval(countdownInterval);
-        countdownInterval = null;
-      }
-    }
-
-    async function handleFormSubmit(e: Event) {
-      e.preventDefault();
-      const submitBtn = modalEl?.querySelector('#submit-btn');
-      const errorDiv = modalEl?.querySelector('#error-message') as HTMLElement | null;
-      
-      if (!e.target) {
-        console.error('Form target not found');
-      } else {
-      
-        const formData = new FormData(e.target as HTMLFormElement);
-
-        if (!submitBtn) {
-          console.error('Submit button not found');
-        } else {
-          submitBtn.textContent = 'submitting...';
-          (submitBtn as HTMLButtonElement).disabled = true;
-          errorDiv?.classList.add('hidden');
-
-          try {
-            const response = await fetch('/api/rsvp', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({
-                email: formData.get('email'),
-                //name: formData.get('name')
-              })
-            });
-
-            const result = await response.json();
-
-            if (result.success) {
-              // Show success state
-              if (formState && successState) {
-                formState.classList.add('hidden');
-                formState.classList.remove('block');
-                successState.classList.remove('hidden');
-                successState.classList.add('block');
-
-                // Remove close btn
-                closeBtn?.classList.add('hidden');
-              }
-                // Start countdown updates
-                let numSeconds = 5;
-                if (countdownEl) {
-                  countdownEl.textContent = `redirecting in (${numSeconds})`;
-                }
-                if (countdownInterval !== null) {
-                  clearInterval(countdownInterval);
-                }
-                countdownInterval = window.setInterval(() => {
-                  numSeconds -= 1;
-                  if (countdownEl) {
-                    countdownEl.textContent = `redirecting in (${numSeconds})`;
-                  }
-                  if (numSeconds <= 0 && countdownInterval !== null) {
-                    clearInterval(countdownInterval);
-                    countdownInterval = null;
-                  }
-                }, 1000);
-
-              // Set name and ticket number in local storage
-              localStorage.setItem('ticket-name', formData.get('name') as string);
-              localStorage.setItem('ticket-number', result.recordCount.toString());
-
-              // Redirect to ticket page after 2 seconds
-              setTimeout(() => {
-                window.location.href = '/tickets';
-              }, numSeconds * 1000);
-            } else {
-              if (errorDiv) {
-                errorDiv.textContent = result.error || 'Something went wrong';
-                errorDiv.classList.remove('hidden');
-              }
-            }
-          } catch (error) {
-            if (errorDiv) {
-              errorDiv.textContent = 'Network error. Please try again.';
-              errorDiv.classList.remove('hidden');
-            }
-          } finally {
-            submitBtn.textContent = 'RSVP';
-            (submitBtn as HTMLButtonElement).disabled = false;
-          }
-        }
-      }
-    }
-
-    // Event listeners
-    rsvpButton?.addEventListener('click', openForm);
-    closeBtn?.addEventListener('click', closeForm);
-    rsvpForm?.addEventListener('submit', handleFormSubmit);
-    customizeBtn?.addEventListener('click', () => (window.location.href = '/tickets'));
-  }
-</script>
