@@ -9,9 +9,10 @@ import tailwindcss from '@tailwindcss/vite';
 function lqip() {
   return {
     name: 'lqip',
+    enforce: 'pre',
     async load(id) {
-      if (id.endsWith('?lqip')) {
-        const filePath = id.replace(/\?lqip$/, '');
+      if (id.includes('lqip')) {
+        const filePath = id.split('?')[0];
         const buffer = await sharp(filePath)
           .resize(20)
           .webp({ quality: 20 })

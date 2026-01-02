@@ -18,7 +18,6 @@ interface GalleryProps {
 export default function Gallery({ brochureImages, eventImages }: GalleryProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
   const [showAll, setShowAll] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState<Record<number, boolean>>({});
   const [lightboxImageLoaded, setLightboxImageLoaded] = useState(false);
 
   const allImages = [...brochureImages, ...eventImages];
@@ -61,10 +60,6 @@ export default function Gallery({ brochureImages, eventImages }: GalleryProps) {
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, closeLightbox, goToPrev, goToNext]);
 
-  const handleImageLoad = (index: number) => {
-    setImageLoaded((prev) => ({ ...prev, [index]: true }));
-  };
-
   const visibleEventImages = showAll ? eventImages : eventImages.slice(0, 14);
 
   return (
@@ -77,29 +72,27 @@ export default function Gallery({ brochureImages, eventImages }: GalleryProps) {
               className={`gallery-item mb-0 w-full block relative overflow-hidden cursor-pointer rounded-xl ${img.className || ''}`}
               role="button"
               onClick={() => openLightbox(i)}
-              style={{ aspectRatio: `${img.width} / ${img.height}` }}
+              style={{
+                aspectRatio: `${img.width} / ${img.height}`,
+              }}
             >
-              <img
-                src={imageLoaded[i] ? img.src : img.placeholder}
-                srcSet={imageLoaded[i] ? img.srcSet : undefined}
-                sizes="(max-width: 768px) 100vw, 33vw"
-                alt={img.alt || 'Brochure page'}
-                width={img.width}
-                height={img.height}
-                decoding="async"
-                className={`w-full h-full object-cover transition-[filter] duration-200 ${imageLoaded[i] ? '' : 'blur-lg scale-110'}`}
-              />
+              <div
+                className="absolute inset-0 bg-cover bg-center blur-lg scale-110"
+                style={{ backgroundImage: `url('${img.placeholder}')` }}
+              ></div>
               <img
                 src={img.src}
                 srcSet={img.srcSet}
                 sizes="(max-width: 768px) 100vw, 33vw"
-                alt=""
-                aria-hidden="true"
-                className="sr-only"
-                loading="eager"
-                fetchPriority={i === 0 ? "high" : "auto"}
+                alt={img.alt || 'Brochure page'}
+                width={img.width}
+                height={img.height}
+                loading="lazy"
                 decoding="async"
-                onLoad={() => handleImageLoad(i)}
+                className="relative z-10 w-full h-full object-cover transition-opacity duration-500 opacity-0"
+                onLoad={(e) => {
+                  e.currentTarget.classList.remove('opacity-0');
+                }}
               />
             </div>
           ))}
@@ -116,28 +109,27 @@ export default function Gallery({ brochureImages, eventImages }: GalleryProps) {
                 className="gallery-item break-inside-avoid mb-0 w-full block relative overflow-hidden cursor-pointer"
                 role="button"
                 onClick={() => openLightbox(globalIndex)}
-                style={{ aspectRatio: `${img.width} / ${img.height}` }}
+                style={{
+                  aspectRatio: `${img.width} / ${img.height}`,
+                }}
               >
-                <img
-                  src={imageLoaded[globalIndex] ? img.src : img.placeholder}
-                  srcSet={imageLoaded[globalIndex] ? img.srcSet : undefined}
-                  sizes="(max-width: 768px) 50vw, 33vw"
-                  alt={img.alt || 'Event photo'}
-                  width={img.width}
-                  height={img.height}
-                  decoding="async"
-                  className={`w-full h-full object-cover transition-[filter] duration-500 ${imageLoaded[globalIndex] ? '' : 'blur-lg scale-110'}`}
-                />
+                <div
+                  className="absolute inset-0 bg-cover bg-center blur-lg scale-110"
+                  style={{ backgroundImage: `url('${img.placeholder}')` }}
+                ></div>
                 <img
                   src={img.src}
                   srcSet={img.srcSet}
                   sizes="(max-width: 768px) 50vw, 33vw"
-                  alt=""
-                  aria-hidden="true"
-                  className="sr-only"
+                  alt={img.alt || 'Event photo'}
+                  width={img.width}
+                  height={img.height}
                   loading="lazy"
                   decoding="async"
-                  onLoad={() => handleImageLoad(globalIndex)}
+                  className="relative z-10 w-full h-full object-cover transition-opacity duration-500 opacity-0"
+                  onLoad={(e) => {
+                    e.currentTarget.classList.remove('opacity-0');
+                  }}
                 />
               </div>
             );
@@ -203,24 +195,18 @@ export default function Gallery({ brochureImages, eventImages }: GalleryProps) {
               className="relative max-w-full max-h-full"
               style={{ aspectRatio: `${currentImage.width} / ${currentImage.height}` }}
             >
+              <div
+                className={`absolute inset-0 bg-cover bg-center blur-md transition-opacity duration-500 ${lightboxImageLoaded ? 'opacity-0' : 'opacity-100'}`}
+                style={{ backgroundImage: `url('${currentImage.placeholder}')` }}
+              ></div>
               <img
-                src={lightboxImageLoaded ? currentImage.src : currentImage.placeholder}
+                src={currentImage.src}
                 alt={currentImage.alt || 'Gallery image'}
-                className={`max-w-full max-h-[90vh] object-contain transition-[filter] duration-300 ${lightboxImageLoaded ? '' : 'blur-lg'}`}
+                className={`relative z-10 max-w-full max-h-[90vh] object-contain transition-opacity duration-300 ${lightboxImageLoaded ? 'opacity-100' : 'opacity-0'}`}
                 onLoad={() => setLightboxImageLoaded(true)}
                 key={lightboxIndex}
                 decoding="async"
               />
-              {!lightboxImageLoaded && (
-                <img
-                  src={currentImage.src}
-                  alt=""
-                  aria-hidden="true"
-                  className="sr-only"
-                  onLoad={() => setLightboxImageLoaded(true)}
-                  decoding="async"
-                />
-              )}
             </div>
           </div>
         </div>
