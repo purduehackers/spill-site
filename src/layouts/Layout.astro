@@ -5,6 +5,7 @@ interface Props {
 }
 
 const { title, description } = Astro.props;
+const canonical = new URL(Astro.url.pathname, 'https://spill.purduehackers.com');
 import '@/styles/global.css';
 import { ClientRouter } from 'astro:transitions';
 import { Image } from 'astro:assets';
@@ -22,13 +23,14 @@ import coffee89 from '@/assets/img/coffee/89.png';
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
 
     {/* OpenGraph metadata for social media link previews */}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={Astro.url} />
-    <meta property="og:image" content={new URL("/logo.webp", Astro.url)} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content="https://spill.purduehackers.com/logo.webp" />
     <meta property="og:image:width" content="600" />
     <meta property="og:image:height" content="609" />
     <meta property="og:image:type" content="image/webp" />

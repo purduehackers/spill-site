@@ -3,6 +3,7 @@ import Layout from '@/layouts/Layout.astro';
 import Logo from "public/logo.svg";
 import { getImage } from 'astro:assets';
 import Gallery from '@/components/Gallery';
+import ProjectCatalog from '@/components/ProjectCatalog.astro';
 
 const imageFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true });
 const placeholderFiles = import.meta.glob<{ default: string }>('../assets/img/event/*.{jpg,jpeg,png,webp,JPG,JPEG,PNG,WEBP}', { eager: true, query: { lqip: true } });
@@ -29,10 +30,10 @@ const brochureImages = await Promise.all([
   { path: '../assets/img/brochure/0.png', className: '' },
   { path: '../assets/img/brochure/1.png', className: 'md:mt-12' },
   { path: '../assets/img/brochure/2.png', className: 'md:mt-24' },
-].map(page => processImage(
+].map((page, index) => processImage(
   brochureFiles[page.path].default,
   brochurePlaceholders[page.path].default,
-  "Event brochure page",
+  `spill project brochure, page ${index + 1}. All project descriptions and creator credits are transcribed in the project catalog below.`,
   page.className
 )));
 
@@ -52,10 +53,12 @@ const eventImages = await Promise.all(
 ---
 
 <Layout
-  title="spill"
-  description="an exhibition of student-made creative technical projects."
+  title="spill — student projects & artworks by Purdue Hackers"
+  description="Explore 23 student-made works exhibited at spill on December 6, 2025: hardware, software, interactive installations, and art, with their creators."
 >
-  <main class="w-full min-h-[90vh] flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 md:ps-20">
+  <main>
+  <header class="w-full min-h-[90vh] flex flex-col md:flex-row justify-between items-center px-4 sm:px-6 md:ps-20">
+    <h1 class="sr-only">spill — a Purdue Hackers exhibition</h1>
     <div class="w-full mt-8 flex flex-col md:flex-row justify-between items-end gap-12">
       <!-- Left side (big heading) -->
       <section class="z-1 w-full md:w-1/2 md:h-[500px] flex items-center justify-center">
@@ -111,10 +114,13 @@ const eventImages = await Promise.all(
             200 people entered a warm coffee shop on a cold night, grabbed a free drink, and experienced interactive
             installations, digital experiments, and visual stories created by purdue students.
           </p>
+          <a href="#projects" class="font-body underline underline-offset-4">meet the 23 works & their creators ↓</a>
         </div>
       </div>
     </div>
-  </main>
+  </header>
 
   <Gallery brochureImages={brochureImages} eventImages={eventImages} client:load />
+  <ProjectCatalog />
+  </main>
 </Layout>
