@@ -34,7 +34,7 @@ export const projects = [
     description: 'Social devices designed to help people find one another and start conversations.',
     links: [
       {
-        label: 'Jack’s development story',
+        label: 'Creator’s write-up',
         href: 'https://www.jackhogan.me/blog/from-tiny-seed-to-towering-sequoia'
       },
       {
