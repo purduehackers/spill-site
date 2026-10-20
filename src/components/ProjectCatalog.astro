@@ -1,0 +1,62 @@
+---
+import { projects } from '../data/projects';
+---
+
+<section
+  id="projects"
+  class="relative z-10 bg-paper px-6 py-16 md:px-12 font-body"
+  aria-labelledby="projects-heading"
+>
+  <div class="mx-auto max-w-6xl">
+    <h2 id="projects-heading" class="font-heading text-5xl mb-5">meet the work</h2>
+    <p class="max-w-2xl leading-relaxed mb-8">
+      the 23 works in the spill brochure, with the people who made them. exhibited december 6, 2025.
+      explore the projects, then follow the links to see how some of them developed.
+    </p>
+    <ol class="grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        projects.map((project) => (
+          <li id={project.id} class="border-t border-coffee/30 pt-4 scroll-mt-8">
+            <article>
+              <p class="font-mono text-sm mb-3">{String(project.number).padStart(2, '0')}</p>
+              <h3 class="text-xl font-medium mb-2">
+                <a
+                  href={`#${project.id}`}
+                  class="underline decoration-coffee/40 underline-offset-4"
+                >
+                  {project.title}
+                </a>
+              </h3>
+              <p class="font-medium mb-3">by {project.creators}</p>
+              <p class="leading-relaxed">{project.description}</p>
+              {project.links.length > 0 && (
+                <ul class="flex flex-wrap gap-x-5 gap-y-2 mt-4">
+                  {project.links.map((link) => (
+                    <li>
+                      <a class="underline underline-offset-4" href={link.href}>
+                        {link.label} ↗
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </article>
+          </li>
+        ))
+      }
+    </ol>
+    <footer class="border-t border-coffee/30 mt-12 pt-8 max-w-2xl leading-relaxed">
+      <p>
+        <a href="https://www.purduehackers.com/" class="underline">purdue hackers</a>
+        backs highly talented, curious people working on ambitious ideas across software, hardware, and
+        design. spill gives that work a public audience.
+      </p>
+      <nav aria-label="More from Purdue Hackers" class="flex flex-wrap gap-x-6 gap-y-3 mt-5">
+        <a class="underline" href="https://burst.purduehackers.com/">BURST 2024</a>
+        <a class="underline" href="https://bento.purduehackers.com/">BENTO talks</a>
+        <a class="underline" href="https://grants.purduehackers.com/">project funding</a>
+        <a class="underline" href="https://ships.purduehackers.com/">latest ships</a>
+      </nav>
+    </footer>
+  </div>
+</section>

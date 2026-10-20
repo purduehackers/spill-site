@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /tickets
+
+Sitemap: https://spill.purduehackers.com/sitemap.xml
